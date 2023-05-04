@@ -142,4 +142,5 @@ testLogger = { id = "com.adarshr.test-logger", version.ref = "testLogger" }
 moshix = { id = "dev.zacsweers.moshix", version.ref = "moshix" }
 kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
 ktor = { id = "io.ktor.plugin", version.ref = "ktor" }
+kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 sqldelight = { id = "app.cash.sqldelight", version.ref = "sqldelight" } 

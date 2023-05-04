@@ -26,6 +26,8 @@ fun main(): Unit = SuspendApp {
 
 fun Application.app(module: Dependencies) {
   configure()
-  health(module.healthCheck)
-  eventRoutes()
+  with(module.statePersistence) {
+    health(module.healthCheck)
+    eventRoutes()
+  }
 }

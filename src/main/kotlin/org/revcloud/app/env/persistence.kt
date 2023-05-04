@@ -7,6 +7,7 @@ import arrow.fx.coroutines.closeable
 import arrow.fx.coroutines.continuations.ResourceScope
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
+import org.revcloud.app.repo.StateId
 import org.revcloud.hydra.sqldelight.SqlDelight
 import org.revcloud.hydra.sqldelight.State
 import java.time.OffsetDateTime
@@ -28,10 +29,11 @@ suspend fun ResourceScope.sqlDelight(dataSource: DataSource): SqlDelight {
   SqlDelight.Schema.create(driver)
   return SqlDelight(
     driver,
-    State.Adapter(offsetDateTimeAdapter, offsetDateTimeAdapter)
+    State.Adapter(stateIdAdapter, offsetDateTimeAdapter, offsetDateTimeAdapter)
   )
 }
 
+private val stateIdAdapter = columnAdapter(::StateId, StateId::serial)
 private val offsetDateTimeAdapter = columnAdapter(OffsetDateTime::parse, OffsetDateTime::toString)
 
 private inline fun <A : Any, B> columnAdapter(

@@ -1,7 +1,8 @@
+import org.revcloud.app.repo.StateId;
 import java.time.OffsetDateTime;
 
 CREATE TABLE IF NOT EXISTS state(
-    id BIGSERIAL PRIMARY KEY,
+    id BIGSERIAL AS StateId PRIMARY KEY,
     previousState TEXT NOT NULL,
     createdAt VARCHAR(50) AS OffsetDateTime NOT NULL,
     updatedAt VARCHAR(50) AS OffsetDateTime NOT NULL

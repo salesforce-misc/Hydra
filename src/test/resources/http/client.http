@@ -1,4 +1,13 @@
+POST http://localhost:7070/event
+Content-Type: application/json
+
+{
+  "state": "state"
+}
+
+###
 GET http://localhost:7070
 Accept: application/json
 
 ###
+

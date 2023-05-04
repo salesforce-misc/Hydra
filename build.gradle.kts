@@ -3,11 +3,13 @@ plugins {
   id("hydra.sub-conventions")
   id("hydra.kt-conventions")
   alias(libs.plugins.ktor)
+  alias(libs.plugins.kotlinx.serialization)
   alias(libs.plugins.sqldelight)
   id(libs.plugins.detekt.pluginId) apply false
 }
 application {
   mainClass by "org.revcloud.app.MainKt"
+  applicationDefaultJvmArgs = listOf("-Dio.ktor.development=true")
 }
 dependencies {
   compileOnly(libs.jetbrains.annotations)
