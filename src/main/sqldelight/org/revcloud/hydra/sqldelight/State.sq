@@ -1,0 +1,13 @@
+import java.time.OffsetDateTime;
+
+CREATE TABLE IF NOT EXISTS state(
+    id BIGSERIAL PRIMARY KEY,
+    previousState TEXT NOT NULL,
+    createdAt VARCHAR(50) AS OffsetDateTime NOT NULL,
+    updatedAt VARCHAR(50) AS OffsetDateTime NOT NULL
+);
+
+insertAndGetId:
+INSERT INTO state(previousState, createdAt, updatedAt)
+VALUES (:state, :createdAt, :updatedAt)
+RETURNING id;
