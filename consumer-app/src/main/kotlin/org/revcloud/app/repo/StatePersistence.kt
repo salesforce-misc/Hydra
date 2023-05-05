@@ -1,6 +1,6 @@
 package org.revcloud.app.repo
 
-import org.revcloud.hydra.sqldelight.StateQueries
+import org.revcloud.app.sqldelight.StateQueries
 import java.time.OffsetDateTime
 
 @JvmInline

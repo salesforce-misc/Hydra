@@ -1,37 +1,20 @@
+import io.gitlab.arturbosch.detekt.Detekt
+import io.gitlab.arturbosch.detekt.DetektPlugin
+import io.gitlab.arturbosch.detekt.report.ReportMergeTask
+
 plugins {
-  id("hydra.root-conventions")
   id("hydra.sub-conventions")
   id("hydra.kt-conventions")
-  alias(libs.plugins.ktor)
-  alias(libs.plugins.kotlinx.serialization)
-  alias(libs.plugins.sqldelight)
+  id(libs.plugins.kover.pluginId)
   id(libs.plugins.detekt.pluginId) apply false
 }
-application {
-  mainClass by "org.revcloud.app.MainKt"
-  applicationDefaultJvmArgs = listOf("-Dio.ktor.development=true")
+allprojects {
+  apply(plugin = "hydra.root-conventions")
 }
 dependencies {
   compileOnly(libs.jetbrains.annotations)
-
-  implementation(libs.hikari)
-  implementation(libs.sqldelight.jdbc)
-  implementation(libs.postgresql)
-  implementation(libs.bundles.arrow)
-  implementation(libs.bundles.ktor.server)
-  implementation(libs.bundles.suspendapp)
-  implementation(libs.bundles.cohort)
   implementation(libs.bundles.kotlin.logging)
-
   testImplementation(libs.assertj.core)
-}
-sqldelight {
-  databases {
-    create("SqlDelight") {
-      packageName.set("org.revcloud.hydra.sqldelight")
-      dialect(libs.sqldelight.postgresql.get())
-    }
-  }
 }
 testing {
   suites {
@@ -50,6 +33,26 @@ koverReport {
   defaults {
     xml {
       onCheck = true
+    }
+  }
+}
+val detektReportMerge by tasks.registering(ReportMergeTask::class) {
+  output.set(rootProject.buildDir.resolve("reports/detekt/merge.xml"))
+}
+subprojects {
+  apply(plugin = "hydra.sub-conventions")
+  tasks.withType<Detekt>().configureEach {
+    reports {
+      xml.required = true
+      html.required = true
+    }
+  }
+  plugins.withType<DetektPlugin> {
+    tasks.withType<Detekt> detekt@{
+      finalizedBy(detektReportMerge)
+      detektReportMerge.configure {
+        input.from(this@detekt.xmlReportFile)
+      }
     }
   }
 }

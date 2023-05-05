@@ -5,7 +5,6 @@ plugins {
   idea
   id("com.diffplug.spotless")
   id("io.gitlab.arturbosch.detekt")
-  id("org.jetbrains.kotlinx.kover")
 }
 
 version = "0.6.2.2"

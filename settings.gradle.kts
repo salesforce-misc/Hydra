@@ -15,3 +15,4 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "hydra-root"
+include("consumer-app")
