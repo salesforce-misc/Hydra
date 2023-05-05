@@ -25,7 +25,3 @@ sealed class SideEffect {
   object LogVaporized : SideEffect()
   object LogCondensed : SideEffect()
 }
-
-interface Logger {
-  fun log(message: String)
-}

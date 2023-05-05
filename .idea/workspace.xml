@@ -4,35 +4,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6ed80e62-f038-45bc-b42e-83dd15ec8dae" name="Changes" comment="Enabled Ktor and Postgres&#10;&#10;&#10;Signed-off-by: Gopal S Akshintala &lt;gopala.akshintala@salesforce.com&gt;">
-      <change afterPath="$PROJECT_DIR$/consumer-app/build.gradle.kts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/consumer-app/src/main/kotlin/org/revcloud/app/env/Dependencies.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/consumer-app/src/main/kotlin/org/revcloud/app/env/Env.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/consumer-app/src/main/kotlin/org/revcloud/app/env/ktor.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/consumer-app/src/main/kotlin/org/revcloud/app/env/persistence.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/consumer-app/src/main/kotlin/org/revcloud/app/main.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/consumer-app/src/main/kotlin/org/revcloud/app/repo/StatePersistence.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/consumer-app/src/main/kotlin/org/revcloud/app/routes/events.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/consumer-app/src/main/kotlin/org/revcloud/app/routes/health.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/consumer-app/src/main/kotlin/org/revcloud/app/service/stateService.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/consumer-app/src/main/resources/log4j2.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+    <list default="true" id="6ed80e62-f038-45bc-b42e-83dd15ec8dae" name="Changes" comment="Extracted consumer to a different module&#10;&#10;&#10;Signed-off-by: Gopal S Akshintala &lt;gopala.akshintala@salesforce.com&gt;">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/buildSrc/src/main/kotlin/hydra.root-conventions.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/buildSrc/src/main/kotlin/hydra.root-conventions.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gradle.properties" beforeDir="false" afterPath="$PROJECT_DIR$/gradle.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/settings.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/settings.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/org/revcloud/app/env/Dependencies.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/org/revcloud/app/env/Env.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/org/revcloud/app/env/ktor.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/org/revcloud/app/env/persistence.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/org/revcloud/app/main.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/org/revcloud/app/repo/StatePersistence.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/org/revcloud/app/routes/events.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/org/revcloud/app/routes/health.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/org/revcloud/app/service/stateService.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.conf" beforeDir="false" afterPath="$PROJECT_DIR$/consumer-app/src/main/resources/application.conf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/sqldelight/org/revcloud/hydra/sqldelight/State.sq" beforeDir="false" afterPath="$PROJECT_DIR$/consumer-app/src/main/sqldelight/org/revcloud/app/sqldelight/State.sq" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/consumer-app/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/consumer-app/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/consumer-app/src/main/kotlin/org/revcloud/app/env/Env.kt" beforeDir="false" afterPath="$PROJECT_DIR$/consumer-app/src/main/kotlin/org/revcloud/app/env/Env.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/consumer-app/src/main/resources/application.conf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/libs.versions.toml" beforeDir="false" afterPath="$PROJECT_DIR$/libs.versions.toml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/org/revcloud/hydra/Hydra.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/org/revcloud/hydra/Hydra.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/org/revcloud/hydra/config/ConfigBuilder.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/org/revcloud/hydra/config/MachineBuilder.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/org/revcloud/hydra/internal/Graph.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/org/revcloud/hydra/internal/Machine.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/org/revcloud/hydra/internal/Matcher.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/org/revcloud/hydra/internal/Matcher.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/org/revcloud/hydra/HydraTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org/revcloud/hydra/HydraTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/kotlin/org/revcloud/hydra/State.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/kotlin/org/revcloud/hydra/State.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -81,6 +64,9 @@
       </list>
     </option>
   </component>
+  <component name="FindBugs-IDEA-Workspace">
+    <toolWindowEditorPreview>false</toolWindowEditorPreview>
+  </component>
   <component name="Git.Settings">
     <option name="PREVIOUS_COMMIT_AUTHORS">
       <list>
@@ -122,34 +108,34 @@
     <option name="showExcludedFiles" value="false" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SONARLINT_PRECOMMIT_ANALYSIS": "false",
-    "WebServerToolWindowFactoryState": "false",
-    "com.github.patou.gitmoji.display-icon": "emoji",
-    "com.github.patou.gitmoji.insert-in-cursor-position": "true",
-    "com.github.patou.gitmoji.text-after-unicode": " ",
-    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit5",
-    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5": "",
-    "git-widget-placeholder": "main",
-    "jdk.selected.JAVA_MODULE": "17",
-    "ktor.last.update.timestamp": "1683192039965",
-    "last_directory_selection": "/Users/gopala.akshintala/code-clones/work/hydra-root/src/test/kotlin/org/revcloud/hydra",
-    "last_opened_file_path": "/Users/gopala.akshintala/code-clones/work/hydra-root/consumer-app/src/main/resources",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "SDKs",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "preferences.sourceCode.Kotlin",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SONARLINT_PRECOMMIT_ANALYSIS&quot;: &quot;false&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;com.github.patou.gitmoji.display-icon&quot;: &quot;emoji&quot;,
+    &quot;com.github.patou.gitmoji.insert-in-cursor-position&quot;: &quot;true&quot;,
+    &quot;com.github.patou.gitmoji.text-after-unicode&quot;: &quot; &quot;,
+    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary&quot;: &quot;JUnit5&quot;,
+    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5&quot;: &quot;&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;17&quot;,
+    &quot;ktor.last.update.timestamp&quot;: &quot;1683192039965&quot;,
+    &quot;last_directory_selection&quot;: &quot;/Users/gopala.akshintala/code-clones/work/hydra-root/src/test/kotlin/org/revcloud/hydra&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/gopala.akshintala/code-clones/work/hydra-root/consumer-app/src/main/resources&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;SDKs&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.sourceCode.Kotlin&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="Push.Settings">
     <force-push-targets>
       <force-push-target remote-path="origin" branch="master" />
@@ -196,10 +182,11 @@
       <command value="gradle generateSqlDelightInterface" />
       <command value="gradle clean build" />
       <command value="gradle run" />
+      <command value="gradle -stop" />
     </option>
   </component>
-  <component name="RunManager" selected="Gradle.hydra-root [clean build]">
-    <configuration name="hydra-root [clean build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+  <component name="RunManager" selected="Gradle.MatterMachine.validTransition">
+    <configuration name="MatterMachine.validTransition" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -210,19 +197,20 @@
         </option>
         <option name="taskNames">
           <list>
-            <option value="clean" />
-            <option value="build" />
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;org.revcloud.hydra.HydraTest$MatterMachine.validTransition&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
       </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
       <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
       <DebugAllEnabled>false</DebugAllEnabled>
-      <ForceTestExec>false</ForceTestExec>
+      <ForceTestExec>true</ForceTestExec>
       <method v="2" />
     </configuration>
-    <configuration name="hydra-root [run]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="hydra-root [-stop]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -233,7 +221,7 @@
         </option>
         <option name="taskNames">
           <list>
-            <option value="run" />
+            <option value="-stop" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -254,33 +242,34 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="MainKt" type="JetRunConfigurationType" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="org.revcloud.app.MainKt" />
-      <module name="hydra-root.main" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration default="true" type="docker-deploy" factoryName="docker-compose.yml" temporary="true">
       <deployment type="docker-compose.yml">
         <settings />
       </deployment>
       <method v="2" />
     </configuration>
+    <configuration name="docker-compose.yaml: Compose Deployment" type="docker-deploy" factoryName="docker-compose.yml" temporary="true" server-name="Docker">
+      <deployment type="docker-compose.yml">
+        <settings>
+          <option name="sourceFilePath" value="docker-compose.yaml" />
+        </settings>
+      </deployment>
+      <method v="2" />
+    </configuration>
     <list>
-      <item itemvalue="Gradle.hydra-root [clean build]" />
-      <item itemvalue="Gradle.hydra-root [run]" />
+      <item itemvalue="Docker.docker-compose.yaml: Compose Deployment" />
+      <item itemvalue="Gradle.MatterMachine.validTransition" />
+      <item itemvalue="Gradle.hydra-root [-stop]" />
       <item itemvalue="HTTP Request.client | #1" />
       <item itemvalue="Kotlin.MainKt (1)" />
-      <item itemvalue="Kotlin.MainKt" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Gradle.MatterMachine.validTransition" />
+        <item itemvalue="Gradle.hydra-root [-stop]" />
         <item itemvalue="Kotlin.MainKt (1)" />
+        <item itemvalue="Docker.docker-compose.yaml: Compose Deployment" />
         <item itemvalue="HTTP Request.client | #1" />
-        <item itemvalue="Gradle.hydra-root [run]" />
-        <item itemvalue="Gradle.hydra-root [clean build]" />
-        <item itemvalue="Kotlin.MainKt" />
       </list>
     </recent_temporary>
   </component>
@@ -318,7 +307,8 @@
       <workItem from="1683208806469" duration="138000" />
       <workItem from="1683208959346" duration="591000" />
       <workItem from="1683214312883" duration="1794000" />
-      <workItem from="1683262428851" duration="1229000" />
+      <workItem from="1683262428851" duration="11094000" />
+      <workItem from="1683294144766" duration="2815000" />
     </task>
     <task id="LOCAL-00001" summary="- Fixed moshiReVoman&#10;- Added module-info.java to integrationTest module">
       <created>1678595183319</created>
@@ -439,7 +429,14 @@
       <option name="project" value="LOCAL" />
       <updated>1683209356930</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="Extracted consumer to a different module&#10;&#10;&#10;Signed-off-by: Gopal S Akshintala &lt;gopala.akshintala@salesforce.com&gt;">
+      <created>1683263694476</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1683263694476</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -500,7 +497,8 @@
     <MESSAGE value="Moshi disable proguard&#10;&#10;&#10;Signed-off-by: Gopal S Akshintala &lt;gopala.akshintala@salesforce.com&gt;" />
     <MESSAGE value="Enable Ktor&#10;&#10;&#10;Signed-off-by: Gopal S Akshintala &lt;gopala.akshintala@salesforce.com&gt;" />
     <MESSAGE value="Enabled Ktor and Postgres&#10;&#10;&#10;Signed-off-by: Gopal S Akshintala &lt;gopala.akshintala@salesforce.com&gt;" />
-    <option name="LAST_COMMIT_MESSAGE" value="Enabled Ktor and Postgres&#10;&#10;&#10;Signed-off-by: Gopal S Akshintala &lt;gopala.akshintala@salesforce.com&gt;" />
+    <MESSAGE value="Extracted consumer to a different module&#10;&#10;&#10;Signed-off-by: Gopal S Akshintala &lt;gopala.akshintala@salesforce.com&gt;" />
+    <option name="LAST_COMMIT_MESSAGE" value="Extracted consumer to a different module&#10;&#10;&#10;Signed-off-by: Gopal S Akshintala &lt;gopala.akshintala@salesforce.com&gt;" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

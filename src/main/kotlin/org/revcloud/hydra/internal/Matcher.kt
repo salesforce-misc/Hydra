@@ -18,9 +18,6 @@ class Matcher<T : Any, out R : T> private constructor(private val clazz: Class<R
     fun <T : Any, R : T> any(clazz: Class<R>): Matcher<T, R> = Matcher(clazz)
 
     @JvmStatic
-    inline fun <T : Any, reified R : T> any(): Matcher<T, R> = any(R::class.java)
-
-    @JvmStatic
-    inline fun <T : Any, reified R : T> eq(value: R): Matcher<T, R> = any<T, R>().where { this == value }
+    fun <T : Any, R : T> eq(value: R, clazz: Class<R>): Matcher<T, R> = any<T, R>(clazz).where { this == value }
   }
 }

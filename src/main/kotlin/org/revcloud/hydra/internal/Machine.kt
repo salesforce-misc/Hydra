@@ -3,7 +3,7 @@ package org.revcloud.hydra.internal
 import org.revcloud.hydra.statemachine.Transition
 import java.util.function.Consumer
 
-data class Graph<StateT : Any, EventT : Any, SideEffectT : Any>(
+data class Machine<StateT : Any, EventT : Any, SideEffectT : Any>(
   val initialState: StateT,
   val stateDefinitions: Map<Matcher<StateT, StateT>, State<StateT, EventT, SideEffectT>>,
   val onTransitionListeners: List<Consumer<Transition<StateT, EventT, SideEffectT>>>

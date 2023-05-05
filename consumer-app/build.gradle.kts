@@ -22,6 +22,13 @@ dependencies {
 
   testImplementation(libs.assertj.core)
 }
+ktor {
+  docker {
+    jreVersion.set(io.ktor.plugin.features.JreVersion.JRE_17)
+    localImageName.set("hydra-consumer-app")
+    imageTag.set("latest")
+  }
+}
 sqldelight {
   databases {
     create("SqlDelight") {

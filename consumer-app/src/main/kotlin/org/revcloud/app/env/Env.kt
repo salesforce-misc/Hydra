@@ -4,8 +4,7 @@ import kotlin.time.Duration
 import kotlin.time.Duration.Companion.days
 
 private const val PORT: Int = 7070
-private const val JDBC_URL: String =
-  "jdbc:postgresql://localhost:5432/hydra"
+private const val JDBC_URL: String = "jdbc:postgresql://localhost:5432/hydra"
 private const val JDBC_USER: String = "postgres"
 private const val JDBC_PW: String = "postgres"
 private const val JDBC_DRIVER: String = "org.postgresql.Driver"
