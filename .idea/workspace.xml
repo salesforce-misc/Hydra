@@ -4,18 +4,27 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6ed80e62-f038-45bc-b42e-83dd15ec8dae" name="Changes" comment="Extracted consumer to a different module&#10;&#10;&#10;Signed-off-by: Gopal S Akshintala &lt;gopala.akshintala@salesforce.com&gt;">
+    <list default="true" id="6ed80e62-f038-45bc-b42e-83dd15ec8dae" name="Changes" comment="First Unit test building a machine&#10;&#10;&#10;Signed-off-by: Gopal S Akshintala &lt;gopala.akshintala@salesforce.com&gt;">
+      <change afterPath="$PROJECT_DIR$/consumer-app/src/main/kotlin/org/revcloud/app/routes/rabbitmq.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/httpRequests/http-requests-log.http" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/httpRequests/http-requests-log.http" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/jarRepositories.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/buildSrc/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/buildSrc/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/buildSrc/settings.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/buildSrc/settings.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/buildSrc/src/main/kotlin/hydra.root-conventions.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/buildSrc/src/main/kotlin/hydra.root-conventions.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/buildSrc/src/main/kotlin/hydra.sub-conventions.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/buildSrc/src/main/kotlin/hydra.sub-conventions.gradle.kts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/consumer-app/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/consumer-app/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/consumer-app/src/main/kotlin/org/revcloud/app/env/Env.kt" beforeDir="false" afterPath="$PROJECT_DIR$/consumer-app/src/main/kotlin/org/revcloud/app/env/Env.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/consumer-app/src/main/resources/application.conf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/consumer-app/src/main/kotlin/org/revcloud/app/env/ktor.kt" beforeDir="false" afterPath="$PROJECT_DIR$/consumer-app/src/main/kotlin/org/revcloud/app/env/ktor.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/consumer-app/src/main/kotlin/org/revcloud/app/main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/consumer-app/src/main/kotlin/org/revcloud/app/main.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/consumer-app/src/main/kotlin/org/revcloud/app/routes/events.kt" beforeDir="false" afterPath="$PROJECT_DIR$/consumer-app/src/main/kotlin/org/revcloud/app/routes/events.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/consumer-app/src/main/kotlin/org/revcloud/app/routes/health.kt" beforeDir="false" afterPath="$PROJECT_DIR$/consumer-app/src/main/kotlin/org/revcloud/app/routes/health.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker-compose.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/libs.versions.toml" beforeDir="false" afterPath="$PROJECT_DIR$/libs.versions.toml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/settings.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/settings.gradle.kts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/org/revcloud/hydra/Hydra.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/org/revcloud/hydra/Hydra.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/org/revcloud/hydra/config/ConfigBuilder.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/org/revcloud/hydra/config/MachineBuilder.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/org/revcloud/hydra/internal/Graph.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/org/revcloud/hydra/internal/Machine.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/org/revcloud/hydra/internal/Matcher.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/org/revcloud/hydra/internal/Matcher.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/org/revcloud/hydra/HydraTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org/revcloud/hydra/HydraTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/kotlin/org/revcloud/hydra/State.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/kotlin/org/revcloud/hydra/State.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/resources/http/client.http" beforeDir="false" afterPath="$PROJECT_DIR$/consumer-app/src/main/resources/http/client.http" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/resources/http/http-client.env.json" beforeDir="false" afterPath="$PROJECT_DIR$/consumer-app/src/main/resources/http/http-client.env.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,12 +64,12 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Kotlin File" />
         <option value="JUnit5 Test Class" />
         <option value="Class" />
         <option value="HTTP Request" />
         <option value="HTTP Public Environment File" />
         <option value="Kotlin Class" />
+        <option value="Kotlin File" />
       </list>
     </option>
   </component>
@@ -121,7 +130,7 @@
     &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5&quot;: &quot;&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
     &quot;jdk.selected.JAVA_MODULE&quot;: &quot;17&quot;,
-    &quot;ktor.last.update.timestamp&quot;: &quot;1683192039965&quot;,
+    &quot;ktor.last.update.timestamp&quot;: &quot;1683343925300&quot;,
     &quot;last_directory_selection&quot;: &quot;/Users/gopala.akshintala/code-clones/work/hydra-root/src/test/kotlin/org/revcloud/hydra&quot;,
     &quot;last_opened_file_path&quot;: &quot;/Users/gopala.akshintala/code-clones/work/hydra-root/consumer-app/src/main/resources&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
@@ -181,12 +190,14 @@
       <command value="gradle spotlessApply" />
       <command value="gradle generateSqlDelightInterface" />
       <command value="gradle clean build" />
-      <command value="gradle run" />
       <command value="gradle -stop" />
+      <command value="gradle :embedded-server:run" />
+      <command value="gradle --stop" />
+      <command value="gradle run" />
     </option>
   </component>
-  <component name="RunManager" selected="Gradle.MatterMachine.validTransition">
-    <configuration name="MatterMachine.validTransition" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+  <component name="RunManager" selected="HTTP Request.client | #2">
+    <configuration name="hydra-root [:embedded-server:run]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -197,31 +208,7 @@
         </option>
         <option name="taskNames">
           <list>
-            <option value=":test" />
-            <option value="--tests" />
-            <option value="&quot;org.revcloud.hydra.HydraTest$MatterMachine.validTransition&quot;" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <ForceTestExec>true</ForceTestExec>
-      <method v="2" />
-    </configuration>
-    <configuration name="hydra-root [-stop]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" value="" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value="-stop" />
+            <option value=":embedded-server:run" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -232,15 +219,50 @@
       <ForceTestExec>false</ForceTestExec>
       <method v="2" />
     </configuration>
-    <configuration name="client | #1" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$/src/test/resources/http/client.http" requestIdentifier="#1" runType="Run single request">
+    <configuration name="hydra-root [run]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="run" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <ForceTestExec>false</ForceTestExec>
       <method v="2" />
     </configuration>
-    <configuration name="MainKt (1)" type="JetRunConfigurationType" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="org.revcloud.app.MainKt" />
-      <module name="hydra-root.consumer-app.main" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
+    <configuration name="hydra-root" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="--stop" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list />
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <ForceTestExec>false</ForceTestExec>
+      <method v="2" />
+    </configuration>
+    <configuration name="client | #2" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$/consumer-app/src/main/resources/http/client.http" index="2" requestIdentifier="#2" runType="Run single request">
+      <method v="2" />
     </configuration>
     <configuration default="true" type="docker-deploy" factoryName="docker-compose.yml" temporary="true">
       <deployment type="docker-compose.yml">
@@ -251,6 +273,7 @@
     <configuration name="docker-compose.yaml: Compose Deployment" type="docker-deploy" factoryName="docker-compose.yml" temporary="true" server-name="Docker">
       <deployment type="docker-compose.yml">
         <settings>
+          <option name="envFilePath" value="" />
           <option name="sourceFilePath" value="docker-compose.yaml" />
         </settings>
       </deployment>
@@ -258,18 +281,18 @@
     </configuration>
     <list>
       <item itemvalue="Docker.docker-compose.yaml: Compose Deployment" />
-      <item itemvalue="Gradle.MatterMachine.validTransition" />
-      <item itemvalue="Gradle.hydra-root [-stop]" />
-      <item itemvalue="HTTP Request.client | #1" />
-      <item itemvalue="Kotlin.MainKt (1)" />
+      <item itemvalue="Gradle.hydra-root" />
+      <item itemvalue="Gradle.hydra-root [:embedded-server:run]" />
+      <item itemvalue="Gradle.hydra-root [run]" />
+      <item itemvalue="HTTP Request.client | #2" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Gradle.MatterMachine.validTransition" />
-        <item itemvalue="Gradle.hydra-root [-stop]" />
-        <item itemvalue="Kotlin.MainKt (1)" />
+        <item itemvalue="HTTP Request.client | #2" />
+        <item itemvalue="Gradle.hydra-root" />
+        <item itemvalue="Gradle.hydra-root [run]" />
+        <item itemvalue="Gradle.hydra-root [:embedded-server:run]" />
         <item itemvalue="Docker.docker-compose.yaml: Compose Deployment" />
-        <item itemvalue="HTTP Request.client | #1" />
       </list>
     </recent_temporary>
   </component>
@@ -308,7 +331,8 @@
       <workItem from="1683208959346" duration="591000" />
       <workItem from="1683214312883" duration="1794000" />
       <workItem from="1683262428851" duration="11094000" />
-      <workItem from="1683294144766" duration="2815000" />
+      <workItem from="1683294144766" duration="5150000" />
+      <workItem from="1683343888645" duration="11159000" />
     </task>
     <task id="LOCAL-00001" summary="- Fixed moshiReVoman&#10;- Added module-info.java to integrationTest module">
       <created>1678595183319</created>
@@ -436,7 +460,14 @@
       <option name="project" value="LOCAL" />
       <updated>1683263694476</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="First Unit test building a machine&#10;&#10;&#10;Signed-off-by: Gopal S Akshintala &lt;gopala.akshintala@salesforce.com&gt;">
+      <created>1683297536992</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1683297536993</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -498,7 +529,8 @@
     <MESSAGE value="Enable Ktor&#10;&#10;&#10;Signed-off-by: Gopal S Akshintala &lt;gopala.akshintala@salesforce.com&gt;" />
     <MESSAGE value="Enabled Ktor and Postgres&#10;&#10;&#10;Signed-off-by: Gopal S Akshintala &lt;gopala.akshintala@salesforce.com&gt;" />
     <MESSAGE value="Extracted consumer to a different module&#10;&#10;&#10;Signed-off-by: Gopal S Akshintala &lt;gopala.akshintala@salesforce.com&gt;" />
-    <option name="LAST_COMMIT_MESSAGE" value="Extracted consumer to a different module&#10;&#10;&#10;Signed-off-by: Gopal S Akshintala &lt;gopala.akshintala@salesforce.com&gt;" />
+    <MESSAGE value="First Unit test building a machine&#10;&#10;&#10;Signed-off-by: Gopal S Akshintala &lt;gopala.akshintala@salesforce.com&gt;" />
+    <option name="LAST_COMMIT_MESSAGE" value="First Unit test building a machine&#10;&#10;&#10;Signed-off-by: Gopal S Akshintala &lt;gopala.akshintala@salesforce.com&gt;" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

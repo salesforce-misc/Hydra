@@ -36,7 +36,7 @@ class Hydra<StateT : Any, EventT : Any, SideEffectT : Any> private constructor(p
     return transition
   }
 
-  fun with(init: MachineBuilder<StateT, EventT, SideEffectT>.() -> Unit): Hydra<StateT, EventT, SideEffectT> {
+  fun with(init: Consumer<MachineBuilder<StateT, EventT, SideEffectT>>): Hydra<StateT, EventT, SideEffectT> {
     return create(machine.copy(initialState = state), init)
   }
 

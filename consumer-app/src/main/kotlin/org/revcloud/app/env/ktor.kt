@@ -1,14 +1,19 @@
 package org.revcloud.app.env
 
-import io.ktor.http.*
-import io.ktor.serialization.kotlinx.json.*
-import io.ktor.server.application.*
-import io.ktor.server.plugins.contentnegotiation.*
+import io.ktor.http.HttpHeaders
+import io.ktor.serialization.kotlinx.json.json
+import io.ktor.server.application.Application
+import io.ktor.server.application.install
+import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.server.plugins.cors.maxAgeDuration
 import io.ktor.server.plugins.cors.routing.CORS
-import io.ktor.server.plugins.defaultheaders.*
-import kotlinx.serialization.json.Json
+import io.ktor.server.plugins.defaultheaders.DefaultHeaders
 import kotlin.time.Duration.Companion.days
+import kotlinx.serialization.cbor.Cbor
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.Json.Default.serializersModule
+import kotlinx.serialization.serializer
+import pl.jutupe.ktor_rabbitmq.RabbitMQ
 
 fun Application.configure() {
   install(DefaultHeaders)
@@ -23,5 +28,20 @@ fun Application.configure() {
     allowHeader(HttpHeaders.ContentType)
     allowNonSimpleContentTypes = true
     maxAgeDuration = 3.days
+  }
+  install(RabbitMQ) {
+    uri = "amqp://guest:guest@localhost:5672"
+    connectionName = "hydra"
+
+    enableLogging()
+
+    serialize { Cbor.encodeToByteArray(serializersModule.serializer(it.javaClass), it) }
+    deserialize { bytes, type -> Cbor.decodeFromByteArray(serializersModule.serializer(type.javaObjectType), bytes) }
+
+    initialize {
+      exchangeDeclare("exchange", "direct", true)
+      queueDeclare("queue", true, false, false, emptyMap())
+      queueBind("queue", "exchange", "routingKey")
+    }
   }
 }

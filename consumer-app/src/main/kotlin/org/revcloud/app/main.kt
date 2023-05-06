@@ -3,15 +3,16 @@ package org.revcloud.app
 import arrow.continuations.SuspendApp
 import arrow.continuations.ktor.server
 import arrow.fx.coroutines.resourceScope
-import io.github.nomisrev.routes.health
-import org.revcloud.app.routes.eventRoutes
-import io.ktor.server.application.*
-import io.ktor.server.netty.*
+import io.ktor.server.application.Application
+import io.ktor.server.netty.Netty
 import kotlinx.coroutines.awaitCancellation
 import org.revcloud.app.env.Dependencies
 import org.revcloud.app.env.Env
 import org.revcloud.app.env.configure
 import org.revcloud.app.env.dependencies
+import org.revcloud.app.routes.eventRoutes
+import org.revcloud.app.routes.health
+import org.revcloud.app.routes.rabbitMq
 
 fun main(): Unit = SuspendApp {
   val env = Env()
@@ -30,4 +31,5 @@ fun Application.app(module: Dependencies) {
     health(module.healthCheck)
     eventRoutes()
   }
+  rabbitMq()
 }

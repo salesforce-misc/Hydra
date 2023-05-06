@@ -6,7 +6,7 @@ Content-Type: application/json
 }
 
 ###
-GET http://localhost:7070
+GET http://localhost:7070/hello
 Accept: application/json
 
 ###

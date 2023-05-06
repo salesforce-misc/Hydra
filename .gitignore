@@ -200,3 +200,4 @@ Temporary Items
 
 /.idea/sonarlint/
 **/bin/
+/.idea/httpRequests/

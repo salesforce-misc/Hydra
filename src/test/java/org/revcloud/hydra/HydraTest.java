@@ -38,6 +38,7 @@ class HydraTest {
     void validTransition() {
       assertThat(matterMachine.getState()).isEqualTo(Solid.INSTANCE);
       matterMachine.transition(OnMelted.INSTANCE);
+      matterMachine.with()
       assertThat(matterMachine.getState()).isEqualTo(Liquid.INSTANCE);
     }
   }

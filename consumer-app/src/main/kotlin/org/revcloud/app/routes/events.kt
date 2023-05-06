@@ -4,29 +4,32 @@ import arrow.core.raise.Raise
 import arrow.core.raise.catch
 import arrow.core.raise.effect
 import arrow.core.raise.fold
-import io.ktor.http.*
-import io.ktor.server.application.*
-import io.ktor.server.request.*
-import io.ktor.server.response.*
-import io.ktor.server.routing.*
-import io.ktor.util.pipeline.*
+import io.ktor.http.HttpStatusCode
+import io.ktor.server.application.Application
+import io.ktor.server.application.ApplicationCall
+import io.ktor.server.application.call
+import io.ktor.server.request.receive
+import io.ktor.server.response.respond
+import io.ktor.server.routing.get
+import io.ktor.server.routing.post
+import io.ktor.server.routing.routing
+import io.ktor.util.pipeline.PipelineContext
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.MissingFieldException
 import kotlinx.serialization.Serializable
 import org.revcloud.app.repo.StatePersistence
 import org.revcloud.app.service.insertAndGetId
-
+import pl.jutupe.ktor_rabbitmq.publish
 
 @Serializable
 data class State(val state: String)
 
-
 context(Application, StatePersistence)
 fun eventRoutes() = routing {
-  get {
-    call.respond(HttpStatusCode.OK, "Hail Hydra!")
+  get("/hello") {
+    call.publish("exchange", "routingKey", /* props= */ null, Event("test"))
+    call.respond("Hail Hydra!")
   }
-
   post("/event") {
     respond(HttpStatusCode.Created) {
       val state = receiveCatching<State>().state
@@ -47,8 +50,7 @@ suspend inline fun <reified A : Any> respond(
 
 context(Raise<IncorrectJson>)
 @OptIn(ExperimentalSerializationApi::class)
-private suspend inline fun <reified A : Any> PipelineContext<Unit, ApplicationCall>
-  .receiveCatching(): A =
+private suspend inline fun <reified A : Any> PipelineContext<Unit, ApplicationCall>.receiveCatching(): A =
   catch({ call.receive() }) { e: MissingFieldException -> raise(IncorrectJson(e)) }
 
 sealed interface DomainError
