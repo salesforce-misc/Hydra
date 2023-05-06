@@ -29,6 +29,13 @@ tasks {
     }
   }
 }
+testing {
+  suites {
+    val test by getting(JvmTestSuite::class) {
+      useJUnitJupiter("5.9.3")
+    }
+  }
+}
 publishing {
   publications.create<MavenPublication>("hydra") {
     val subprojectJarName = tasks.jar.get().archiveBaseName.get()

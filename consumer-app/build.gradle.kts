@@ -9,7 +9,7 @@ application {
   applicationDefaultJvmArgs = listOf("-Dio.ktor.development=true")
 }
 dependencies {
-  rootProject
+  implementation(project(":hydra"))
   compileOnly(libs.jetbrains.annotations)
   implementation(libs.hikari)
   implementation(libs.sqldelight.jdbc)
