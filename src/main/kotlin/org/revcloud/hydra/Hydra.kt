@@ -40,6 +40,10 @@ class Hydra<StateT : Any, EventT : Any, SideEffectT : Any> private constructor(p
     return create(machine.copy(initialState = state), init)
   }
 
+  fun with(init: MachineBuilder<StateT, EventT, SideEffectT>.() -> Unit): Hydra<StateT, EventT, SideEffectT> {
+    return create(machine.copy(initialState = state), init)
+  }
+
   private fun StateT.getTransition(event: EventT): Transition<StateT, EventT, SideEffectT> {
     for ((eventMatcher, createTransitionTo) in getDefinition().transitions) {
       if (eventMatcher.matches(event)) {
@@ -73,10 +77,23 @@ class Hydra<StateT : Any, EventT : Any, SideEffectT : Any> private constructor(p
       init: Consumer<MachineBuilder<StateT, EventT, SideEffectT>>
     ): Hydra<StateT, EventT, SideEffectT> = create(null, init)
 
+    fun <StateT : Any, EventT : Any, SideEffectT : Any> create(
+      init: MachineBuilder<StateT, EventT, SideEffectT>.() -> Unit
+    ): Hydra<StateT, EventT, SideEffectT> {
+      return create(null, init)
+    }
+
     @JvmStatic
     private fun <StateT : Any, EventT : Any, SideEffectT : Any> create(
       machine: Machine<StateT, EventT, SideEffectT>?,
       init: Consumer<MachineBuilder<StateT, EventT, SideEffectT>>
     ): Hydra<StateT, EventT, SideEffectT> = Hydra(MachineBuilder(machine).apply { init.accept(this) }.build())
+
+    private fun <StateT : Any, EventT : Any, SideEffectT : Any> create(
+      machine: Machine<StateT, EventT, SideEffectT>?,
+      init: MachineBuilder<StateT, EventT, SideEffectT>.() -> Unit
+    ): Hydra<StateT, EventT, SideEffectT> {
+      return Hydra(MachineBuilder(machine).apply(init).build())
+    }
   }
 }

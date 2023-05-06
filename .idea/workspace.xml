@@ -4,27 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6ed80e62-f038-45bc-b42e-83dd15ec8dae" name="Changes" comment="First Unit test building a machine&#10;&#10;&#10;Signed-off-by: Gopal S Akshintala &lt;gopala.akshintala@salesforce.com&gt;">
-      <change afterPath="$PROJECT_DIR$/consumer-app/src/main/kotlin/org/revcloud/app/routes/rabbitmq.kt" afterDir="false" />
+    <list default="true" id="6ed80e62-f038-45bc-b42e-83dd15ec8dae" name="Changes" comment="Integrate with RabbitMQ&#10;&#10;&#10;Signed-off-by: Gopal S Akshintala &lt;gopala.akshintala@salesforce.com&gt;">
+      <change afterPath="$PROJECT_DIR$/consumer-app/src/main/kotlin/org/revcloud/app/routes/MatterStateMachine.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/httpRequests/http-requests-log.http" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/httpRequests/http-requests-log.http" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/jarRepositories.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/buildSrc/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/buildSrc/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/buildSrc/settings.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/buildSrc/settings.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/buildSrc/src/main/kotlin/hydra.root-conventions.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/buildSrc/src/main/kotlin/hydra.root-conventions.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/buildSrc/src/main/kotlin/hydra.sub-conventions.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/buildSrc/src/main/kotlin/hydra.sub-conventions.gradle.kts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/consumer-app/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/consumer-app/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/consumer-app/src/main/kotlin/org/revcloud/app/env/ktor.kt" beforeDir="false" afterPath="$PROJECT_DIR$/consumer-app/src/main/kotlin/org/revcloud/app/env/ktor.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/consumer-app/src/main/kotlin/org/revcloud/app/main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/consumer-app/src/main/kotlin/org/revcloud/app/main.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/consumer-app/src/main/kotlin/org/revcloud/app/routes/events.kt" beforeDir="false" afterPath="$PROJECT_DIR$/consumer-app/src/main/kotlin/org/revcloud/app/routes/events.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/consumer-app/src/main/kotlin/org/revcloud/app/routes/health.kt" beforeDir="false" afterPath="$PROJECT_DIR$/consumer-app/src/main/kotlin/org/revcloud/app/routes/health.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docker-compose.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/libs.versions.toml" beforeDir="false" afterPath="$PROJECT_DIR$/libs.versions.toml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/settings.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/settings.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/consumer-app/src/main/kotlin/org/revcloud/app/routes/events.kt" beforeDir="false" afterPath="$PROJECT_DIR$/consumer-app/src/main/kotlin/org/revcloud/app/routes/state.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/consumer-app/src/main/kotlin/org/revcloud/app/routes/rabbitmq.kt" beforeDir="false" afterPath="$PROJECT_DIR$/consumer-app/src/main/kotlin/org/revcloud/app/routes/rabbitConsumers.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/org/revcloud/hydra/Hydra.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/org/revcloud/hydra/Hydra.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/org/revcloud/hydra/HydraTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org/revcloud/hydra/HydraTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/resources/http/client.http" beforeDir="false" afterPath="$PROJECT_DIR$/consumer-app/src/main/resources/http/client.http" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/resources/http/http-client.env.json" beforeDir="false" afterPath="$PROJECT_DIR$/consumer-app/src/main/resources/http/http-client.env.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/org/revcloud/hydra/config/MachineBuilder.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/org/revcloud/hydra/config/MachineBuilder.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/org/revcloud/hydra/internal/Matcher.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/org/revcloud/hydra/internal/Matcher.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -196,7 +185,7 @@
       <command value="gradle run" />
     </option>
   </component>
-  <component name="RunManager" selected="HTTP Request.client | #2">
+  <component name="RunManager" selected="Gradle.hydra-root [run]">
     <configuration name="hydra-root [:embedded-server:run]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -332,7 +321,7 @@
       <workItem from="1683214312883" duration="1794000" />
       <workItem from="1683262428851" duration="11094000" />
       <workItem from="1683294144766" duration="5150000" />
-      <workItem from="1683343888645" duration="11159000" />
+      <workItem from="1683343888645" duration="15738000" />
     </task>
     <task id="LOCAL-00001" summary="- Fixed moshiReVoman&#10;- Added module-info.java to integrationTest module">
       <created>1678595183319</created>
@@ -467,7 +456,14 @@
       <option name="project" value="LOCAL" />
       <updated>1683297536993</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="Integrate with RabbitMQ&#10;&#10;&#10;Signed-off-by: Gopal S Akshintala &lt;gopala.akshintala@salesforce.com&gt;">
+      <created>1683360331764</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1683360331764</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -530,7 +526,8 @@
     <MESSAGE value="Enabled Ktor and Postgres&#10;&#10;&#10;Signed-off-by: Gopal S Akshintala &lt;gopala.akshintala@salesforce.com&gt;" />
     <MESSAGE value="Extracted consumer to a different module&#10;&#10;&#10;Signed-off-by: Gopal S Akshintala &lt;gopala.akshintala@salesforce.com&gt;" />
     <MESSAGE value="First Unit test building a machine&#10;&#10;&#10;Signed-off-by: Gopal S Akshintala &lt;gopala.akshintala@salesforce.com&gt;" />
-    <option name="LAST_COMMIT_MESSAGE" value="First Unit test building a machine&#10;&#10;&#10;Signed-off-by: Gopal S Akshintala &lt;gopala.akshintala@salesforce.com&gt;" />
+    <MESSAGE value="Integrate with RabbitMQ&#10;&#10;&#10;Signed-off-by: Gopal S Akshintala &lt;gopala.akshintala@salesforce.com&gt;" />
+    <option name="LAST_COMMIT_MESSAGE" value="Integrate with RabbitMQ&#10;&#10;&#10;Signed-off-by: Gopal S Akshintala &lt;gopala.akshintala@salesforce.com&gt;" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

@@ -9,8 +9,8 @@ application {
   applicationDefaultJvmArgs = listOf("-Dio.ktor.development=true")
 }
 dependencies {
+  rootProject
   compileOnly(libs.jetbrains.annotations)
-
   implementation(libs.hikari)
   implementation(libs.sqldelight.jdbc)
   implementation(libs.postgresql)

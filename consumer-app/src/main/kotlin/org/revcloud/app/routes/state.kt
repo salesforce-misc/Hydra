@@ -27,13 +27,15 @@ data class State(val state: String)
 context(Application, StatePersistence)
 fun eventRoutes() = routing {
   get("/hello") {
-    call.publish("exchange", "routingKey", /* props= */ null, Event("test"))
+    call.publish("exchange", "routingKey", null, Event("event"))
+    call.publish("exchange", "routingKey", null, State("state"))
     call.respond("Hail Hydra!")
   }
-  post("/event") {
+  post("/start") {
     respond(HttpStatusCode.Created) {
-      val state = receiveCatching<State>().state
-      insertAndGetId(state).serial
+      val initialState = receiveCatching<State>().state
+      call.publish("exchange", "routingKey", null, initialState)
+      insertAndGetId(initialState).serial
     }
   }
 }

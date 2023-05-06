@@ -12,7 +12,7 @@ import org.revcloud.app.env.configure
 import org.revcloud.app.env.dependencies
 import org.revcloud.app.routes.eventRoutes
 import org.revcloud.app.routes.health
-import org.revcloud.app.routes.rabbitMq
+import org.revcloud.app.routes.rabbitConsumers
 
 fun main(): Unit = SuspendApp {
   val env = Env()
@@ -31,5 +31,5 @@ fun Application.app(module: Dependencies) {
     health(module.healthCheck)
     eventRoutes()
   }
-  rabbitMq()
+  rabbitConsumers()
 }
