@@ -2,7 +2,7 @@ POST http://localhost:7070/action
 Content-Type: application/json
 
 {
-  "type": "org.revcloud.app.env.Action.OnMelted"
+  "type": "org.revcloud.app.env.Action.Melt"
 }
 
 ###

@@ -22,29 +22,29 @@ sealed class Matter {
 @Serializable
 sealed class Action {
     @Serializable
-    object OnMelted : Action()
+    object Melt : Action()
 
     @Serializable
-    object OnFrozen : Action()
+    object Freeze : Action()
 
     @Serializable
-    object OnVaporized : Action()
+    object Vaporize : Action()
 
     @Serializable
-    object OnCondensed : Action()
+    object Condense : Action()
 }
 
 @Serializable
 sealed class SideEffect {
     @Serializable
-    object LogMelted : SideEffect()
+    object Melted : SideEffect()
 
     @Serializable
-    object LogFrozen : SideEffect()
+    object Frozen : SideEffect()
 
     @Serializable
-    object LogVaporized : SideEffect()
+    object Vaporized : SideEffect()
 
     @Serializable
-    object LogCondensed : SideEffect()
+    object Condensed : SideEffect()
 }
