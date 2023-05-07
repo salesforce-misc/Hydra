@@ -1,12 +1,13 @@
 package org.revcloud.app.env
 
-import io.ktor.http.*
-import io.ktor.serialization.kotlinx.json.*
-import io.ktor.server.application.*
-import io.ktor.server.plugins.contentnegotiation.*
+import io.ktor.http.HttpHeaders
+import io.ktor.serialization.kotlinx.json.json
+import io.ktor.server.application.Application
+import io.ktor.server.application.install
+import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.server.plugins.cors.maxAgeDuration
 import io.ktor.server.plugins.cors.routing.CORS
-import io.ktor.server.plugins.defaultheaders.*
+import io.ktor.server.plugins.defaultheaders.DefaultHeaders
 import kotlinx.serialization.json.Json
 import org.revcloud.app.routes.eventRoutes
 import org.revcloud.app.routes.health
@@ -36,11 +37,14 @@ fun Application.configure(rabbitMQInstanceToConfigure: RabbitMQInstance) {
 
 fun Application.app(module: Dependencies) {
   configure(module.rabbitMQInstance)
-  with(module.statePersistence) {
-    health(module.healthCheck)
-    eventRoutes()
+  with(module.logger) {
+    with(module.statePersistence) {
+      health(module.healthCheck)
+      eventRoutes()
+    }
+    with(module.matterMachine) {
+      rabbitConsumers()
+    }
   }
-  with(module.matterMachine) {
-    rabbitConsumers()
-  }
+  
 }

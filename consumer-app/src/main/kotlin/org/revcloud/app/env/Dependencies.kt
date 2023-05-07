@@ -6,6 +6,7 @@ import com.sksamuel.cohort.hikari.HikariConnectionsHealthCheck
 import kotlinx.coroutines.Dispatchers
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.serializer
+import mu.KLogger
 import mu.KotlinLogging
 import org.revcloud.app.repo.StatePersistence
 import org.revcloud.app.repo.statePersistence
@@ -20,11 +21,12 @@ class Dependencies(
   val statePersistence: StatePersistence,
   val rabbitMQInstance: RabbitMQInstance,
   val matterMachine: Hydra<Matter, Action, SideEffect>,
-  val healthCheck: HealthCheckRegistry
+  val healthCheck: HealthCheckRegistry,
+  val logger: KLogger
 )
 
 context(ResourceScope)
-suspend fun dependencies(env: Env): Dependencies {
+suspend fun init(env: Env): Dependencies {
   val hikari = hikari(env.dataSource)
   val healthCheck = HealthCheckRegistry(Dispatchers.Default) { register(HikariConnectionsHealthCheck(hikari, 1), 5.seconds) }
   val sqlDelight = sqlDelight(hikari)
@@ -47,8 +49,8 @@ suspend fun dependencies(env: Env): Dependencies {
         queueBind("queue", "exchange", "routingKey")
       }
     })
+  val logger = KotlinLogging.logger {}
   val matterMachine = Hydra.create<Matter, Action, SideEffect> {
-    val logger = KotlinLogging.logger {}
     initialState(Matter.Solid)
     state<Matter.Solid> {
       on<Action.OnMelted> {
@@ -96,6 +98,7 @@ suspend fun dependencies(env: Env): Dependencies {
     statePersistence(sqlDelight.stateQueries),
     rabbitMQInstance,
     matterMachine,
-    healthCheck
+    healthCheck,
+    logger
   )
 }
