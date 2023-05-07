@@ -9,12 +9,13 @@ import io.ktor.server.plugins.cors.maxAgeDuration
 import io.ktor.server.plugins.cors.routing.CORS
 import io.ktor.server.plugins.defaultheaders.DefaultHeaders
 import kotlin.time.Duration.Companion.days
-import kotlinx.serialization.cbor.Cbor
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.Json.Default.serializersModule
 import kotlinx.serialization.serializer
 import pl.jutupe.ktor_rabbitmq.RabbitMQ
 
+@OptIn(ExperimentalSerializationApi::class)
 fun Application.configure() {
   install(DefaultHeaders)
   install(ContentNegotiation) {
@@ -32,12 +33,17 @@ fun Application.configure() {
   install(RabbitMQ) {
     uri = "amqp://guest:guest@localhost:5672"
     connectionName = "hydra"
-
     enableLogging()
-
-    serialize { Cbor.encodeToByteArray(serializersModule.serializer(it.javaClass), it) }
-    deserialize { bytes, type -> Cbor.decodeFromByteArray(serializersModule.serializer(type.javaObjectType), bytes) }
-
+    serialize {
+      if (it.javaClass.superclass.kotlin.isSealed) {
+        Json.encodeToString(serializersModule.serializer(it.javaClass.superclass), it).toByteArray()  
+      } else {
+        Json.encodeToString(serializersModule.serializer(it.javaClass), it).toByteArray()  
+      }
+    }
+    deserialize { bytes, type ->
+      Json.decodeFromString(serializersModule.serializer(type.javaObjectType), bytes.decodeToString())
+    }
     initialize {
       exchangeDeclare("exchange", "direct", true)
       queueDeclare("queue", true, false, false, emptyMap())

@@ -1,24 +1,21 @@
 package org.revcloud.app.routes
 
 import io.ktor.server.application.Application
-import kotlinx.serialization.Serializable
 import pl.jutupe.ktor_rabbitmq.consume
 import pl.jutupe.ktor_rabbitmq.rabbitConsumer
 
-
-
 context(Application)
 fun rabbitConsumers() = rabbitConsumer {
-  consume<Event>("queue") { body ->
-    println("Consumed Event $body")
+  consume<Action>("queue") { event ->
+    println("Consumed Action $event")
   }
-  consume<State>("queue") { body ->
-    println("Consumed State $body")
-
+  consume<Matter>("queue") { matter ->
+    println("Consumed Matter $matter")
+    matterMachine.with { initialState(matter) }
+  }
+  consume<State>("queue") { state ->
+    println("Consumed State $state")
   }
 }
-
-@Serializable
-data class Event(val state: String)
 
 

@@ -18,7 +18,6 @@ import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.MissingFieldException
 import kotlinx.serialization.Serializable
 import org.revcloud.app.repo.StatePersistence
-import org.revcloud.app.service.insertAndGetId
 import pl.jutupe.ktor_rabbitmq.publish
 
 @Serializable
@@ -27,15 +26,15 @@ data class State(val state: String)
 context(Application, StatePersistence)
 fun eventRoutes() = routing {
   get("/hello") {
-    call.publish("exchange", "routingKey", null, Event("event"))
+    call.publish("exchange", "routingKey", null, Action.OnMelted)
+    call.publish("exchange", "routingKey", null, Matter.Solid)
     call.publish("exchange", "routingKey", null, State("state"))
     call.respond("Hail Hydra!")
   }
   post("/start") {
     respond(HttpStatusCode.Created) {
-      val initialState = receiveCatching<State>().state
-      call.publish("exchange", "routingKey", null, initialState)
-      insertAndGetId(initialState).serial
+      val initialMatter = receiveCatching<Matter>()
+      call.publish("exchange", "routingKey", null, initialMatter)
     }
   }
 }

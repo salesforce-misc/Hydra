@@ -7,7 +7,7 @@ plugins {
   id("io.gitlab.arturbosch.detekt")
 }
 
-version = "0.6.2.2"
+version = "0.0.1"
 group = "com.salesforce.ccspayments"
 description = "Hydra - the Orchestrator"
 repositories {

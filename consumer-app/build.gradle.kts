@@ -22,7 +22,6 @@ dependencies {
   implementation(libs.bundles.suspendapp)
   implementation(libs.bundles.cohort)
   implementation(libs.bundles.kotlin.logging)
-
   testImplementation(libs.assertj.core)
 }
 ktor {
@@ -37,19 +36,6 @@ sqldelight {
     create("SqlDelight") {
       packageName.set("org.revcloud.app.sqldelight")
       dialect(libs.sqldelight.postgresql.get())
-    }
-  }
-}
-testing {
-  suites {
-    val test by getting(JvmTestSuite::class) {
-      useJUnitJupiter(libs.versions.junit.get())
-    }
-    val integrationTest by registering(JvmTestSuite::class) {
-      dependencies {
-        implementation(project())
-        implementation(libs.assertj.core)
-      }
     }
   }
 }
