@@ -1,21 +1,16 @@
 package org.revcloud.app.env
 
-import kotlin.time.Duration
-import kotlin.time.Duration.Companion.days
-
 private const val PORT: Int = 7070
 private const val JDBC_URL: String = "jdbc:postgresql://localhost:5432/hydra"
 private const val JDBC_USER: String = "postgres"
 private const val JDBC_PW: String = "postgres"
 private const val JDBC_DRIVER: String = "org.postgresql.Driver"
-private const val AUTH_SECRET: String = "MySuperStrongSecret"
-private const val AUTH_ISSUER: String = "KtorArrowExampleIssuer"
-private const val AUTH_DURATION: Int = 30
+private const val RABBIT_MQ_URI = "amqp://guest:guest@localhost:5672"
 
 data class Env(
   val dataSource: DataSource = DataSource(),
   val http: Http = Http(),
-  val auth: Auth = Auth(),
+  val rabbitMQ: RabbitMQ = RabbitMQ()
 ) {
   data class Http(
     val host: String = System.getenv("HOST") ?: "0.0.0.0",
@@ -28,10 +23,9 @@ data class Env(
     val password: String = System.getenv("POSTGRES_PASSWORD") ?: JDBC_PW,
     val driver: String = JDBC_DRIVER,
   )
-
-  data class Auth(
-    val secret: String = System.getenv("JWT_SECRET") ?: AUTH_SECRET,
-    val issuer: String = System.getenv("JWT_ISSUER") ?: AUTH_ISSUER,
-    val duration: Duration = (System.getenv("JWT_DURATION")?.toIntOrNull() ?: AUTH_DURATION).days
+  
+  data class RabbitMQ(
+    val uri: String = System.getenv("RABBIT_MQ_URI") ?: RABBIT_MQ_URI
   )
+  
 }

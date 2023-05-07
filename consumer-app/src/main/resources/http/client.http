@@ -1,13 +1,9 @@
-POST http://localhost:7070/event
+POST http://localhost:7070/action
 Content-Type: application/json
 
 {
-  "state": "state"
+  "type": "org.revcloud.app.env.Action.OnMelted"
 }
-
-###
-GET http://localhost:7070/hello
-Accept: application/json
 
 ###
 

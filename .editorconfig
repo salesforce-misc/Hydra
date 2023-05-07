@@ -12,6 +12,9 @@ ij_formatter_tags_enabled = false
 ij_smart_tabs = false
 ij_visual_guides = none
 ij_wrap_on_typing = false
+ij_kotlin_name_count_to_use_star_import = 99
+ij_kotlin_name_count_to_use_star_import_for_members = 99
+ij_java_names_count_to_use_import_on_demand = 99
 
 [*.css]
 ij_css_align_closing_brace_with_properties = false
@@ -40,7 +43,6 @@ ij_gherkin_keep_indents_on_empty_lines = false
 [*.haml]
 tab_width = 4
 ij_continuation_indent_size = 8
-ij_haml_keep_indents_on_empty_lines = false
 
 [*.java]
 max_line_length = off
@@ -933,6 +935,8 @@ ij_groovy_wrap_long_lines = false
 [{*.kt,*.kts}]
 max_line_length = off
 indent_size = 2
+ij_kotlin_name_count_to_use_star_import = 999
+ij_kotlin_name_count_to_use_star_import_for_members = 999
 ij_kotlin_continuation_indent_size = 2
 ij_kotlin_align_in_columns_case_branch = false
 ij_kotlin_align_multiline_binary_operation = false
@@ -982,8 +986,6 @@ ij_kotlin_method_call_chain_wrap = normal
 ij_kotlin_method_parameters_new_line_after_left_paren = true
 ij_kotlin_method_parameters_right_paren_on_new_line = true
 ij_kotlin_method_parameters_wrap = on_every_item
-ij_kotlin_name_count_to_use_star_import = 10
-ij_kotlin_name_count_to_use_star_import_for_members = 10
 ij_kotlin_packages_to_use_import_on_demand = kotlinx.android.synthetic.**,io.ktor.**
 ij_kotlin_parameter_annotation_wrap = off
 ij_kotlin_space_after_comma = true

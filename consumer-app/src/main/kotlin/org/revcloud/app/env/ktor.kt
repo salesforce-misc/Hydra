@@ -1,22 +1,21 @@
 package org.revcloud.app.env
 
-import io.ktor.http.HttpHeaders
-import io.ktor.serialization.kotlinx.json.json
-import io.ktor.server.application.Application
-import io.ktor.server.application.install
-import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.http.*
+import io.ktor.serialization.kotlinx.json.*
+import io.ktor.server.application.*
+import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.server.plugins.cors.maxAgeDuration
 import io.ktor.server.plugins.cors.routing.CORS
-import io.ktor.server.plugins.defaultheaders.DefaultHeaders
-import kotlin.time.Duration.Companion.days
-import kotlinx.serialization.ExperimentalSerializationApi
+import io.ktor.server.plugins.defaultheaders.*
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.Json.Default.serializersModule
-import kotlinx.serialization.serializer
+import org.revcloud.app.routes.eventRoutes
+import org.revcloud.app.routes.health
+import org.revcloud.app.routes.rabbitConsumers
 import pl.jutupe.ktor_rabbitmq.RabbitMQ
+import pl.jutupe.ktor_rabbitmq.RabbitMQInstance
+import kotlin.time.Duration.Companion.days
 
-@OptIn(ExperimentalSerializationApi::class)
-fun Application.configure() {
+fun Application.configure(rabbitMQInstanceToConfigure: RabbitMQInstance) {
   install(DefaultHeaders)
   install(ContentNegotiation) {
     json(Json {
@@ -31,23 +30,17 @@ fun Application.configure() {
     maxAgeDuration = 3.days
   }
   install(RabbitMQ) {
-    uri = "amqp://guest:guest@localhost:5672"
-    connectionName = "hydra"
-    enableLogging()
-    serialize {
-      if (it.javaClass.superclass.kotlin.isSealed) {
-        Json.encodeToString(serializersModule.serializer(it.javaClass.superclass), it).toByteArray()  
-      } else {
-        Json.encodeToString(serializersModule.serializer(it.javaClass), it).toByteArray()  
-      }
-    }
-    deserialize { bytes, type ->
-      Json.decodeFromString(serializersModule.serializer(type.javaObjectType), bytes.decodeToString())
-    }
-    initialize {
-      exchangeDeclare("exchange", "direct", true)
-      queueDeclare("queue", true, false, false, emptyMap())
-      queueBind("queue", "exchange", "routingKey")
-    }
+    rabbitMQInstance = rabbitMQInstanceToConfigure.apply { enableLogging() }
+  }
+}
+
+fun Application.app(module: Dependencies) {
+  configure(module.rabbitMQInstance)
+  with(module.statePersistence) {
+    health(module.healthCheck)
+    eventRoutes()
+  }
+  with(module.matterMachine) {
+    rabbitConsumers()
   }
 }
