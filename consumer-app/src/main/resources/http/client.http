@@ -1,8 +1,8 @@
-POST http://localhost:7070/action
+POST http://localhost:7070/place
 Content-Type: application/json
 
 {
-  "type": "org.revcloud.app.env.Action.Melt"
+  "type": "org.revcloud.app.env.Action.Place"
 }
 
 ###

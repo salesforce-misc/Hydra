@@ -3,7 +3,7 @@ import java.time.OffsetDateTime;
 
 CREATE TABLE IF NOT EXISTS state(
     id BIGSERIAL AS StateId PRIMARY KEY,
-    previousState TEXT NOT NULL,
+    previousState JSONB NOT NULL,
     createdAt VARCHAR(50) AS OffsetDateTime NOT NULL,
     updatedAt VARCHAR(50) AS OffsetDateTime NOT NULL
 );

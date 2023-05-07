@@ -14,7 +14,7 @@ import kotlin.time.Duration.Companion.seconds
 class Dependencies(
   val env: Env,
   val statePersistence: StatePersistence,
-  val matterMachine: Hydra<Matter, Action, SideEffect>,
+  val orderMachine: Hydra<Order, Action, SideEffect>,
   val healthCheck: HealthCheckRegistry,
   val logger: KLogger
 )
@@ -24,24 +24,30 @@ suspend fun init(env: Env): Dependencies {
   val hikari = hikari(env.dataSource)
   val healthCheck = HealthCheckRegistry(Dispatchers.Default) { register(HikariConnectionsHealthCheck(hikari, 1), 5.seconds) }
   val sqlDelight = sqlDelight(hikari)
-  val matterMachine = Hydra.create {
-    initialState(Matter.Solid)
-    state<Matter.Solid> {
-      on<Action.Melt> {
-        transitionTo(Matter.Liquid, SideEffect.Melted)
+  val orderMachine = Hydra.create {
+    initialState(Order.Idle)
+    state<Order.Idle> {
+      on<Action.Place> {
+        transitionTo(Order.Place, SideEffect.Placed)
       }
     }
-    state<Matter.Liquid> {
-      on<Action.Freeze> {
-        transitionTo(Matter.Solid, SideEffect.Frozen)
+    state<Order.Place> {
+      on<Action.PaymentFailed> {
+        transitionTo(Order.Idle, SideEffect.Cancelled)
       }
-      on<Action.Vaporize> {
-        transitionTo(Matter.Gas, SideEffect.Vaporized)
+      on<Action.PaymentSuccessful> {
+        transitionTo(Order.Process, SideEffect.Paid)
+      }
+      on<Action.Cancel> {
+        transitionTo(Order.Idle, SideEffect.Cancelled)
       }
     }
-    state<Matter.Gas> {
-      on<Action.Condense> {
-        transitionTo(Matter.Liquid, SideEffect.Condensed)
+    state<Order.Process> {
+      on<Action.Ship> {
+        transitionTo(Order.Deliver, SideEffect.Shipped)
+      }
+      on<Action.Cancel> {
+        transitionTo(Order.Idle, SideEffect.Cancelled)
       }
     }
   }
@@ -49,7 +55,7 @@ suspend fun init(env: Env): Dependencies {
   return Dependencies(
     env,
     statePersistence(sqlDelight.stateQueries),
-    matterMachine,
+    orderMachine,
     healthCheck,
     KotlinLogging.logger {}
   )

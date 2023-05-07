@@ -22,7 +22,7 @@ import pl.jutupe.ktor_rabbitmq.publish
 
 context(Application, StatePersistence, KLogger)
 fun eventRoutes() = routing {
-  post("/action") {
+  post("/place") {
     respond(HttpStatusCode.Created) {
       val action = receiveCatching<Action>()
       info { "Received Action: $action" }

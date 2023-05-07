@@ -62,7 +62,7 @@ fun Application.app(module: Dependencies) {
       health(module.healthCheck)
       eventRoutes()
     }
-    with(module.matterMachine) {
+    with(module.orderMachine) {
       rabbitConsumers()
     }
   }
