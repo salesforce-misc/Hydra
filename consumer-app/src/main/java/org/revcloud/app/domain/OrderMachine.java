@@ -21,7 +21,7 @@ public final class OrderMachine {
                 sb ->
                     sb.on(
                         Action.Place.class,
-                        (currentState, event) ->
+                        (currentState, action) ->
                             sb.transitionTo(Order.Place.INSTANCE, SideEffect.Placed.INSTANCE)));
 
             mb.state(
@@ -29,15 +29,15 @@ public final class OrderMachine {
                 sb -> {
                   sb.on(
                       PaymentFailed.class,
-                      (currentState, event) ->
+                      (currentState, action) ->
                           sb.transitionTo(Idle.INSTANCE, SideEffect.Cancelled.INSTANCE));
                   sb.on(
                       PaymentSuccessful.class,
-                      (currentState, event) ->
+                      (currentState, action) ->
                           sb.transitionTo(Process.INSTANCE, SideEffect.Paid.INSTANCE));
                   sb.on(
                       Cancel.class,
-                      (currentState, event) ->
+                      (currentState, action) ->
                           sb.transitionTo(Idle.INSTANCE, SideEffect.Cancelled.INSTANCE));
                 });
 
@@ -46,11 +46,11 @@ public final class OrderMachine {
                 sb -> {
                   sb.on(
                       Action.Ship.class,
-                      (currentState, event) ->
+                      (currentState, action) ->
                           sb.transitionTo(Order.Deliver.INSTANCE, SideEffect.Shipped.INSTANCE));
                   sb.on(
                       Action.Cancel.class,
-                      (currentState, event) ->
+                      (currentState, action) ->
                           sb.transitionTo(Order.Idle.INSTANCE, SideEffect.Cancelled.INSTANCE));
                 });
           });

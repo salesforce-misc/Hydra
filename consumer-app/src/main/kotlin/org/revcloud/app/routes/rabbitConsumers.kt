@@ -21,7 +21,7 @@ context(Application, Hydra<Order, Action, SideEffect>, StatePersistence, KLogger
 fun rabbitConsumers() = rabbitConsumer {
   consume<Action>("queue") { action ->
     info { "Consumed Action $action" }
-    val order: Order = state
+    val order: Order = state // * NOTE 08/05/23 gopala.akshintala: This is needed for encoding below 
     runBlocking { insert(Json.encodeToString(order)) }
     val transition = transition(action)
     onTransition(transition)
