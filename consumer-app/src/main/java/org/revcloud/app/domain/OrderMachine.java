@@ -15,6 +15,7 @@ public final class OrderMachine {
       Hydra.create(
           mb -> {
             mb.initialState(Idle.INSTANCE);
+
             mb.state(
                 Idle.class,
                 sb ->
@@ -22,6 +23,7 @@ public final class OrderMachine {
                         Action.Place.class,
                         (currentState, event) ->
                             sb.transitionTo(Order.Place.INSTANCE, SideEffect.Placed.INSTANCE)));
+
             mb.state(
                 Order.Place.class,
                 sb -> {
@@ -38,6 +40,7 @@ public final class OrderMachine {
                       (currentState, event) ->
                           sb.transitionTo(Idle.INSTANCE, SideEffect.Cancelled.INSTANCE));
                 });
+
             mb.state(
                 Order.Process.class,
                 sb -> {

@@ -4,20 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6ed80e62-f038-45bc-b42e-83dd15ec8dae" name="Changes" comment="Migrate to use Order example&#10;&#10;&#10;Signed-off-by: Gopal S Akshintala &lt;gopala.akshintala@salesforce.com&gt;">
-      <change afterPath="$PROJECT_DIR$/consumer-app/src/main/java/org/revcloud/app/domain/OrderMachine.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/consumer-app/src/test/java/org/revcloud/app/HydraTest.java" afterDir="false" />
+    <list default="true" id="6ed80e62-f038-45bc-b42e-83dd15ec8dae" name="Changes" comment="- Migrate Order machine to Java&#10;- Persist state at every consumption&#10;&#10;&#10;Signed-off-by: Gopal S Akshintala &lt;gopala.akshintala@salesforce.com&gt;">
       <change beforePath="$PROJECT_DIR$/.idea/httpRequests/http-requests-log.http" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/httpRequests/http-requests-log.http" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/consumer-app/src/main/kotlin/org/revcloud/app/env/Dependencies.kt" beforeDir="false" afterPath="$PROJECT_DIR$/consumer-app/src/main/kotlin/org/revcloud/app/env/Dependencies.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/consumer-app/src/main/kotlin/org/revcloud/app/env/domain.kt" beforeDir="false" afterPath="$PROJECT_DIR$/consumer-app/src/main/kotlin/org/revcloud/app/domain/domain.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/consumer-app/src/main/kotlin/org/revcloud/app/env/ktor.kt" beforeDir="false" afterPath="$PROJECT_DIR$/consumer-app/src/main/kotlin/org/revcloud/app/env/ktor.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/consumer-app/src/main/kotlin/org/revcloud/app/routes/rabbitConsumers.kt" beforeDir="false" afterPath="$PROJECT_DIR$/consumer-app/src/main/kotlin/org/revcloud/app/routes/rabbitConsumers.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/consumer-app/src/main/kotlin/org/revcloud/app/routes/routes.kt" beforeDir="false" afterPath="$PROJECT_DIR$/consumer-app/src/main/kotlin/org/revcloud/app/routes/routes.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/consumer-app/src/main/kotlin/org/revcloud/app/service/stateService.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/consumer-app/src/main/resources/http/client.http" beforeDir="false" afterPath="$PROJECT_DIR$/consumer-app/src/main/resources/http/client.http" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/consumer-app/src/main/sqldelight/org/revcloud/app/sqldelight/State.sq" beforeDir="false" afterPath="$PROJECT_DIR$/consumer-app/src/main/sqldelight/org/revcloud/app/sqldelight/State.sq" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/buildSrc/src/main/kotlin/hydra.sub-conventions.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/buildSrc/src/main/kotlin/hydra.sub-conventions.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/consumer-app/src/main/java/org/revcloud/app/domain/OrderMachine.java" beforeDir="false" afterPath="$PROJECT_DIR$/consumer-app/src/main/java/org/revcloud/app/domain/OrderMachine.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -186,37 +176,15 @@
       <command value="gradle :embedded-server:run" />
       <command value="gradle stop" />
       <command value="gradle --stop" />
-      <command value="gradle clean build" />
       <command value="gradle clean build --no-build-cache" />
-      <command value="gradle spotlessApply" />
       <command value="gradle build" />
-      <command value="gradle run" />
       <command value="gradle generateSqlDelightInterface" />
+      <command value="gradle run" />
+      <command value="gradle spotlessApply" />
+      <command value="gradle clean build" />
     </option>
   </component>
-  <component name="RunManager" selected="HTTP Request.client | #1">
-    <configuration name="hydra-root [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" value="" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value="build" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <ForceTestExec>false</ForceTestExec>
-      <method v="2" />
-    </configuration>
+  <component name="RunManager" selected="Gradle.hydra-root [clean build]">
     <configuration name="hydra-root [clean build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -262,6 +230,50 @@
       <ForceTestExec>false</ForceTestExec>
       <method v="2" />
     </configuration>
+    <configuration name="hydra-root [run]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="run" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <ForceTestExec>false</ForceTestExec>
+      <method v="2" />
+    </configuration>
+    <configuration name="hydra-root [spotlessApply]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="spotlessApply" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <ForceTestExec>false</ForceTestExec>
+      <method v="2" />
+    </configuration>
     <configuration name="client | #1" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$/consumer-app/src/main/resources/http/client.http" requestIdentifier="#1" runType="Run single request">
       <method v="2" />
     </configuration>
@@ -271,28 +283,20 @@
       </deployment>
       <method v="2" />
     </configuration>
-    <configuration name="docker-compose.yaml: Compose Deployment" type="docker-deploy" factoryName="docker-compose.yml" temporary="true" server-name="Docker">
-      <deployment type="docker-compose.yml">
-        <settings>
-          <option name="sourceFilePath" value="docker-compose.yaml" />
-        </settings>
-      </deployment>
-      <method v="2" />
-    </configuration>
     <list>
-      <item itemvalue="Docker.docker-compose.yaml: Compose Deployment" />
-      <item itemvalue="Gradle.hydra-root [build]" />
+      <item itemvalue="Gradle.hydra-root [run]" />
+      <item itemvalue="Gradle.hydra-root [spotlessApply]" />
       <item itemvalue="Gradle.hydra-root [clean build]" />
       <item itemvalue="Gradle.hydra-root [generateSqlDelightInterface]" />
       <item itemvalue="HTTP Request.client | #1" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Gradle.hydra-root [clean build]" />
+        <item itemvalue="Gradle.hydra-root [spotlessApply]" />
+        <item itemvalue="Gradle.hydra-root [run]" />
         <item itemvalue="HTTP Request.client | #1" />
         <item itemvalue="Gradle.hydra-root [generateSqlDelightInterface]" />
-        <item itemvalue="Gradle.hydra-root [build]" />
-        <item itemvalue="Gradle.hydra-root [clean build]" />
-        <item itemvalue="Docker.docker-compose.yaml: Compose Deployment" />
       </list>
     </recent_temporary>
   </component>
@@ -338,7 +342,7 @@
       <workItem from="1683424965409" duration="27893000" />
       <workItem from="1683519194482" duration="432000" />
       <workItem from="1683524367053" duration="3093000" />
-      <workItem from="1683527900130" duration="3096000" />
+      <workItem from="1683527900130" duration="5395000" />
     </task>
     <task id="LOCAL-00001" summary="- Fixed moshiReVoman&#10;- Added module-info.java to integrationTest module">
       <created>1678595183319</created>
@@ -536,7 +540,14 @@
       <option name="project" value="LOCAL" />
       <updated>1683477337951</updated>
     </task>
-    <option name="localTasksCounter" value="29" />
+    <task id="LOCAL-00029" summary="- Migrate Order machine to Java&#10;- Persist state at every consumption&#10;&#10;&#10;Signed-off-by: Gopal S Akshintala &lt;gopala.akshintala@salesforce.com&gt;">
+      <created>1683531050568</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1683531050568</updated>
+    </task>
+    <option name="localTasksCounter" value="30" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -595,7 +606,8 @@
     <MESSAGE value="optimize imports&#10;&#10;&#10;Signed-off-by: Gopal S Akshintala &lt;gopala.akshintala@salesforce.com&gt;" />
     <MESSAGE value="Move onTransition to separate method&#10;&#10;&#10;Signed-off-by: Gopal S Akshintala &lt;gopala.akshintala@salesforce.com&gt;" />
     <MESSAGE value="Migrate to use Order example&#10;&#10;&#10;Signed-off-by: Gopal S Akshintala &lt;gopala.akshintala@salesforce.com&gt;" />
-    <option name="LAST_COMMIT_MESSAGE" value="Migrate to use Order example&#10;&#10;&#10;Signed-off-by: Gopal S Akshintala &lt;gopala.akshintala@salesforce.com&gt;" />
+    <MESSAGE value="- Migrate Order machine to Java&#10;- Persist state at every consumption&#10;&#10;&#10;Signed-off-by: Gopal S Akshintala &lt;gopala.akshintala@salesforce.com&gt;" />
+    <option name="LAST_COMMIT_MESSAGE" value="- Migrate Order machine to Java&#10;- Persist state at every consumption&#10;&#10;&#10;Signed-off-by: Gopal S Akshintala &lt;gopala.akshintala@salesforce.com&gt;" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
