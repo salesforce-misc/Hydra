@@ -1,4 +1,4 @@
-package org.revcloud.app.env
+package org.revcloud.app.domain
 
 import kotlinx.serialization.Serializable
 

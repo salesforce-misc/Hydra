@@ -16,7 +16,7 @@ import io.ktor.util.pipeline.PipelineContext
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.MissingFieldException
 import mu.KLogger
-import org.revcloud.app.env.Action
+import org.revcloud.app.domain.Action
 import org.revcloud.app.repo.StatePersistence
 import pl.jutupe.ktor_rabbitmq.publish
 

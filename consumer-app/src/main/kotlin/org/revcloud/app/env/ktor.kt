@@ -61,9 +61,9 @@ fun Application.app(module: Dependencies) {
     with(module.statePersistence) {
       health(module.healthCheck)
       eventRoutes()
-    }
-    with(module.orderMachine) {
-      rabbitConsumers()
+      with(module.orderMachine) {
+        rabbitConsumers()
+      }
     }
   }
   

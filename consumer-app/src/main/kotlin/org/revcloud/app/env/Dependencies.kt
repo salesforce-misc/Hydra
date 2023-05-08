@@ -6,6 +6,10 @@ import com.sksamuel.cohort.hikari.HikariConnectionsHealthCheck
 import kotlinx.coroutines.Dispatchers
 import mu.KLogger
 import mu.KotlinLogging
+import org.revcloud.app.domain.Action
+import org.revcloud.app.domain.Order
+import org.revcloud.app.domain.OrderMachine
+import org.revcloud.app.domain.SideEffect
 import org.revcloud.app.repo.StatePersistence
 import org.revcloud.app.repo.statePersistence
 import org.revcloud.hydra.Hydra
@@ -24,33 +28,7 @@ suspend fun init(env: Env): Dependencies {
   val hikari = hikari(env.dataSource)
   val healthCheck = HealthCheckRegistry(Dispatchers.Default) { register(HikariConnectionsHealthCheck(hikari, 1), 5.seconds) }
   val sqlDelight = sqlDelight(hikari)
-  val orderMachine = Hydra.create {
-    initialState(Order.Idle)
-    state<Order.Idle> {
-      on<Action.Place> {
-        transitionTo(Order.Place, SideEffect.Placed)
-      }
-    }
-    state<Order.Place> {
-      on<Action.PaymentFailed> {
-        transitionTo(Order.Idle, SideEffect.Cancelled)
-      }
-      on<Action.PaymentSuccessful> {
-        transitionTo(Order.Process, SideEffect.Paid)
-      }
-      on<Action.Cancel> {
-        transitionTo(Order.Idle, SideEffect.Cancelled)
-      }
-    }
-    state<Order.Process> {
-      on<Action.Ship> {
-        transitionTo(Order.Deliver, SideEffect.Shipped)
-      }
-      on<Action.Cancel> {
-        transitionTo(Order.Idle, SideEffect.Cancelled)
-      }
-    }
-  }
+  val orderMachine = OrderMachine.orderMachine;
 
   return Dependencies(
     env,

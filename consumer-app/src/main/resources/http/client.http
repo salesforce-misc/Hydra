@@ -2,7 +2,7 @@ POST http://localhost:7070/place
 Content-Type: application/json
 
 {
-  "type": "org.revcloud.app.env.Action.Place"
+  "type": "org.revcloud.app.domain.Action.Place"
 }
 
 ###

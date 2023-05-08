@@ -3,12 +3,12 @@ import java.time.OffsetDateTime;
 
 CREATE TABLE IF NOT EXISTS state(
     id BIGSERIAL AS StateId PRIMARY KEY,
-    previousState JSONB NOT NULL,
+    previousState JSON NOT NULL,
     createdAt VARCHAR(50) AS OffsetDateTime NOT NULL,
     updatedAt VARCHAR(50) AS OffsetDateTime NOT NULL
 );
 
 insertAndGetId:
 INSERT INTO state(previousState, createdAt, updatedAt)
-VALUES (:state, :createdAt, :updatedAt)
+VALUES (CAST(:state AS json), :createdAt, :updatedAt)
 RETURNING id;

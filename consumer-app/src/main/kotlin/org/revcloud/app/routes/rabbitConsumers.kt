@@ -1,10 +1,14 @@
 package org.revcloud.app.routes
 
 import io.ktor.server.application.Application
+import kotlinx.coroutines.runBlocking
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import mu.KLogger
-import org.revcloud.app.env.Action
-import org.revcloud.app.env.Order
-import org.revcloud.app.env.SideEffect
+import org.revcloud.app.domain.Action
+import org.revcloud.app.domain.Order
+import org.revcloud.app.domain.SideEffect
+import org.revcloud.app.repo.StatePersistence
 import org.revcloud.hydra.Hydra
 import org.revcloud.hydra.statemachine.Transition
 import pl.jutupe.ktor_rabbitmq.RabbitMQInstance
@@ -13,11 +17,12 @@ import pl.jutupe.ktor_rabbitmq.publish
 import pl.jutupe.ktor_rabbitmq.rabbitConsumer
 import kotlin.random.Random
 
-context(Application, Hydra<Order, Action, SideEffect>, KLogger)
+context(Application, Hydra<Order, Action, SideEffect>, StatePersistence, KLogger)
 fun rabbitConsumers() = rabbitConsumer {
   consume<Action>("queue") { action ->
     info { "Consumed Action $action" }
-    // ! TODO 07/05/23 gopala.akshintala: Persist from-state 
+    val order: Order = state
+    runBlocking { insert(Json.encodeToString(order)) }
     val transition = transition(action)
     onTransition(transition)
   }

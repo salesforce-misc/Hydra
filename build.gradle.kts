@@ -10,9 +10,8 @@ allprojects {
   apply(plugin = "hydra.root-conventions")
 }
 dependencies {
-  subprojects.forEach {
-    kover(project(":${it.name}"))
-  }
+  kover(project(":hydra"))
+  kover(project(":consumer-app"))
 }
 koverReport {
   defaults {
