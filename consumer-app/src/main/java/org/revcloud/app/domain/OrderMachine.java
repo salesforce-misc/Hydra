@@ -4,7 +4,7 @@ import org.revcloud.app.domain.Action.Cancel;
 import org.revcloud.app.domain.Action.PaymentFailed;
 import org.revcloud.app.domain.Action.PaymentSuccessful;
 import org.revcloud.app.domain.Order.Idle;
-import org.revcloud.app.domain.Order.Process;
+import org.revcloud.app.domain.Order.Processed;
 import org.revcloud.hydra.Hydra;
 
 public final class OrderMachine {
@@ -22,36 +22,36 @@ public final class OrderMachine {
                     sb.on(
                         Action.Place.class,
                         (currentState, action) ->
-                            sb.transitionTo(Order.Place.INSTANCE, SideEffect.Placed.INSTANCE)));
+                            sb.transitionTo(Order.Placed.INSTANCE, SideEffect.OnPlaced.INSTANCE)));
 
             mb.state(
-                Order.Place.class,
+                Order.Placed.class,
                 sb -> {
                   sb.on(
                       PaymentFailed.class,
                       (currentState, action) ->
-                          sb.transitionTo(Idle.INSTANCE, SideEffect.Cancelled.INSTANCE));
+                          sb.transitionTo(Idle.INSTANCE, SideEffect.OnCancelled.INSTANCE));
                   sb.on(
                       PaymentSuccessful.class,
                       (currentState, action) ->
-                          sb.transitionTo(Process.INSTANCE, SideEffect.Paid.INSTANCE));
+                          sb.transitionTo(Processed.INSTANCE, SideEffect.OnPaid.INSTANCE));
                   sb.on(
                       Cancel.class,
                       (currentState, action) ->
-                          sb.transitionTo(Idle.INSTANCE, SideEffect.Cancelled.INSTANCE));
+                          sb.transitionTo(Idle.INSTANCE, SideEffect.OnCancelled.INSTANCE));
                 });
 
             mb.state(
-                Order.Process.class,
+                Order.Processed.class,
                 sb -> {
                   sb.on(
                       Action.Ship.class,
                       (currentState, action) ->
-                          sb.transitionTo(Order.Deliver.INSTANCE, SideEffect.Shipped.INSTANCE));
+                          sb.transitionTo(Order.Delivered.INSTANCE, SideEffect.OnShipped.INSTANCE));
                   sb.on(
                       Action.Cancel.class,
                       (currentState, action) ->
-                          sb.transitionTo(Order.Idle.INSTANCE, SideEffect.Cancelled.INSTANCE));
+                          sb.transitionTo(Order.Idle.INSTANCE, SideEffect.OnCancelled.INSTANCE));
                 });
           });
 }

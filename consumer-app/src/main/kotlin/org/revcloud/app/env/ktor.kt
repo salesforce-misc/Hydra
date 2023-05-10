@@ -16,6 +16,21 @@ import org.revcloud.app.routes.rabbitConsumers
 import pl.jutupe.ktor_rabbitmq.RabbitMQ
 import kotlin.time.Duration.Companion.days
 
+fun Application.app(module: Dependencies) {
+  with(module.env) {
+    configure()
+    with(module.logger) {
+      with(module.statePersistence) {
+        health(module.healthCheck)
+        eventRoutes()
+        with(module.orderMachine) {
+          rabbitConsumers()
+        }
+      }
+    }
+  }
+}
+
 context(Env)
 fun Application.configure() {
   install(DefaultHeaders)
@@ -46,25 +61,9 @@ fun Application.configure() {
       Json.decodeFromString(Json.serializersModule.serializer(type.javaObjectType), bytes.decodeToString())
     }
     initialize {
-      exchangeDeclare("exchange", "direct", true)
+      exchangeDeclare(rabbitMQ.exchange, "direct", true)
       queueDeclare("queue", true, false, false, emptyMap())
       queueBind("queue", "exchange", "routingKey")
     }
   }
-}
-
-fun Application.app(module: Dependencies) {
-  with(module.env) {
-    configure()
-  }
-  with(module.logger) {
-    with(module.statePersistence) {
-      health(module.healthCheck)
-      eventRoutes()
-      with(module.orderMachine) {
-        rabbitConsumers()
-      }
-    }
-  }
-  
 }

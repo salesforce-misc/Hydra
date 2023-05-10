@@ -8,6 +8,7 @@ import mu.KLogger
 import org.revcloud.app.domain.Action
 import org.revcloud.app.domain.Order
 import org.revcloud.app.domain.SideEffect
+import org.revcloud.app.env.Env
 import org.revcloud.app.repo.StatePersistence
 import org.revcloud.hydra.Hydra
 import org.revcloud.hydra.statemachine.Transition
@@ -17,7 +18,7 @@ import pl.jutupe.ktor_rabbitmq.publish
 import pl.jutupe.ktor_rabbitmq.rabbitConsumer
 import kotlin.random.Random
 
-context(Application, Hydra<Order, Action, SideEffect>, StatePersistence, KLogger)
+context(Application, Hydra<Order, Action, SideEffect>, StatePersistence, Env, KLogger)
 fun rabbitConsumers() = rabbitConsumer {
   consume<Action>("queue") { action ->
     info { "Consumed Action $action" }
@@ -28,32 +29,31 @@ fun rabbitConsumers() = rabbitConsumer {
   }
 }
 
-context(RabbitMQInstance, KLogger)
+context(RabbitMQInstance, Env, KLogger)
 fun onTransition(transition: Transition<Order, Action, SideEffect>) {
-  val validTransition = transition as? Transition.Valid ?: return
-  when (validTransition.sideEffect) {
-    SideEffect.Placed -> {
-      info { "${SideEffect.Placed.msg}, Payment in Progress" }
+  val sideEffect = (transition as? Transition.Valid)?.sideEffect ?: return
+  when (sideEffect) {
+    SideEffect.OnPlaced -> {
+      info { "${SideEffect.OnPlaced.msg}, Payment in Progress" }
       if (Random.nextBoolean()) {
-        publish("exchange", "routingKey", null, Action.PaymentSuccessful)
+        publish(rabbitMQ.exchange, rabbitMQ.routingKey, null, Action.PaymentSuccessful)
       } else {
-        publish("exchange", "routingKey", null, Action.PaymentFailed)
+        publish(rabbitMQ.exchange, rabbitMQ.routingKey, null, Action.PaymentFailed)
       }
     }
-    SideEffect.Paid -> {
-      info { "${SideEffect.Paid.msg}, Shipping in Progress" }
+    SideEffect.OnPaid -> {
+      info { "${SideEffect.OnPaid.msg}, Shipping in Progress" }
       if (Random.nextBoolean()) {
-        publish("exchange", "routingKey", null, Action.Ship)
+        publish(rabbitMQ.exchange, rabbitMQ.routingKey, null, Action.Ship)
       } else {
-        publish("exchange", "routingKey", null, Action.Cancel)
+        publish(rabbitMQ.exchange, rabbitMQ.routingKey, null, Action.Cancel)
       }
     }
-    SideEffect.Shipped -> {
-      info { "${SideEffect.Shipped.msg}, Delivered successfully!!" }
+    SideEffect.OnShipped -> {
+      info { "${SideEffect.OnShipped.msg}, Delivered successfully!!" }
     }
-    SideEffect.Cancelled -> {
-      info { SideEffect.Cancelled.msg }
+    SideEffect.OnCancelled -> {
+      info { SideEffect.OnCancelled.msg }
     }
-    else -> error { "Invalid Side Effect" }
   }
 }

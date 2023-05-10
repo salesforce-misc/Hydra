@@ -25,7 +25,10 @@ data class Env(
   )
   
   data class RabbitMQ(
-    val uri: String = System.getenv("RABBIT_MQ_URI") ?: RABBIT_MQ_URI
+    val uri: String = System.getenv("RABBIT_MQ_URI") ?: RABBIT_MQ_URI,
+    val exchange: String = "hydra",
+    val queue: String = "hydra",
+    val routingKey: String = "hydra"
   )
   
 }

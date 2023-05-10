@@ -9,13 +9,13 @@ sealed class Order {
   object Idle : Order()
 
   @Serializable
-  object Place : Order()
+  object Placed : Order()
 
   @Serializable
-  object Process : Order()
+  object Processed : Order()
 
   @Serializable
-  object Deliver : Order()
+  object Delivered : Order()
   
 }
 
@@ -42,14 +42,14 @@ sealed class Action {
 @Serializable
 sealed class SideEffect(val msg: String) {
   @Serializable
-  object Placed : SideEffect("Order placed")
+  object OnPlaced : SideEffect("Order placed")
 
   @Serializable
-  object Paid : SideEffect("Order paid")
+  object OnPaid : SideEffect("Order paid")
 
   @Serializable
-  object Shipped : SideEffect("Order shipped")
+  object OnShipped : SideEffect("Order shipped")
 
   @Serializable
-  object Cancelled : SideEffect("Order cancelled")
+  object OnCancelled : SideEffect("Order cancelled")
 }
