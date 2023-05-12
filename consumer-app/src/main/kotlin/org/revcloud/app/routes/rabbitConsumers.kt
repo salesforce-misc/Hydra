@@ -5,9 +5,9 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import mu.KLogger
-import org.revcloud.app.domain.Action
+import org.revcloud.app.domain.Event
 import org.revcloud.app.domain.Order
-import org.revcloud.app.domain.SideEffect
+import org.revcloud.app.domain.Action
 import org.revcloud.app.env.Env
 import org.revcloud.app.repo.StatePersistence
 import org.revcloud.hydra.Hydra
@@ -18,9 +18,9 @@ import pl.jutupe.ktor_rabbitmq.publish
 import pl.jutupe.ktor_rabbitmq.rabbitConsumer
 import kotlin.random.Random
 
-context(Application, Hydra<Order, Action, SideEffect>, StatePersistence, Env, KLogger)
+context(Application, Hydra<Order, Event, Action>, StatePersistence, Env, KLogger)
 fun rabbitConsumers() = rabbitConsumer {
-  consume<Action>("queue") { action ->
+  consume<Event>("queue") { action ->
     info { "Consumed Action $action" }
     val order: Order = state // * NOTE 08/05/23 gopala.akshintala: This is needed for encoding below 
     runBlocking { insert(Json.encodeToString(order)) }
@@ -30,30 +30,30 @@ fun rabbitConsumers() = rabbitConsumer {
 }
 
 context(RabbitMQInstance, Env, KLogger)
-fun onTransition(transition: Transition<Order, Action, SideEffect>) {
+fun onTransition(transition: Transition<Order, Event, Action>) {
   val sideEffect = (transition as? Transition.Valid)?.sideEffect ?: return
   when (sideEffect) {
-    SideEffect.OnPlaced -> {
-      info { "${SideEffect.OnPlaced.msg}, Payment in Progress" }
+    Action.OnPlaced -> {
+      info { "${Action.OnPlaced.msg}, Payment in Progress" }
       if (Random.nextBoolean()) {
-        publish(rabbitMQ.exchange, rabbitMQ.routingKey, null, Action.PaymentSuccessful)
+        publish(rabbitMQ.exchange, rabbitMQ.routingKey, null, Event.PaymentSuccessful)
       } else {
-        publish(rabbitMQ.exchange, rabbitMQ.routingKey, null, Action.PaymentFailed)
+        publish(rabbitMQ.exchange, rabbitMQ.routingKey, null, Event.PaymentFailed)
       }
     }
-    SideEffect.OnPaid -> {
-      info { "${SideEffect.OnPaid.msg}, Shipping in Progress" }
+    Action.OnPaid -> {
+      info { "${Action.OnPaid.msg}, Shipping in Progress" }
       if (Random.nextBoolean()) {
-        publish(rabbitMQ.exchange, rabbitMQ.routingKey, null, Action.Ship)
+        publish(rabbitMQ.exchange, rabbitMQ.routingKey, null, Event.Ship)
       } else {
-        publish(rabbitMQ.exchange, rabbitMQ.routingKey, null, Action.Cancel)
+        publish(rabbitMQ.exchange, rabbitMQ.routingKey, null, Event.Cancel)
       }
     }
-    SideEffect.OnShipped -> {
-      info { "${SideEffect.OnShipped.msg}, Delivered successfully!!" }
+    Action.OnShipped -> {
+      info { "${Action.OnShipped.msg}, Delivered successfully!!" }
     }
-    SideEffect.OnCancelled -> {
-      info { SideEffect.OnCancelled.msg }
+    Action.OnCancelled -> {
+      info { Action.OnCancelled.msg }
     }
   }
 }

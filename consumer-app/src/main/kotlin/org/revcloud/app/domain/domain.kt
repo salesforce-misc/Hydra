@@ -20,36 +20,36 @@ sealed class Order {
 }
 
 @Serializable
-sealed class Action {
+sealed class Event {
   @Serializable
-  object Place : Action()
+  object Place : Event()
 
   @Serializable
-  object PaymentSuccessful : Action()
+  object PaymentSuccessful : Event()
 
   @Serializable
-  object PaymentFailed : Action()
+  object PaymentFailed : Event()
 
   @Serializable
-  object Ship : Action()
+  object Ship : Event()
 
   @Serializable
-  object Cancel : Action()
+  object Cancel : Event()
 }
 
 
 
 @Serializable
-sealed class SideEffect(val msg: String) {
+sealed class Action(val msg: String) {
   @Serializable
-  object OnPlaced : SideEffect("Order placed")
+  object OnPlaced : Action("Order placed")
 
   @Serializable
-  object OnPaid : SideEffect("Order paid")
+  object OnPaid : Action("Order paid")
 
   @Serializable
-  object OnShipped : SideEffect("Order shipped")
+  object OnShipped : Action("Order shipped")
 
   @Serializable
-  object OnCancelled : SideEffect("Order cancelled")
+  object OnCancelled : Action("Order cancelled")
 }

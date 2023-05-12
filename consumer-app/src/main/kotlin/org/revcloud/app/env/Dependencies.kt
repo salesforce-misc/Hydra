@@ -6,10 +6,10 @@ import com.sksamuel.cohort.hikari.HikariConnectionsHealthCheck
 import kotlinx.coroutines.Dispatchers
 import mu.KLogger
 import mu.KotlinLogging
-import org.revcloud.app.domain.Action
+import org.revcloud.app.domain.Event
 import org.revcloud.app.domain.Order
 import org.revcloud.app.domain.OrderMachine
-import org.revcloud.app.domain.SideEffect
+import org.revcloud.app.domain.Action
 import org.revcloud.app.repo.StatePersistence
 import org.revcloud.app.repo.statePersistence
 import org.revcloud.hydra.Hydra
@@ -18,7 +18,7 @@ import kotlin.time.Duration.Companion.seconds
 class Dependencies(
   val env: Env,
   val statePersistence: StatePersistence,
-  val orderMachine: Hydra<Order, Action, SideEffect>,
+  val orderMachine: Hydra<Order, Event, Action>,
   val healthCheck: HealthCheckRegistry,
   val logger: KLogger
 )

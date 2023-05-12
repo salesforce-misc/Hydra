@@ -16,7 +16,7 @@ import io.ktor.util.pipeline.PipelineContext
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.MissingFieldException
 import mu.KLogger
-import org.revcloud.app.domain.Action
+import org.revcloud.app.domain.Event
 import org.revcloud.app.env.Env
 import org.revcloud.app.repo.StatePersistence
 import pl.jutupe.ktor_rabbitmq.publish
@@ -25,9 +25,9 @@ context(Application, StatePersistence, Env, KLogger)
 fun eventRoutes() = routing {
   post("/place") {
     respond(HttpStatusCode.Created) {
-      val action = receiveCatching<Action>()
-      info { "Received Action: $action" }
-      call.publish(rabbitMQ.exchange, rabbitMQ.exchange, null, action)
+      val event = receiveCatching<Event>()
+      info { "Received Action: $event" }
+      call.publish(rabbitMQ.exchange, rabbitMQ.exchange, null, event)
     }
   }
 }

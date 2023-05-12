@@ -8,8 +8,8 @@ import org.revcloud.hydra.internal.Machine.State.TransitionTo
 import org.revcloud.hydra.internal.Matcher
 import org.revcloud.hydra.statemachine.Transition
 
-class MachineBuilder<StateT : Any, EventT : Any, SideEffectT : Any>(
-  machine: Machine<StateT, EventT, SideEffectT>? = null
+class MachineBuilder<StateT : Any, EventT : Any, ActionT : Any>(
+  machine: Machine<StateT, EventT, ActionT>? = null
 ) {
   private var initialState = machine?.initialState
   private val stateDefinitions = LinkedHashMap(machine?.stateDefinitions ?: emptyMap())
@@ -45,21 +45,21 @@ class MachineBuilder<StateT : Any, EventT : Any, SideEffectT : Any>(
     state(Matcher.eq(state, clazz), init)
   }
 
-  fun onTransition(listener: Consumer<Transition<StateT, EventT, SideEffectT>>) {
+  fun onTransition(listener: Consumer<Transition<StateT, EventT, ActionT>>) {
     onTransitionListeners.add(listener)
   }
 
-  fun onTransition(listener: (Transition<StateT, EventT, SideEffectT>) -> Unit) {
+  fun onTransition(listener: (Transition<StateT, EventT, ActionT>) -> Unit) {
     onTransitionListeners.add(listener)
   }
 
-  fun build(): Machine<StateT, EventT, SideEffectT> {
+  fun build(): Machine<StateT, EventT, ActionT> {
     return Machine(requireNotNull(initialState), stateDefinitions.toMap(), onTransitionListeners.toList())
   }
 
   inner class StateDefinitionBuilder<S : StateT> {
 
-    private val stateDefinition = State<StateT, EventT, SideEffectT>()
+    private val stateDefinition = State<StateT, EventT, ActionT>()
 
     fun <E : EventT> any(eventClass: Class<E>): Matcher<EventT, E> = Matcher.any(eventClass)
 
@@ -71,7 +71,7 @@ class MachineBuilder<StateT : Any, EventT : Any, SideEffectT : Any>(
 
     fun <E : EventT> on(
       eventMatcher: Matcher<EventT, E>,
-      createTransitionTo: S.(E) -> TransitionTo<StateT, SideEffectT>
+      createTransitionTo: S.(E) -> TransitionTo<StateT, ActionT>
     ) {
       stateDefinition.transitions[eventMatcher] = { state, event ->
         @Suppress("UNCHECKED_CAST")
@@ -79,22 +79,22 @@ class MachineBuilder<StateT : Any, EventT : Any, SideEffectT : Any>(
       }
     }
 
-    fun <E : EventT> on(eventClass: Class<E>, createTransitionTo: S.(E) -> TransitionTo<StateT, SideEffectT>
+    fun <E : EventT> on(eventClass: Class<E>, createTransitionTo: S.(E) -> TransitionTo<StateT, ActionT>
     ) = on(any(eventClass), createTransitionTo)
 
     inline fun <reified E : EventT> on(
-      noinline createTransitionTo: S.(E) -> TransitionTo<StateT, SideEffectT>
+      noinline createTransitionTo: S.(E) -> TransitionTo<StateT, ActionT>
     ) = on(any(), createTransitionTo)
 
     fun <E : EventT> on(
       event: E,
       eventClass: Class<E>,
-      createTransitionTo: S.(E) -> TransitionTo<StateT, SideEffectT>
+      createTransitionTo: S.(E) -> TransitionTo<StateT, ActionT>
     ) = on(eq(event, eventClass), createTransitionTo)
 
     inline fun <reified E : EventT> on(
       event: E,
-      noinline createTransitionTo: S.(E) -> TransitionTo<StateT, SideEffectT>
+      noinline createTransitionTo: S.(E) -> TransitionTo<StateT, ActionT>
     ) = on(eq(event), createTransitionTo)
 
     fun onEnter(listener: BiConsumer<S, EventT>) = with(stateDefinition) {
@@ -128,9 +128,9 @@ class MachineBuilder<StateT : Any, EventT : Any, SideEffectT : Any>(
     fun build() = stateDefinition
 
     @JvmOverloads
-    fun transitionTo(state: StateT, sideEffect: SideEffectT? = null): TransitionTo<StateT, SideEffectT> =
+    fun transitionTo(state: StateT, sideEffect: ActionT? = null): TransitionTo<StateT, ActionT> =
       TransitionTo(state, sideEffect)
 
-    fun S.dontTransition(sideEffect: SideEffectT? = null): TransitionTo<StateT, SideEffectT> = transitionTo(this, sideEffect)
+    fun S.dontTransition(sideEffect: ActionT? = null): TransitionTo<StateT, ActionT> = transitionTo(this, sideEffect)
   }
 }
