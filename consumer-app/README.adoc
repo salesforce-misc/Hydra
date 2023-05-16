@@ -1,4 +1,4 @@
-= Hydra 🐙
+= Hydra 🐙 | Consumer sample
 Gopal S Akshintala <gopala.akshintala@salesforce.com>
 :Revision: 1.0
 ifdef::env-github[]
@@ -15,8 +15,10 @@ endif::[]
 :imagesdir: images
 :prewrap!:
 
-____
-States, Events, Actions
-____
+== Tech stack
+
+* Ktor
+* Postgres DB
+* Rabbit MQ
 
 == link:CONTRIBUTING.adoc[🙌🏼Wanna Collab & Contribute?]

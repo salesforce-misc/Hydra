@@ -2,8 +2,6 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/hydra-root.iml" filepath="$PROJECT_DIR$/.idea/hydra-root.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/consumer-app/hydra-root.consumer-app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/consumer-app/hydra-root.consumer-app.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/hydra-root.test.iml" filepath="$PROJECT_DIR$/.idea/modules/hydra-root.test.iml" />
     </modules>
   </component>

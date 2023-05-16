@@ -39,3 +39,11 @@ sqldelight {
     }
   }
 }
+tasks {
+  withType<PublishToMavenRepository>().configureEach {
+    enabled = false
+  }
+  withType<PublishToMavenLocal>().configureEach {
+    enabled = false
+  }
+}

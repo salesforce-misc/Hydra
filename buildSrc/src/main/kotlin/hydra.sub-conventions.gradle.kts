@@ -39,8 +39,6 @@ testing {
 }
 publishing {
   publications.create<MavenPublication>("hydra") {
-    val subprojectJarName = tasks.jar.get().archiveBaseName.get()
-    artifactId = if (subprojectJarName == "hydra-root") "hydra" else "hydra-$subprojectJarName"
     from(components["java"])
     pom {
       name.set(artifactId)

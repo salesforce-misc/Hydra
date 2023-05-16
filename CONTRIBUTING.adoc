@@ -19,7 +19,7 @@ endif::[]
 :hide-uri-scheme:
 :sourcedir: src/main/java
 :imagesdir: images
-:hydra-version: 0.6.3
+:hydra-version: 0.0.1
 :toc:
 
 [#_versioning_strategy]
@@ -52,30 +52,6 @@ endif::[]
 
 * You can run/debug the existing unit tests or write your own to play with the tool.
 
-[CAUTION]
-====
-While running Unit tests, you may encounter the classic `PKIX path building failed` issue with Java while making Http calls.To mitigate this,
-
-- `<your-jdk-path>` — Locate the `jdk` being used by your Gradle
-- `<your-cert-path>` — Fetch your host certificate and run the below command (rep) to add that cert to your java keystore
-- `<some-name>` — Give any unique name
-
-Run this command (When asked for `Enter keystore password:` enter `changeit` (Common for most Java distributions))
-
-[source,bash]
-----
-keytool -import -alias <some-name> -keystore <your-jdk-path>/lib/security/cacerts -file <your-cert-path>.cer
-----
-
-For example:
-
-[source,bash]
-----
-keytool -import -alias linux-4 -keystore /Users/gopala.akshintala/core-public/tools/Darwin/jdk/openjdk_17.0.5_17.38.22_x64/zulu-17.jdk/Contents/Home/lib/security/cacerts -file /Users/gopala.akshintala/Desktop/gopalaaksh-wsl4.internal.salesforce.com.cer
-----
-
-====
-
 === Kotlin
 
 * The code-base is a mix of Java and Kotlin.
@@ -106,5 +82,5 @@ So, it needs to be published manually.
 
 [source,bash]
 ----
-./gradlew publish
+./gradlew hydra:publish
 ----
