@@ -36,11 +36,7 @@ class Hydra<StateT : Any, EventT : Any, ActionT : Any> private constructor(priva
     return transition
   }
 
-  fun with(init: Consumer<MachineBuilder<StateT, EventT, ActionT>>): Hydra<StateT, EventT, ActionT> {
-    return create(machine.copy(initialState = state), init)
-  }
-
-  fun with(init: MachineBuilder<StateT, EventT, ActionT>.() -> Unit): Hydra<StateT, EventT, ActionT> {
+  fun cloneWith(init: Consumer<MachineBuilder<StateT, EventT, ActionT>>): Hydra<StateT, EventT, ActionT> {
     return create(machine.copy(initialState = state), init)
   }
 

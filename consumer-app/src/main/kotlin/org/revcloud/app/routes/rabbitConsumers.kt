@@ -31,7 +31,7 @@ fun rabbitConsumers() = rabbitConsumer {
 
 context(RabbitMQInstance, Env, KLogger)
 fun onTransition(transition: Transition<Order, Event, Action>) {
-  val sideEffect = (transition as? Transition.Valid)?.sideEffect ?: return
+  val sideEffect = (transition as? Transition.Valid)?.action ?: return
   when (sideEffect) {
     Action.OnPlaced -> {
       info { "${Action.OnPlaced.msg}, Payment in Progress" }

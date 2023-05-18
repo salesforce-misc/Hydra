@@ -9,7 +9,7 @@ plugins {
 
 version = "0.0.1"
 group = "com.salesforce.ccspayments"
-description = "Hydra - the Orchestrator"
+description = "Hydra - States, Events, Actions"
 repositories {
   mavenCentral()
   maven("https://jitpack.io")

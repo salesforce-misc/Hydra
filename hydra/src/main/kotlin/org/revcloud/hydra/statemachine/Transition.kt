@@ -1,19 +1,33 @@
 package org.revcloud.hydra.statemachine
 
-@Suppress("UNUSED")
-sealed class Transition<out StateT : Any, out EventT : Any, out SideEffectT : Any> {
+sealed class Transition<out StateT : Any, out EventT : Any, out ActionT : Any> {
   abstract val fromState: StateT
   abstract val event: EventT
+  companion object {
+    @JvmStatic
+    fun <StateT: Any, EventT: Any, ActionT: Any> valid(
+      fromState: StateT,
+      event: EventT,
+      toState: StateT,
+      action: ActionT?
+    ) = Valid(fromState, event, toState, action)
 
-  data class Valid<out StateT : Any, out EventT : Any, out SideEffectT : Any> internal constructor(
+    @JvmStatic
+    fun <StateT: Any, EventT: Any, ActionT: Any> invalid(
+      fromState: StateT,
+      event: EventT,
+    ) = Invalid(fromState, event)
+  }
+  
+  data class Valid<out StateT: Any, out EventT: Any, out ActionT: Any> internal constructor(
     override val fromState: StateT,
     override val event: EventT,
     val toState: StateT,
-    val sideEffect: SideEffectT?
-  ) : Transition<StateT, EventT, SideEffectT>()
+    val action: ActionT?
+  ) : Transition<StateT, EventT, ActionT>()
 
-  data class Invalid<out StateT : Any, out EventT : Any, out SideEffectT : Any> internal constructor(
+  data class Invalid<out StateT: Any, out EventT: Any> internal constructor(
     override val fromState: StateT,
     override val event: EventT
-  ) : Transition<StateT, EventT, SideEffectT>()
+  ) : Transition<StateT, EventT, Nothing>()
 }

@@ -3,6 +3,7 @@ arrow = "1.1.6-alpha.91"
 suspendapp="0.4.0"
 hikari="5.0.1"
 cohort="2.0.2"
+cohort-ktor="1.7.3"
 ktor = "2.3.0"
 sqldelight="2.0.0-SNAPSHOT"
 postgresql="42.6.0"
@@ -96,7 +97,7 @@ ktor-serialization-json = { module = "io.ktor:ktor-serialization-kotlinx-json", 
 ktor-server-html = { module = "io.ktor:ktor-server-html-builder", version.ref = "ktor" }
 hikari = { module = "com.zaxxer:HikariCP", version.ref="hikari" }
 cohort-core = { module="com.sksamuel.cohort:cohort-core", version.ref="cohort" }
-cohort-ktor = { module="com.sksamuel.cohort:cohort-ktor2", version.ref="cohort" }
+cohort-ktor = { module="com.sksamuel.cohort:cohort-ktor2", version.ref="cohort-ktor" }
 cohort-hikari = { module="com.sksamuel.cohort:cohort-hikari", version.ref="cohort" }
 sqldelight-jdbc = { module = "app.cash.sqldelight:jdbc-driver", version.ref="sqldelight" }
 sqldelight-postgresql = { module = "app.cash.sqldelight:postgresql-dialect", version.ref="sqldelight" }
