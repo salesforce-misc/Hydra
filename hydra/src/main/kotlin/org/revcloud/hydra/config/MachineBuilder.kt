@@ -128,9 +128,9 @@ class MachineBuilder<StateT : Any, EventT : Any, ActionT : Any>(
     fun build() = stateDefinition
 
     @JvmOverloads
-    fun transitionTo(state: StateT, sideEffect: ActionT? = null): TransitionTo<StateT, ActionT> =
-      TransitionTo(state, sideEffect)
+    fun transitionTo(state: StateT, action: ActionT? = null): TransitionTo<StateT, ActionT> =
+      TransitionTo(state, action)
 
-    fun S.dontTransition(sideEffect: ActionT? = null): TransitionTo<StateT, ActionT> = transitionTo(this, sideEffect)
+    fun S.dontTransition(action: ActionT? = null): TransitionTo<StateT, ActionT> = transitionTo(this, action)
   }
 }

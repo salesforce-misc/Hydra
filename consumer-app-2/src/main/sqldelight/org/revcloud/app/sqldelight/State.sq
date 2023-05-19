@@ -1,0 +1,14 @@
+import org.revcloud.quote.repo.StateId;
+import java.time.OffsetDateTime;
+
+CREATE TABLE IF NOT EXISTS state(
+    id BIGSERIAL AS StateId PRIMARY KEY,
+    previousState JSON NOT NULL,
+    createdAt VARCHAR(50) AS OffsetDateTime NOT NULL,
+    updatedAt VARCHAR(50) AS OffsetDateTime NOT NULL
+);
+
+insertAndGetId:
+INSERT INTO state(previousState, createdAt, updatedAt)
+VALUES (CAST(:state AS json), :createdAt, :updatedAt)
+RETURNING id;

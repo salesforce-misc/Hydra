@@ -3,20 +3,20 @@ package org.revcloud.hydra.internal
 import org.revcloud.hydra.statemachine.Transition
 import java.util.function.Consumer
 
-data class Machine<StateT : Any, EventT : Any, SideEffectT : Any>(
+data class Machine<StateT : Any, EventT : Any, ActionT : Any>(
   val initialState: StateT,
-  val stateDefinitions: Map<Matcher<StateT, StateT>, State<StateT, EventT, SideEffectT>>,
-  val onTransitionListeners: List<Consumer<Transition<StateT, EventT, SideEffectT>>>
+  val stateDefinitions: Map<Matcher<StateT, StateT>, State<StateT, EventT, ActionT>>,
+  val onTransitionListeners: List<Consumer<Transition<StateT, EventT, ActionT>>>
   ) {
   
-  class State<StateT : Any, EventT : Any, SideEffectT : Any> internal constructor() {
+  class State<StateT : Any, EventT : Any, ActionT : Any> internal constructor() {
     val onEnterListeners = mutableListOf<(StateT, EventT) -> Unit>()
     val onExitListeners = mutableListOf<(StateT, EventT) -> Unit>()
-    val transitions = linkedMapOf<Matcher<EventT, EventT>, (StateT, EventT) -> TransitionTo<StateT, SideEffectT>>()
+    val transitions = linkedMapOf<Matcher<EventT, EventT>, (StateT, EventT) -> TransitionTo<StateT, ActionT>>()
 
-    data class TransitionTo<out StateT : Any, out SideEffectT : Any> internal constructor(
+    data class TransitionTo<out StateT : Any, out ActionT : Any> internal constructor(
       val toState: StateT,
-      val sideEffect: SideEffectT?
+      val action: ActionT?
     )
   }
 }

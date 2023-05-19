@@ -1,0 +1,24 @@
+= Hydra 🐙 | Consumer sample
+Gopal S Akshintala <gopala.akshintala@salesforce.com>
+:Revision: 1.0
+ifdef::env-github[]
+:tip-caption: :bulb:
+:note-caption: :information_source:
+:important-caption: :heavy_exclamation_mark:
+:caution-caption: :fire:
+:warning-caption: :warning:
+endif::[]
+:toc:
+:toc-placement: preamble
+:sourcedir: src/main/kotlin
+:testdir: src/integrationTest/java
+:imagesdir: images
+:prewrap!:
+
+== Tech stack
+
+* Ktor
+* Postgres DB
+* Rabbit MQ
+
+== link:CONTRIBUTING.adoc[🙌🏼Wanna Collab & Contribute?]

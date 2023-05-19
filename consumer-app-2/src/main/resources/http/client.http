@@ -1,4 +1,4 @@
-POST http://localhost:7070/order/place
+POST http://localhost:7070/quote/place
 Content-Type: application/json
 
 {

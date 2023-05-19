@@ -43,8 +43,8 @@ class Hydra<StateT : Any, EventT : Any, ActionT : Any> private constructor(priva
   private fun StateT.getTransition(event: EventT): Transition<StateT, EventT, ActionT> {
     for ((eventMatcher, createTransitionTo) in getDefinition().transitions) {
       if (eventMatcher.matches(event)) {
-        val (toState, sideEffect) = createTransitionTo(this, event)
-        return Transition.Valid(this, event, toState, sideEffect)
+        val (toState, action) = createTransitionTo(this, event)
+        return Transition.Valid(this, event, toState, action)
       }
     }
     return Transition.Invalid(this, event)
@@ -69,13 +69,13 @@ class Hydra<StateT : Any, EventT : Any, ActionT : Any> private constructor(priva
 
   companion object {
     @JvmStatic
-    fun <StateT : Any, EventT : Any, SideEffectT : Any> create(
-      init: Consumer<MachineBuilder<StateT, EventT, SideEffectT>>
-    ): Hydra<StateT, EventT, SideEffectT> = create(null, init)
+    fun <StateT : Any, EventT : Any, ActionT : Any> create(
+      init: Consumer<MachineBuilder<StateT, EventT, ActionT>>
+    ): Hydra<StateT, EventT, ActionT> = create(null, init)
 
-    fun <StateT : Any, EventT : Any, SideEffectT : Any> create(
-      init: MachineBuilder<StateT, EventT, SideEffectT>.() -> Unit
-    ): Hydra<StateT, EventT, SideEffectT> {
+    fun <StateT : Any, EventT : Any, ActionT : Any> create(
+      init: MachineBuilder<StateT, EventT, ActionT>.() -> Unit
+    ): Hydra<StateT, EventT, ActionT> {
       return create(null, init)
     }
 
