@@ -2,7 +2,7 @@ POST http://localhost:7070/quote/place
 Content-Type: application/json
 
 {
-  "type": "org.revcloud.app.domain.Action.Place"
+  "type": "org.revcloud.quote.domain.Action.Place"
 }
 
 ###

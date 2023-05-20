@@ -1,6 +1,6 @@
 plugins {
   id("hydra.kt-conventions")
-  alias(libs.plugins.ktor)
+  id("hydra.consumer.sample-conventions")
   alias(libs.plugins.kotlinx.serialization)
   alias(libs.plugins.sqldelight)
 }
@@ -14,8 +14,6 @@ dependencies {
   implementation(libs.hikari)
   implementation(libs.sqldelight.jdbc)
   implementation(libs.postgresql)
-  implementation(libs.rabbitmq.client)
-  implementation(libs.ktor.rabbitmq)
   implementation(libs.jackson.kotlin)
   implementation(libs.bundles.arrow)
   implementation(libs.bundles.ktor.server)

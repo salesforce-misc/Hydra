@@ -1,6 +1,6 @@
 plugins {
   id("hydra.kt-conventions")
-  alias(libs.plugins.ktor)
+  id("hydra.consumer.sample-conventions")
   alias(libs.plugins.kotlinx.serialization)
   alias(libs.plugins.sqldelight)
 }

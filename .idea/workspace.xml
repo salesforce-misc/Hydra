@@ -4,13 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6ed80e62-f038-45bc-b42e-83dd15ec8dae" name="Changes" comment="Add PlaceQuote model">
+    <list default="true" id="6ed80e62-f038-45bc-b42e-83dd15ec8dae" name="Changes" comment="Improve PlaceQuote model&#10;&#10;Signed-off-by: Gopal S Akshintala &lt;gopala.akshintala@salesforce.com&gt;">
+      <change afterPath="$PROJECT_DIR$/buildSrc/src/main/kotlin/hydra.consumer.sample-conventions.gradle.kts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/consumer-app-2/src/main/java/org/revcloud/quote/domain/PlaceQuoteMachine.java" beforeDir="false" afterPath="$PROJECT_DIR$/consumer-app-2/src/main/java/org/revcloud/quote/domain/PlaceQuoteMachine.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/consumer-app-2/src/main/kotlin/org/revcloud/quote/domain/quote.kt" beforeDir="false" afterPath="$PROJECT_DIR$/consumer-app-2/src/main/kotlin/org/revcloud/quote/domain/quote.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/consumer-app-2/src/main/kotlin/org/revcloud/quote/domain/steps.kt" beforeDir="false" afterPath="$PROJECT_DIR$/consumer-app-2/src/main/kotlin/org/revcloud/quote/domain/steps.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/consumer-app-2/src/main/kotlin/org/revcloud/quote/routes/eventHandler.kt" beforeDir="false" afterPath="$PROJECT_DIR$/consumer-app-2/src/main/kotlin/org/revcloud/quote/routes/exitEventHandler.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/consumer-app-2/src/main/kotlin/org/revcloud/quote/routes/rabbitConsumers.kt" beforeDir="false" afterPath="$PROJECT_DIR$/consumer-app-2/src/main/kotlin/org/revcloud/quote/routes/rabbitConsumers.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/buildSrc/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/buildSrc/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/buildSrc/src/main/kotlin/preDef.kt" beforeDir="false" afterPath="$PROJECT_DIR$/buildSrc/src/main/kotlin/preDef.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/consumer-app-2/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/consumer-app-2/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/consumer-app-2/src/main/resources/http/client.http" beforeDir="false" afterPath="$PROJECT_DIR$/consumer-app-2/src/main/resources/http/client.http" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/consumer-app/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/consumer-app/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/libs.versions.toml" beforeDir="false" afterPath="$PROJECT_DIR$/libs.versions.toml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -54,8 +56,8 @@
         <option value="HTTP Request" />
         <option value="HTTP Public Environment File" />
         <option value="Class" />
-        <option value="Kotlin File" />
         <option value="Kotlin Class" />
+        <option value="Kotlin File" />
       </list>
     </option>
   </component>
@@ -200,30 +202,7 @@
       <command value="gradle hydra:publish" />
     </option>
   </component>
-  <component name="RunManager" selected="Gradle.hydra-root [hydra:publish]">
-    <configuration name="hydra-root [clean build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" value="" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value="clean" />
-            <option value="build" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <RunAsTest>false</RunAsTest>
-      <method v="2" />
-    </configuration>
+  <component name="RunManager" selected="HTTP Request.client | #1">
     <configuration name="hydra-root [hydra:publish]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -292,6 +271,9 @@
       <RunAsTest>false</RunAsTest>
       <method v="2" />
     </configuration>
+    <configuration name="client | #1" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$/consumer-app-2/src/main/resources/http/client.http" requestIdentifier="#1" runType="Run single request">
+      <method v="2" />
+    </configuration>
     <configuration name="HydraTest.invalidTransitionCancelInIdle" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="hydra-root.hydra.test" />
       <extension name="coverage">
@@ -316,18 +298,18 @@
     </configuration>
     <list>
       <item itemvalue="Gradle.hydra-root [hydra:publish]" />
-      <item itemvalue="Gradle.hydra-root [clean build]" />
       <item itemvalue="Gradle.hydra-root [hydra:test --tests org.revcloud.hydra.HydraTest]" />
       <item itemvalue="Gradle.hydra-root [spotlessApply]" />
+      <item itemvalue="HTTP Request.client | #1" />
       <item itemvalue="JUnit.HydraTest.invalidTransitionCancelInIdle" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="HTTP Request.client | #1" />
         <item itemvalue="JUnit.HydraTest.invalidTransitionCancelInIdle" />
         <item itemvalue="Gradle.hydra-root [spotlessApply]" />
         <item itemvalue="Gradle.hydra-root [hydra:test --tests org.revcloud.hydra.HydraTest]" />
         <item itemvalue="Gradle.hydra-root [hydra:publish]" />
-        <item itemvalue="Gradle.hydra-root [clean build]" />
       </list>
     </recent_temporary>
   </component>
@@ -657,7 +639,15 @@
       <option name="project" value="LOCAL" />
       <updated>1684517835485</updated>
     </task>
-    <option name="localTasksCounter" value="38" />
+    <task id="LOCAL-00038" summary="Improve PlaceQuote model&#10;&#10;Signed-off-by: Gopal S Akshintala &lt;gopala.akshintala@salesforce.com&gt;">
+      <option name="closed" value="true" />
+      <created>1684566132768</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1684566132768</updated>
+    </task>
+    <option name="localTasksCounter" value="39" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -692,8 +682,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="Release 0.6.2&#10;- Upgrade Dependencies&#10;- Remove kotest as it has conflicting jar&#10;&#10;Signed-off-by: Gopal S Akshintala &lt;gopala.akshintala@salesforce.com&gt;" />
-    <MESSAGE value="Release 0.6.2.1&#10;- Exclude hamcrest from vador&#10;&#10;Signed-off-by: Gopal S Akshintala &lt;gopala.akshintala@salesforce.com&gt;" />
     <MESSAGE value="Add gradle wrapper&#10;&#10;Signed-off-by: Gopal S Akshintala &lt;gopala.akshintala@salesforce.com&gt;" />
     <MESSAGE value="Add instructions to add Gradle credentials in CONTRIBUTING.adoc&#10;&#10;Signed-off-by: Gopal S Akshintala &lt;gopala.akshintala@salesforce.com&gt;" />
     <MESSAGE value="Moshi disable proguard&#10;&#10;&#10;Signed-off-by: Gopal S Akshintala &lt;gopala.akshintala@salesforce.com&gt;" />
@@ -717,7 +705,9 @@
     <MESSAGE value="Enable for Nexus publish" />
     <MESSAGE value="Add unit tests" />
     <MESSAGE value="Add PlaceQuote model" />
-    <option name="LAST_COMMIT_MESSAGE" value="Add PlaceQuote model" />
+    <MESSAGE value="Improve PlaceQuote model" />
+    <MESSAGE value="Improve PlaceQuote model&#10;&#10;Signed-off-by: Gopal S Akshintala &lt;gopala.akshintala@salesforce.com&gt;" />
+    <option name="LAST_COMMIT_MESSAGE" value="Improve PlaceQuote model&#10;&#10;Signed-off-by: Gopal S Akshintala &lt;gopala.akshintala@salesforce.com&gt;" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
