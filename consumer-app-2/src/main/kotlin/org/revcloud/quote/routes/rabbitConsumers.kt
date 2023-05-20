@@ -16,26 +16,21 @@ context(Application, Hydra<Quote, Event, Action>, StatePersistence, Env, KLogger
 fun rabbitConsumers() = rabbitConsumer {
   consume<Event.Place>(rabbitMQ.queue) { event ->
     info { "Consumed event: $event" }
-    eventHandler(event)
+    exitEventHandler(event)
   }
   consume<Event.Persist>(rabbitMQ.queue) { event ->
     info { "Consumed event: $event to Persist Quote" }
-    eventHandler(Event.PersistSuccess(mapOf("id" to "1")))
+    val exitEvent = if (Random.nextBoolean()) Event.PersistSuccess(mapOf("id" to "1"), mapOf("id" to "2")) else Event.PersistFailed
+    exitEventHandler(exitEvent)
   }
   consume<Event.Price>(rabbitMQ.queue) { event ->
     info { "Consumed event: $event to Price Quote" }
-    if (Random.nextBoolean()) {
-      eventHandler(Event.PricingSuccess(mapOf("id" to "1")))
-    } else {
-      eventHandler(Event.PricingFailed)
-    }
+    val exitEvent = if (Random.nextBoolean()) Event.PricingSuccess(mapOf("id" to "1")) else Event.PricingFailed
+    exitEventHandler(exitEvent)
   }
   consume<Event.Tax>(rabbitMQ.queue) { event ->
     info { "Consumed event: $event to Tax Quote" }
-    if (Random.nextBoolean()) {
-      eventHandler(Event.TaxSuccess)
-    } else {
-      eventHandler(Event.TaxFailed)
-    }
+    val exitEvent = if (Random.nextBoolean()) Event.TaxSuccess else Event.TaxFailed
+    exitEventHandler(exitEvent)
   }
 }

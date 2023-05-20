@@ -39,7 +39,7 @@ sealed class Event {
   object Persist: Event()
 
   @Serializable
-  class PersistSuccess(val persistResult: Map<String, String>): Event()
+  class PersistSuccess(val prePersist: Map<String, String>, val persistResult: Map<String, String>): Event()
 
   @Serializable
   object PersistFailed: Event()
@@ -66,7 +66,7 @@ sealed class Event {
 
 
 @Serializable
-sealed class Action() {
+sealed class Action {
   @Serializable
   object PersistQuote: Action()
 
@@ -81,6 +81,9 @@ sealed class Action() {
 
   @Serializable
   object TaxQuote: Action()
+
+  @Serializable
+  object OnTaxFailed: Action()
 
   @Serializable
   object OnCompleted: Action()

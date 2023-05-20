@@ -4,49 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6ed80e62-f038-45bc-b42e-83dd15ec8dae" name="Changes" comment="Add unit tests">
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/scala_compiler.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/consumer-app-2/README.adoc" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/consumer-app-2/build.gradle.kts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/consumer-app-2/docker-compose.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/consumer-app-2/src/main/java/org/revcloud/quote/domain/PlaceQuoteMachine.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/consumer-app-2/src/main/kotlin/org/revcloud/quote/domain/quote.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/consumer-app-2/src/main/kotlin/org/revcloud/quote/domain/steps.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/consumer-app-2/src/main/kotlin/org/revcloud/quote/env/Dependencies.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/consumer-app-2/src/main/kotlin/org/revcloud/quote/routes/eventHandler.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/consumer-app-2/src/main/kotlin/org/revcloud/quote/routes/rabbitConsumers.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/consumer-app-2/src/main/resources/http/client.http" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/consumer-app-2/src/main/resources/http/http-client.env.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/consumer-app-2/src/main/resources/log4j2.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/consumer-app-2/src/main/sqldelight/org/revcloud/app/sqldelight/State.sq" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/consumer-app/src/main/kotlin/org/revcloud/order/env/Env.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/consumer-app/src/main/kotlin/org/revcloud/order/env/ktor.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/consumer-app/src/main/kotlin/org/revcloud/order/env/persistence.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/consumer-app/src/main/kotlin/org/revcloud/order/main.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/consumer-app/src/main/kotlin/org/revcloud/order/repo/StatePersistence.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/consumer-app/src/main/kotlin/org/revcloud/order/routes/health.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/consumer-app/src/main/kotlin/org/revcloud/order/routes/routes.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+    <list default="true" id="6ed80e62-f038-45bc-b42e-83dd15ec8dae" name="Changes" comment="Add PlaceQuote model">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/buildSrc/src/main/kotlin/hydra.root-conventions.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/buildSrc/src/main/kotlin/hydra.root-conventions.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/consumer-app/src/main/java/org/revcloud/app/domain/OrderMachine.java" beforeDir="false" afterPath="$PROJECT_DIR$/consumer-app/src/main/java/org/revcloud/order/domain/OrderMachine.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/consumer-app/src/main/kotlin/org/revcloud/app/domain/domain.kt" beforeDir="false" afterPath="$PROJECT_DIR$/consumer-app/src/main/kotlin/org/revcloud/order/domain/order.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/consumer-app/src/main/kotlin/org/revcloud/app/env/Dependencies.kt" beforeDir="false" afterPath="$PROJECT_DIR$/consumer-app/src/main/kotlin/org/revcloud/order/env/Dependencies.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/consumer-app/src/main/kotlin/org/revcloud/app/env/Env.kt" beforeDir="false" afterPath="$PROJECT_DIR$/consumer-app-2/src/main/kotlin/org/revcloud/quote/env/Env.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/consumer-app/src/main/kotlin/org/revcloud/app/env/ktor.kt" beforeDir="false" afterPath="$PROJECT_DIR$/consumer-app-2/src/main/kotlin/org/revcloud/quote/env/ktor.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/consumer-app/src/main/kotlin/org/revcloud/app/env/persistence.kt" beforeDir="false" afterPath="$PROJECT_DIR$/consumer-app-2/src/main/kotlin/org/revcloud/quote/env/persistence.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/consumer-app/src/main/kotlin/org/revcloud/app/main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/consumer-app-2/src/main/kotlin/org/revcloud/quote/main.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/consumer-app/src/main/kotlin/org/revcloud/app/repo/StatePersistence.kt" beforeDir="false" afterPath="$PROJECT_DIR$/consumer-app-2/src/main/kotlin/org/revcloud/quote/repo/StatePersistence.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/consumer-app/src/main/kotlin/org/revcloud/app/routes/health.kt" beforeDir="false" afterPath="$PROJECT_DIR$/consumer-app-2/src/main/kotlin/org/revcloud/quote/routes/health.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/consumer-app/src/main/kotlin/org/revcloud/app/routes/rabbitConsumers.kt" beforeDir="false" afterPath="$PROJECT_DIR$/consumer-app/src/main/kotlin/org/revcloud/order/routes/rabbitConsumers.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/consumer-app/src/main/kotlin/org/revcloud/app/routes/routes.kt" beforeDir="false" afterPath="$PROJECT_DIR$/consumer-app-2/src/main/kotlin/org/revcloud/quote/routes/routes.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/consumer-app/src/main/resources/http/client.http" beforeDir="false" afterPath="$PROJECT_DIR$/consumer-app/src/main/resources/http/client.http" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hydra/src/main/kotlin/org/revcloud/hydra/Hydra.kt" beforeDir="false" afterPath="$PROJECT_DIR$/hydra/src/main/kotlin/org/revcloud/hydra/Hydra.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hydra/src/main/kotlin/org/revcloud/hydra/config/MachineBuilder.kt" beforeDir="false" afterPath="$PROJECT_DIR$/hydra/src/main/kotlin/org/revcloud/hydra/config/MachineBuilder.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hydra/src/main/kotlin/org/revcloud/hydra/internal/Machine.kt" beforeDir="false" afterPath="$PROJECT_DIR$/hydra/src/main/kotlin/org/revcloud/hydra/internal/Machine.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/settings.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/settings.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/consumer-app-2/src/main/java/org/revcloud/quote/domain/PlaceQuoteMachine.java" beforeDir="false" afterPath="$PROJECT_DIR$/consumer-app-2/src/main/java/org/revcloud/quote/domain/PlaceQuoteMachine.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/consumer-app-2/src/main/kotlin/org/revcloud/quote/domain/quote.kt" beforeDir="false" afterPath="$PROJECT_DIR$/consumer-app-2/src/main/kotlin/org/revcloud/quote/domain/quote.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/consumer-app-2/src/main/kotlin/org/revcloud/quote/domain/steps.kt" beforeDir="false" afterPath="$PROJECT_DIR$/consumer-app-2/src/main/kotlin/org/revcloud/quote/domain/steps.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/consumer-app-2/src/main/kotlin/org/revcloud/quote/routes/eventHandler.kt" beforeDir="false" afterPath="$PROJECT_DIR$/consumer-app-2/src/main/kotlin/org/revcloud/quote/routes/exitEventHandler.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/consumer-app-2/src/main/kotlin/org/revcloud/quote/routes/rabbitConsumers.kt" beforeDir="false" afterPath="$PROJECT_DIR$/consumer-app-2/src/main/kotlin/org/revcloud/quote/routes/rabbitConsumers.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -431,6 +395,7 @@
       <workItem from="1684426054226" duration="2517000" />
       <workItem from="1684471678063" duration="14111000" />
       <workItem from="1684507343654" duration="8414000" />
+      <workItem from="1684517781574" duration="2907000" />
     </task>
     <task id="LOCAL-00001" summary="- Fixed moshiReVoman&#10;- Added module-info.java to integrationTest module">
       <created>1678595183319</created>
@@ -684,7 +649,15 @@
       <option name="project" value="LOCAL" />
       <updated>1684389757583</updated>
     </task>
-    <option name="localTasksCounter" value="37" />
+    <task id="LOCAL-00037" summary="Add PlaceQuote model">
+      <option name="closed" value="true" />
+      <created>1684517835485</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1684517835485</updated>
+    </task>
+    <option name="localTasksCounter" value="38" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -719,7 +692,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="module-info.java cleanup&#10;&#10;Signed-off-by: Gopal S Akshintala &lt;gopala.akshintala@salesforce.com&gt;" />
     <MESSAGE value="Release 0.6.2&#10;- Upgrade Dependencies&#10;- Remove kotest as it has conflicting jar&#10;&#10;Signed-off-by: Gopal S Akshintala &lt;gopala.akshintala@salesforce.com&gt;" />
     <MESSAGE value="Release 0.6.2.1&#10;- Exclude hamcrest from vador&#10;&#10;Signed-off-by: Gopal S Akshintala &lt;gopala.akshintala@salesforce.com&gt;" />
     <MESSAGE value="Add gradle wrapper&#10;&#10;Signed-off-by: Gopal S Akshintala &lt;gopala.akshintala@salesforce.com&gt;" />
@@ -744,7 +716,8 @@
     <MESSAGE value="Rename SideEffect to Action" />
     <MESSAGE value="Enable for Nexus publish" />
     <MESSAGE value="Add unit tests" />
-    <option name="LAST_COMMIT_MESSAGE" value="Add unit tests" />
+    <MESSAGE value="Add PlaceQuote model" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add PlaceQuote model" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

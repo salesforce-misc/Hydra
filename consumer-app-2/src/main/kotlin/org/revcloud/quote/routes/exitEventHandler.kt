@@ -18,7 +18,7 @@ import org.revcloud.quote.repo.StatePersistence
 import pl.jutupe.ktor_rabbitmq.RabbitMQInstance
 
 context(RabbitMQInstance, Hydra<Quote, Event, Action>, StatePersistence, Env, KLogger)
-fun eventHandler(event: Event) {
+fun exitEventHandler(event: Event) {
   val quote: Quote = state // * NOTE 08/05/23 gopala.akshintala: This is needed for encoding below
   runBlocking { insert(Json.encodeToString(quote)) }
 
@@ -28,7 +28,7 @@ fun eventHandler(event: Event) {
     Action.PersistQuote -> persistQuoteStep()
     Action.PriceQuote -> priceQuoteStep()
     Action.TaxQuote -> taxQuoteStep()
-    Action.OnPersistFailed, Action.OnPriceFailed, Action. -> postProcess()
-    else -> throw IllegalArgumentException("Unknown state")
+    Action.OnPersistFailed, Action.OnPriceFailed, Action.OnTaxFailed, Action.OnCompleted -> postProcess()
+    else -> postProcess()
   }
 }

@@ -13,7 +13,6 @@ public class PlaceQuoteMachine {
       Hydra.create(
           mb -> {
             mb.initialState(Idle.INSTANCE);
-
             mb.state(
                 Quote.Idle.class,
                 sb ->
@@ -31,8 +30,7 @@ public class PlaceQuoteMachine {
                   sb.on(
                       Event.PersistSuccess.class,
                       (currentState, event) -> {
-                        final var persistResult = event.getPersistResult();
-                        if (atpForPricing(persistResult)) {
+                        if (atpForPricing(event.getPrePersist(), event.getPersistResult())) {
                           return sb.transitionTo(Quote.PricingInProgress.INSTANCE, Action.PriceQuote.INSTANCE);
                         } else {
                           return sb.transitionTo(Quote.Completed.INSTANCE, Action.OnCompleted.INSTANCE);
@@ -74,7 +72,7 @@ public class PlaceQuoteMachine {
 
   private static final Random random = new Random();
 
-  static boolean atpForPricing(Map<String, String> persistResult) {
+  static boolean atpForPricing(Map<String, String> prePersist, Map<String, String> persistResult) {
     return random.nextBoolean();
   }
 
