@@ -1,53 +1,64 @@
 package org.revcloud.hydra;
 
 import org.jetbrains.annotations.NotNull;
+import org.revcloud.hydra.statemachine.Transition;
 
-class OrderMachine {
-  
-  private OrderMachine(){}
-  public static final Hydra<Order, Event, Action> orderMachine =
-      Hydra.create(
-          mb -> {
-            mb.initialState(Idle.INSTANCE);
+class OrderMachine2 {
+  final Hydra<Order, Event, Action> orderMachine;
+  public OrderMachine2() {
+    orderMachine = prepareOrderMachine();
+  }
+  private Hydra<Order, Event, Action> prepareOrderMachine() {
+    return Hydra.create(
+        mb -> {
+          mb.initialState(Idle.INSTANCE);
 
-            mb.state(
-                Idle.class,
-                sb ->
-                    sb.on(
-                        Place.class,
-                        (currentState, action) ->
-                            sb.transitionTo(Placed.INSTANCE, OnPlaced.INSTANCE)));
+          mb.state(
+              Idle.class,
+              sb ->
+                  sb.on(
+                      Place.class,
+                      (currentState, action) ->
+                          sb.transitionTo(Placed.INSTANCE, OnPlaced.INSTANCE)));
 
-            mb.state(
-                Placed.class,
-                sb -> {
-                  sb.on(
-                      PaymentFailed.class,
-                      (currentState, action) ->
-                          sb.transitionTo(Idle.INSTANCE, OnCancelled.INSTANCE));
-                  sb.on(
-                      PaymentSuccessful.class,
-                      (currentState, action) ->
-                          sb.transitionTo(Processed.INSTANCE, OnPaid.INSTANCE));
-                  sb.on(
-                      Cancel.class,
-                      (currentState, action) ->
-                          sb.transitionTo(Idle.INSTANCE, OnCancelled.INSTANCE));
-                });
+          mb.state(
+              Placed.class,
+              sb -> {
+                sb.on(
+                    PaymentFailed.class,
+                    (currentState, action) ->
+                        sb.transitionTo(Idle.INSTANCE, OnCancelled.INSTANCE));
+                sb.on(
+                    PaymentSuccessful.class,
+                    (currentState, action) ->
+                        sb.transitionTo(Processed.INSTANCE, OnPaid.INSTANCE));
+                sb.on(
+                    Cancel.class,
+                    (currentState, action) ->
+                        sb.transitionTo(Idle.INSTANCE, OnCancelled.INSTANCE));
+              });
 
-            mb.state(
-                Processed.class,
-                sb -> {
-                  sb.on(
-                      Ship.class,
-                      (currentState, action) ->
-                          sb.transitionTo(Delivered.INSTANCE, OnShipped.INSTANCE));
-                  sb.on(
-                      Cancel.class,
-                      (currentState, action) ->
-                          sb.transitionTo(Idle.INSTANCE, OnCancelled.INSTANCE));
-                });
+          mb.state(
+              Processed.class,
+              sb -> {
+                sb.on(
+                    Ship.class,
+                    (currentState, action) ->
+                        sb.transitionTo(Delivered.INSTANCE, OnShipped.INSTANCE));
+                sb.on(
+                    Cancel.class,
+                    (currentState, action) ->
+                        sb.transitionTo(Idle.INSTANCE, OnCancelled.INSTANCE));
+              });
+          mb.onTransition(transition -> {
+            System.out.println("onTransition: " + orderMachine.getState());
           });
+        });
+  }
+  
+  public Transition<Order, Event, Action> exitWithEvent(Event evnt) {
+    return orderMachine.transition(evnt);
+  }
 
   // Order
   interface Order {}

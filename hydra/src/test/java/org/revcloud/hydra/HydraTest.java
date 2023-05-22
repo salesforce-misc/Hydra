@@ -47,7 +47,8 @@ class HydraTest {
     assertThat(orderMachine.getState()).isEqualTo(Idle.INSTANCE);
     assertThat(transition)
         .isEqualTo(
-            Transition.valid(Placed.INSTANCE, PaymentFailed.INSTANCE, Idle.INSTANCE, OnCancelled.INSTANCE));
+            Transition.valid(
+                Placed.INSTANCE, PaymentFailed.INSTANCE, Idle.INSTANCE, OnCancelled.INSTANCE));
   }
 
   @Test
@@ -56,8 +57,6 @@ class HydraTest {
     final var orderMachine = cloneOrderMachineWithInitialState(Idle.INSTANCE);
     final var transition = orderMachine.transition(Cancel.INSTANCE);
     assertThat(orderMachine.getState()).isEqualTo(Idle.INSTANCE);
-    assertThat(transition)
-        .isEqualTo(
-            Transition.invalid(Idle.INSTANCE, Cancel.INSTANCE));
+    assertThat(transition).isEqualTo(Transition.invalid(Idle.INSTANCE, Cancel.INSTANCE));
   }
 }

@@ -1,10 +1,5 @@
 package org.revcloud.order.domain;
 
-import org.revcloud.order.domain.Event.Cancel;
-import org.revcloud.order.domain.Event.PaymentFailed;
-import org.revcloud.order.domain.Event.PaymentSuccessful;
-import org.revcloud.order.domain.Order.Idle;
-import org.revcloud.order.domain.Order.Processed;
 import org.revcloud.hydra.Hydra;
 import org.revcloud.order.domain.Event.Cancel;
 import org.revcloud.order.domain.Event.PaymentFailed;

@@ -33,10 +33,10 @@ sealed class Quote {
 @Serializable
 sealed class Event {
   @Serializable
-  object Place: Event()
+  class Place(val quotePayload: Map<String, String>): Event()
 
   @Serializable
-  object Persist: Event()
+  class Persist(val quotePayload: Map<String, String>): Event()
 
   @Serializable
   class PersistSuccess(val prePersist: Map<String, String>, val persistResult: Map<String, String>): Event()
@@ -68,7 +68,10 @@ sealed class Event {
 @Serializable
 sealed class Action {
   @Serializable
-  object PersistQuote: Action()
+  object PersistQuoteSync: Action()
+  
+  @Serializable
+  object PersistQuoteAsync: Action()
 
   @Serializable
   object OnPersistFailed: Action()

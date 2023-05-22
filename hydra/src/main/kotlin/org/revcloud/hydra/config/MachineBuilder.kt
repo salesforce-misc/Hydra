@@ -49,10 +49,6 @@ class MachineBuilder<StateT : Any, EventT : Any, ActionT : Any>(
     onTransitionListeners.add(listener)
   }
 
-  fun onTransition(listener: (Transition<StateT, EventT, ActionT>) -> Unit) {
-    onTransitionListeners.add(listener)
-  }
-
   fun build(): Machine<StateT, EventT, ActionT> {
     return Machine(requireNotNull(initialState), stateDefinitions.toMap(), onTransitionListeners.toList())
   }
