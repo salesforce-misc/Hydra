@@ -10,7 +10,7 @@ import org.revcloud.quote.env.Env;
 import org.revcloud.quote.repo.StatePersistence;
 import pl.jutupe.ktor_rabbitmq.RabbitMQInstance;
 
-import static org.revcloud.quote.domain.QuoteExitEventHandlerKt.quoteTransitionHandler;
+import static org.revcloud.quote.domain.QuoteTransitionHandlerKt.quoteTransitionHandler;
 
 public class PlaceQuoteMachine {
 

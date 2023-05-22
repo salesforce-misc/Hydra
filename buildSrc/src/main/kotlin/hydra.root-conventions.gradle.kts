@@ -7,7 +7,7 @@ plugins {
   id("io.gitlab.arturbosch.detekt")
 }
 
-version = "0.0.2"
+version = "0.0.3"
 group = "com.salesforce.ccspayments"
 description = "Hydra - States, Events, Actions"
 repositories {
