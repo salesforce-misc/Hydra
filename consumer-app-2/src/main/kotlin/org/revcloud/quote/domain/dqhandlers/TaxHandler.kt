@@ -12,7 +12,8 @@ import org.revcloud.quote.framework.DQHandler
 import org.revcloud.quote.repo.StatePersistence
 
 context(Hydra<Quote, Event, Action>, StatePersistence, Env, KLogger)
-class TaxHandler: DQHandler() {
+class TaxHandler: DQHandler<Quote, Event, Action>() {
+  override val stateType = Quote::class.java
   override fun handleEvent(eventToConsume: Event): Event? {
     return taxQuote(eventToConsume as Event.Tax)
   }

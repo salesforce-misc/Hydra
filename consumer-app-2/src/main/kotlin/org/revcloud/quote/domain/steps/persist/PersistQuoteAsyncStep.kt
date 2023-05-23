@@ -12,8 +12,9 @@ import org.revcloud.quote.repo.StatePersistence
 import pl.jutupe.ktor_rabbitmq.RabbitMQInstance
 
 context(Hydra<Quote, Event, Action>, RabbitMQInstance, StatePersistence, Env, KLogger)
-class PersistQuoteAsyncStep: AsyncStep() {
-  override fun handleEvent(eventToPublish: Event): Event? {
+class PersistQuoteAsyncStep: AsyncStep<Quote, Event, Action>() {
+  override val stateType = Quote::class.java
+  override fun handleEvent(eventToPublish: Event): Event {
     info { "Persist Quote Async" }
     return eventToPublish
   }

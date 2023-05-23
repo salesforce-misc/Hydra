@@ -1,24 +1,23 @@
 package org.revcloud.quote.framework
 
 import kotlinx.coroutines.runBlocking
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.Json.Default.serializersModule
+import kotlinx.serialization.serializer
 import mu.KLogger
 import org.revcloud.hydra.Hydra
-import org.revcloud.quote.domain.Action
-import org.revcloud.quote.domain.Event
-import org.revcloud.quote.domain.Quote
 import org.revcloud.quote.env.Env
 import org.revcloud.quote.repo.StatePersistence
 import pl.jutupe.ktor_rabbitmq.RabbitMQInstance
 import pl.jutupe.ktor_rabbitmq.publish
 
-context(Hydra<Quote, Event, Action>, RabbitMQInstance, StatePersistence, Env, KLogger)
-abstract class AsyncStep {
+context(Hydra<StateT, EventT, ActionT>, RabbitMQInstance, StatePersistence, Env, KLogger)
+abstract class AsyncStep<StateT : Any, EventT : Any, ActionT : Any> {
+  protected abstract val stateType: Class<StateT>
   
-  protected abstract fun handleEvent(eventToPublish: Event): Event?
+  protected abstract fun handleEvent(eventToPublish: EventT): EventT?
   
-  fun execute(event: Event): Event? {
+  fun execute(event: EventT): EventT? {
     info { "Consumed Event: $event and doing some pre stuff" }
     persistState()
     return runCatching {
@@ -32,8 +31,8 @@ abstract class AsyncStep {
   }
 
   private fun persistState() {
-    val quote: Quote = state // * NOTE 08/05/23 gopala.akshintala: This is needed for encoding below 
-    runBlocking { insert(Json.encodeToString(quote)) }
+    val quote: StateT = state // * NOTE 08/05/23 gopala.akshintala: This is needed for encoding below
+    runBlocking { insert(Json.encodeToString(serializersModule.serializer(stateType), quote)) }
   }
 
 }
