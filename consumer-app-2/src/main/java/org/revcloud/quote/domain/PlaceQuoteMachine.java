@@ -1,5 +1,7 @@
 package org.revcloud.quote.domain;
 
+import static org.revcloud.quote.domain.QuoteTransitionHandlerKt.quoteTransitionHandler;
+
 import java.util.Map;
 import java.util.Random;
 import mu.KLogger;
@@ -10,18 +12,20 @@ import org.revcloud.quote.env.Env;
 import org.revcloud.quote.repo.StatePersistence;
 import pl.jutupe.ktor_rabbitmq.RabbitMQInstance;
 
-import static org.revcloud.quote.domain.QuoteTransitionHandlerKt.quoteTransitionHandler;
-
 public class PlaceQuoteMachine {
 
   private final RabbitMQInstance rabbitMQInstance;
   private final StatePersistence statePersistence;
   private final Env env;
   private final KLogger kLogger;
-  
+
   private final Hydra<Quote, Event, Action> orderHydra;
 
-  public PlaceQuoteMachine(RabbitMQInstance rabbitMQInstance, StatePersistence statePersistence, Env env, KLogger kLogger) {
+  public PlaceQuoteMachine(
+      RabbitMQInstance rabbitMQInstance,
+      StatePersistence statePersistence,
+      Env env,
+      KLogger kLogger) {
     this.rabbitMQInstance = rabbitMQInstance;
     this.statePersistence = statePersistence;
     this.env = env;
@@ -41,8 +45,7 @@ public class PlaceQuoteMachine {
                       (currentState, event) -> {
                         if (event.getQuotePayload().size() > 10) {
                           return sb.transitionTo(
-                              Quote.PersistInProgress.INSTANCE,
-                              Action.PersistQuoteAsync.INSTANCE);
+                              Quote.PersistInProgress.INSTANCE, Action.PersistQuoteAsync.INSTANCE);
                         } else {
                           return sb.transitionTo(
                               Quote.PersistInProgress.INSTANCE, Action.PersistQuoteSync.INSTANCE);
@@ -94,14 +97,16 @@ public class PlaceQuoteMachine {
                 sb.on(
                     Event.TaxFailed.class,
                     (currentState, event) ->
-                        sb.transitionTo(
-                            Quote.FailedToTax.INSTANCE, Action.OnPriceFailed.INSTANCE));
+                        sb.transitionTo(Quote.FailedToTax.INSTANCE, Action.OnPriceFailed.INSTANCE));
                 sb.on(
                     Event.TaxSuccess.class,
                     (currentState, event) ->
                         sb.transitionTo(Quote.Completed.INSTANCE, Action.OnCompleted.INSTANCE));
               });
-          mb.onTransition(transition -> quoteTransitionHandler(orderHydra, rabbitMQInstance, statePersistence, env, kLogger, transition));
+          mb.onTransition(
+              transition ->
+                  quoteTransitionHandler(
+                      orderHydra, rabbitMQInstance, statePersistence, env, kLogger, transition));
         });
   }
 

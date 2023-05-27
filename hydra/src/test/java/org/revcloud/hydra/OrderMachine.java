@@ -1,10 +1,17 @@
 package org.revcloud.hydra;
 
+import java.util.function.BiConsumer;
 import org.jetbrains.annotations.NotNull;
+import org.mockito.Mockito;
 
 class OrderMachine {
-  
-  private OrderMachine(){}
+
+  private OrderMachine() {}
+
+  static final BiConsumer<Idle, Event> onIdleExit = Mockito.mock();
+  static final BiConsumer<Placed, Event> onPlaceEnter = Mockito.mock();
+  static final BiConsumer<Delivered, Event> DeliveredEnter = Mockito.mock();
+
   public static final Hydra<Order, Event, Action> orderMachine =
       Hydra.create(
           mb -> {
@@ -12,15 +19,18 @@ class OrderMachine {
 
             mb.state(
                 Idle.class,
-                sb ->
-                    sb.on(
-                        Place.class,
-                        (currentState, action) ->
-                            sb.transitionTo(Placed.INSTANCE, OnPlaced.INSTANCE)));
+                sb -> {
+                  sb.onExit(onIdleExit);
+                  sb.on(
+                      Place.class,
+                      (currentState, action) ->
+                          sb.transitionTo(Placed.INSTANCE, OnPlaced.INSTANCE));
+                });
 
             mb.state(
                 Placed.class,
                 sb -> {
+                  sb.onEnter(onPlaceEnter);
                   sb.on(
                       PaymentFailed.class,
                       (currentState, action) ->
@@ -47,13 +57,15 @@ class OrderMachine {
                       (currentState, action) ->
                           sb.transitionTo(Idle.INSTANCE, OnCancelled.INSTANCE));
                 });
+
+            mb.state(Delivered.class, sb -> sb.onEnter(DeliveredEnter));
           });
 
   // Order
   interface Order {}
 
   static final class Idle implements Order {
-    @NotNull public static final Order INSTANCE;
+    @NotNull public static final Idle INSTANCE;
 
     private Idle() {}
 

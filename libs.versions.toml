@@ -14,8 +14,8 @@ java-vavr = "0.10.4"
 kotlin-vavr = "0.10.2"
 jetbrains-annotations = "24.0.1"
 typeTools = "0.6.3"
-kover = "0.7.0-Beta"
-kotlin = "1.8.21"
+kover = "0.7.0"
+kotlin = "1.9.0-Beta"
 moshix = "0.22.1"
 kotest = "5.6.2"
 spotbugs = "5.0.14"
@@ -32,6 +32,7 @@ graal-sdk = "22.3.2"
 underscore = "1.89"
 kotlin-faker = "1.14.0"
 immutables = "2.9.3"
+mockito = "5.3.1"
 # Common dependencies
 junit = "5.9.3"
 detekt = "1.22.0"
@@ -100,6 +101,7 @@ postgresql = { module="org.postgresql:postgresql", version.ref="postgresql" }
 rabbitmq-client = { module = "com.rabbitmq:amqp-client", version.ref = "rabbitmq-client" }
 ktor-rabbitmq = { module = "com.github.JUtupe:ktor-rabbitmq", version.ref = "ktor-rabbitmq" }
 jackson-kotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin", version.ref = "jackson-kotlin"}
+mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockito"}
 
 # Gradle plugins
 kotlin-gradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }

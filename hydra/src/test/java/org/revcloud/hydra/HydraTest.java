@@ -1,10 +1,13 @@
 package org.revcloud.hydra;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.revcloud.hydra.OrderMachine.onIdleExit;
+import static org.revcloud.hydra.OrderMachine.onPlaceEnter;
 import static org.revcloud.hydra.OrderMachine.orderMachine;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.revcloud.hydra.OrderMachine.Action;
 import org.revcloud.hydra.OrderMachine.Cancel;
 import org.revcloud.hydra.OrderMachine.Event;
@@ -16,6 +19,7 @@ import org.revcloud.hydra.OrderMachine.PaymentFailed;
 import org.revcloud.hydra.OrderMachine.Place;
 import org.revcloud.hydra.OrderMachine.Placed;
 import org.revcloud.hydra.statemachine.Transition;
+import org.revcloud.hydra.statemachine.Transition.Valid;
 
 class HydraTest {
 
@@ -26,6 +30,17 @@ class HydraTest {
   @Test
   void initialStateShouldBeIdle() {
     assertThat(orderMachine.getState()).isEqualTo(Idle.INSTANCE);
+  }
+
+  @Test
+  @DisplayName("Read transition with listeners, without changing the state")
+  void readTransition() {
+    final var transition =
+        orderMachine.readTransitionAndNotifyListeners(Idle.INSTANCE, Place.INSTANCE);
+    assertThat(transition).isInstanceOf(Valid.class);
+    assertThat(((Valid<Order, Event, Action>) transition).getToState()).isEqualTo(Placed.INSTANCE);
+    Mockito.verify(onIdleExit).accept(Idle.INSTANCE, Place.INSTANCE);
+    Mockito.verify(onPlaceEnter).accept(Placed.INSTANCE, Place.INSTANCE);
   }
 
   @Test

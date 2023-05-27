@@ -1,7 +1,7 @@
 package org.revcloud.hydra
 
-import org.revcloud.hydra.internal.Machine
 import org.revcloud.hydra.config.MachineBuilder
+import org.revcloud.hydra.internal.Machine
 import org.revcloud.hydra.statemachine.Transition
 import java.util.concurrent.atomic.AtomicReference
 import java.util.function.Consumer
@@ -9,7 +9,7 @@ import java.util.function.Consumer
 class Hydra<StateT : Any, EventT : Any, ActionT : Any> private constructor(private val machine: Machine<StateT, EventT, ActionT>) {
 
   private val stateRef = AtomicReference(machine.initialState)
-  
+
   val state: StateT
     get() = stateRef.get()
 
@@ -31,6 +31,21 @@ class Hydra<StateT : Any, EventT : Any, ActionT : Any> private constructor(priva
         with(toState) {
           notifyOnEnter(event)
         }
+      }
+    }
+    return transition
+  }
+
+  fun StateT.readTransitionAndNotifyListeners(event: EventT): Transition<StateT, EventT, ActionT> {
+    val fromState = this
+    val transition = fromState.getTransition(event)
+    transition.notifyOnTransition()
+    if (transition is Transition.Valid) {
+      with(fromState) {
+        notifyOnExit(event)
+      }
+      with(transition.toState) {
+        notifyOnEnter(event)
       }
     }
     return transition
