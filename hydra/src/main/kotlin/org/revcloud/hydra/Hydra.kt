@@ -22,32 +22,27 @@ class Hydra<StateT : Any, EventT : Any, ActionT : Any> private constructor(priva
       }
       transition
     }
-    transition.notifyOnTransition()
-    if (transition is Transition.Valid) {
-      with(transition) {
-        with(fromState) {
-          notifyOnExit(event)
-        }
-        with(toState) {
-          notifyOnEnter(event)
-        }
-      }
-    }
+    notifyTransition(transition, event)
     return transition
   }
 
-  fun StateT.readTransitionAndNotifyListeners(event: EventT): Transition<StateT, EventT, ActionT> {
-    val fromState = this
-    val transition = fromState.getTransition(event)
-    transition.notifyOnTransition()
-    if (transition is Transition.Valid) {
+  private fun notifyTransition(transition: Transition<StateT, EventT, ActionT>, event: EventT) = with(transition) {
+    if (this is Transition.Valid) {
       with(fromState) {
         notifyOnExit(event)
       }
-      with(transition.toState) {
+      notifyOnTransition()
+      with(toState) {
         notifyOnEnter(event)
       }
+    } else {
+      notifyOnTransition()
     }
+  }
+
+  fun StateT.readTransitionAndNotifyListeners(event: EventT): Transition<StateT, EventT, ActionT> {
+    val transition = this.getTransition(event)
+    notifyTransition(transition, event)
     return transition
   }
 

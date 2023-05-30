@@ -6,9 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="6ed80e62-f038-45bc-b42e-83dd15ec8dae" name="Changes" comment="Release: 0.0.4&#10;Add readTransitionAndNotifyListeners&#10;&#10;Signed-off-by: Gopal S Akshintala &lt;gopala.akshintala@salesforce.com&gt;">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/consumer-app-2/src/main/java/org/revcloud/quote/domain/PlaceQuoteMachine.java" beforeDir="false" afterPath="$PROJECT_DIR$/consumer-app-2/src/main/java/org/revcloud/quote/domain/PlaceQuoteMachine.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hydra/src/test/java/org/revcloud/hydra/HydraTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/hydra/src/test/java/org/revcloud/hydra/HydraTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hydra/src/test/java/org/revcloud/hydra/OrderMachine.java" beforeDir="false" afterPath="$PROJECT_DIR$/hydra/src/test/java/org/revcloud/hydra/OrderMachine.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hydra/src/main/kotlin/org/revcloud/hydra/Hydra.kt" beforeDir="false" afterPath="$PROJECT_DIR$/hydra/src/main/kotlin/org/revcloud/hydra/Hydra.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hydra/src/main/kotlin/org/revcloud/hydra/config/MachineBuilder.kt" beforeDir="false" afterPath="$PROJECT_DIR$/hydra/src/main/kotlin/org/revcloud/hydra/config/MachineBuilder.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -74,7 +73,6 @@
     <setting file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.JUtupe/ktor-rabbitmq/0.4.0/33f5c7c66db1c24be94d342022d708ef8175e328/ktor-rabbitmq-0.4.0-sources.jar!/pl/jutupe/ktor_rabbitmq/RabbitPublisher.kt" root0="SKIP_INSPECTION" />
     <setting file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.rabbitmq/amqp-client/5.17.0/ba9d03b4cfe752dbab404106b5d2ea466262f33d/amqp-client-5.17.0-sources.jar!/com/rabbitmq/client/Channel.java" root0="SKIP_INSPECTION" />
     <setting file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.squareup.moshi/moshi/1.14.0/cae460a3498d2375721e5ecb3b8e15e3131c72a3/moshi-1.14.0-sources.jar!/com/squareup/moshi/JsonAdapter.java" root0="SKIP_INSPECTION" />
-    <setting file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.graalvm.sdk/graal-sdk/22.3.1/2e2a7e4578fd0e81f82c9864ed8ae74d57898eb9/graal-sdk-22.3.1-sources.jar!/org/graalvm/polyglot/PolyglotException.java" root0="SKIP_INSPECTION" />
     <setting file="jrt://$USER_HOME$/.sdkman/candidates/java/current!/java.base/sun/security/ssl/Alert.class" root0="SKIP_INSPECTION" />
     <setting file="jar://$USER_HOME$/core-public/tools/Darwin/jdk/openjdk_17.0.5_17.38.22_x64/zulu-17.jdk/Contents/Home/lib/src.zip!/java.base/java/util/function/BiConsumer.java" root0="SKIP_INSPECTION" />
     <setting file="jar://$USER_HOME$/core-public/tools/Darwin/jdk/openjdk_17.0.5_17.38.22_x64/zulu-17.jdk/Contents/Home/lib/src.zip!/java.base/sun/security/ssl/SSLHandshake.java" root0="SKIP_INSPECTION" />
@@ -411,6 +409,9 @@
       <workItem from="1685008213106" duration="2486000" />
       <workItem from="1685080857099" duration="11326000" />
       <workItem from="1685170095409" duration="4255000" />
+      <workItem from="1685351229471" duration="935000" />
+      <workItem from="1685362835384" duration="790000" />
+      <workItem from="1685429986069" duration="4037000" />
     </task>
     <task id="LOCAL-00001" summary="- Fixed moshiReVoman&#10;- Added module-info.java to integrationTest module">
       <created>1678595183319</created>

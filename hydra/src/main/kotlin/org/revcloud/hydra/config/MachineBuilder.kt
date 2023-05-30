@@ -100,24 +100,10 @@ class MachineBuilder<StateT : Any, EventT : Any, ActionT : Any>(
       }
     }
 
-    fun onEnter(listener: S.(EventT) -> Unit) = with(stateDefinition) {
-      onEnterListeners.add { state, cause ->
-        @Suppress("UNCHECKED_CAST")
-        listener(state as S, cause)
-      }
-    }
-
     fun onExit(listener: BiConsumer<S, EventT>) = with(stateDefinition) {
       onExitListeners.add { state, cause ->
         @Suppress("UNCHECKED_CAST")
         listener.accept(state as S, cause)
-      }
-    }
-
-    fun onExit(listener: S.(EventT) -> Unit) = with(stateDefinition) {
-      onExitListeners.add { state, cause ->
-        @Suppress("UNCHECKED_CAST")
-        listener(state as S, cause)
       }
     }
 
