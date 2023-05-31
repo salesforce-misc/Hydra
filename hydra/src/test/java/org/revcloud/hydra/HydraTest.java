@@ -44,18 +44,19 @@ class HydraTest {
   }
 
   @Test
-  @DisplayName("FromState: Idle, Event: Place, ToState: Placed, Action: OnPlaced")
+  @DisplayName("Valid Transition - FromState: Idle, Event: Place, ToState: Placed, Action: OnPlaced")
   void idleOrderPlacePlaced() {
     final var orderMachine = cloneOrderMachineWithInitialState(Idle.INSTANCE);
     final var transition = orderMachine.transition(Place.INSTANCE);
     assertThat(orderMachine.getState()).isEqualTo(Placed.INSTANCE);
+    assertThat(transition.isValid()).isTrue();
     assertThat(transition)
         .isEqualTo(
             Transition.valid(Idle.INSTANCE, Place.INSTANCE, Placed.INSTANCE, OnPlaced.INSTANCE));
   }
 
   @Test
-  @DisplayName("FromState: Placed, Event: PaymentFailed, ToState: Idle, Action: OnCancelled")
+  @DisplayName("Valid Transition - FromState: Placed, Event: PaymentFailed, ToState: Idle, Action: OnCancelled")
   void placedOrderPaymentFailed() {
     final var orderMachine = cloneOrderMachineWithInitialState(Placed.INSTANCE);
     final var transition = orderMachine.transition(PaymentFailed.INSTANCE);
@@ -67,11 +68,12 @@ class HydraTest {
   }
 
   @Test
-  @DisplayName("FromState: Idle, Event: Cancel - Invalid Transition")
+  @DisplayName("Invalid Transition - FromState: Idle, Event: Cancel - Invalid Transition")
   void invalidTransitionCancelInIdle() {
     final var orderMachine = cloneOrderMachineWithInitialState(Idle.INSTANCE);
     final var transition = orderMachine.transition(Cancel.INSTANCE);
     assertThat(orderMachine.getState()).isEqualTo(Idle.INSTANCE);
+    assertThat(transition.isValid()).isFalse();
     assertThat(transition).isEqualTo(Transition.invalid(Idle.INSTANCE, Cancel.INSTANCE));
   }
 }

@@ -3,6 +3,10 @@ package org.revcloud.hydra.statemachine
 sealed class Transition<out StateT : Any, out EventT : Any, out ActionT : Any> {
   abstract val fromState: StateT
   abstract val event: EventT
+  
+  val isValid: Boolean
+    get() = this is Valid
+  
   companion object {
     @JvmStatic
     fun <StateT: Any, EventT: Any, ActionT: Any> valid(
