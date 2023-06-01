@@ -12,7 +12,9 @@ data class Machine<StateT : Any, EventT : Any, ActionT : Any>(
   class State<StateT : Any, EventT : Any, ActionT : Any> internal constructor() {
     val onEnterListeners = mutableListOf<(StateT, EventT) -> Unit>()
     val onExitListeners = mutableListOf<(StateT, EventT) -> Unit>()
-    val transitions = linkedMapOf<Matcher<EventT, EventT>, (StateT, EventT) -> TransitionTo<StateT, ActionT>>()
+
+    // ! TODO 01/06/23 gopala.akshintala: Create a different transition which doesn't take StateT when it is null 
+    val transitions = linkedMapOf<Matcher<EventT, EventT>, (StateT?, EventT) -> TransitionTo<StateT, ActionT>>()
 
     data class TransitionTo<out StateT : Any, out ActionT : Any> internal constructor(
       val toState: StateT,

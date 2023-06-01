@@ -1,65 +1,10 @@
 package org.revcloud.hydra;
 
-import java.util.function.BiConsumer;
 import org.jetbrains.annotations.NotNull;
-import org.mockito.Mockito;
 
-class OrderMachine {
+class OrderDomain {
 
-  private OrderMachine() {}
-
-  static final BiConsumer<Idle, Event> onIdleExit = Mockito.mock();
-  static final BiConsumer<Placed, Event> onPlaceEnter = Mockito.mock();
-  static final BiConsumer<Delivered, Event> DeliveredEnter = Mockito.mock();
-
-  public static final Hydra<Order, Event, Action> orderMachine =
-      Hydra.create(
-          mb -> {
-            mb.initialState(Idle.INSTANCE);
-
-            mb.state(
-                Idle.class,
-                sb -> {
-                  sb.onExit(onIdleExit);
-                  sb.on(
-                      Place.class,
-                      (currentState, action) ->
-                          sb.transitionTo(Placed.INSTANCE, OnPlaced.INSTANCE));
-                });
-
-            mb.state(
-                Placed.class,
-                sb -> {
-                  sb.onEnter(onPlaceEnter);
-                  sb.on(
-                      PaymentFailed.class,
-                      (currentState, action) ->
-                          sb.transitionTo(Idle.INSTANCE, OnCancelled.INSTANCE));
-                  sb.on(
-                      PaymentSuccessful.class,
-                      (currentState, action) ->
-                          sb.transitionTo(Processed.INSTANCE, OnPaid.INSTANCE));
-                  sb.on(
-                      Cancel.class,
-                      (currentState, action) ->
-                          sb.transitionTo(Idle.INSTANCE, OnCancelled.INSTANCE));
-                });
-
-            mb.state(
-                Processed.class,
-                sb -> {
-                  sb.on(
-                      Ship.class,
-                      (currentState, action) ->
-                          sb.transitionTo(Delivered.INSTANCE, OnShipped.INSTANCE));
-                  sb.on(
-                      Cancel.class,
-                      (currentState, action) ->
-                          sb.transitionTo(Idle.INSTANCE, OnCancelled.INSTANCE));
-                });
-
-            mb.state(Delivered.class, sb -> sb.onEnter(DeliveredEnter));
-          });
+  private OrderDomain() {}
 
   // Order
   interface Order {}

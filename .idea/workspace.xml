@@ -4,10 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6ed80e62-f038-45bc-b42e-83dd15ec8dae" name="Changes" comment="Release: 0.0.5&#10;Change listener order&#10;&#10;Signed-off-by: Gopal S Akshintala &lt;gopala.akshintala@salesforce.com&gt;">
+    <list default="true" id="6ed80e62-f038-45bc-b42e-83dd15ec8dae" name="Changes" comment="Add isValid for Transition&#10;&#10;Signed-off-by: Gopal S Akshintala &lt;gopala.akshintala@salesforce.com&gt;">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hydra/src/main/kotlin/org/revcloud/hydra/Hydra.kt" beforeDir="false" afterPath="$PROJECT_DIR$/hydra/src/main/kotlin/org/revcloud/hydra/Hydra.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hydra/src/main/kotlin/org/revcloud/hydra/config/MachineBuilder.kt" beforeDir="false" afterPath="$PROJECT_DIR$/hydra/src/main/kotlin/org/revcloud/hydra/config/MachineBuilder.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hydra/src/main/kotlin/org/revcloud/hydra/internal/Machine.kt" beforeDir="false" afterPath="$PROJECT_DIR$/hydra/src/main/kotlin/org/revcloud/hydra/internal/Machine.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hydra/src/main/kotlin/org/revcloud/hydra/internal/Matcher.kt" beforeDir="false" afterPath="$PROJECT_DIR$/hydra/src/main/kotlin/org/revcloud/hydra/internal/Matcher.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/hydra/src/main/kotlin/org/revcloud/hydra/statemachine/Transition.kt" beforeDir="false" afterPath="$PROJECT_DIR$/hydra/src/main/kotlin/org/revcloud/hydra/statemachine/Transition.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/hydra/src/test/java/org/revcloud/hydra/HydraTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/hydra/src/test/java/org/revcloud/hydra/HydraTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hydra/src/test/java/org/revcloud/hydra/OrderMachine.java" beforeDir="false" afterPath="$PROJECT_DIR$/hydra/src/test/java/org/revcloud/hydra/OrderMachine.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/libs.versions.toml" beforeDir="false" afterPath="$PROJECT_DIR$/libs.versions.toml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -56,6 +62,9 @@
         <option value="Kotlin Class" />
       </list>
     </option>
+  </component>
+  <component name="FindBugs-IDEA-Workspace">
+    <toolWindowEditorPreview>false</toolWindowEditorPreview>
   </component>
   <component name="Git.Settings">
     <option name="PREVIOUS_COMMIT_AUTHORS">
@@ -122,7 +131,7 @@
     &quot;project.structure.last.edited&quot;: &quot;SDKs&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.project.gradle&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
   &quot;keyToStringList&quot;: {
@@ -208,8 +217,8 @@
       <command value="gradle hydra:test --tests org.revcloud.hydra.HydraTest.idleOrderPlacePlaced" />
     </option>
   </component>
-  <component name="RunManager" selected="Gradle.hydra-root [hydra:test --tests org.revcloud.hydra.HydraTest.idleOrderPlacePlaced]">
-    <configuration name="hydra-root [hydra:test --tests org.revcloud.hydra.HydraTest.idleOrderPlacePlaced]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+  <component name="RunManager" selected="Gradle.HydraTest">
+    <configuration name="HydraTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -220,20 +229,20 @@
         </option>
         <option name="taskNames">
           <list>
-            <option value="hydra:test" />
+            <option value=":hydra:test" />
             <option value="--tests" />
-            <option value="org.revcloud.hydra.HydraTest.idleOrderPlacePlaced" />
+            <option value="&quot;org.revcloud.hydra.HydraTest&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
       </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
       <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
       <DebugAllEnabled>false</DebugAllEnabled>
-      <RunAsTest>false</RunAsTest>
+      <RunAsTest>true</RunAsTest>
       <method v="2" />
     </configuration>
-    <configuration name="hydra-root [hydra:test --tests org.revcloud.hydra.HydraTest.idleOrdlerPlacePlaced]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="HydraTest.readTransition" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -244,20 +253,20 @@
         </option>
         <option name="taskNames">
           <list>
-            <option value="hydra:test" />
+            <option value=":hydra:test" />
             <option value="--tests" />
-            <option value="org.revcloud.hydra.HydraTest.idleOrdlerPlacePlaced" />
+            <option value="&quot;org.revcloud.hydra.HydraTest.readTransition&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
       </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
       <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
       <DebugAllEnabled>false</DebugAllEnabled>
-      <RunAsTest>false</RunAsTest>
+      <RunAsTest>true</RunAsTest>
       <method v="2" />
     </configuration>
-    <configuration name="hydra-root [spotlessApply]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="HydraTest.readTransitionWithClass" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -268,15 +277,17 @@
         </option>
         <option name="taskNames">
           <list>
-            <option value="spotlessApply" />
+            <option value=":hydra:test" />
+            <option value="--tests" />
+            <option value="&quot;org.revcloud.hydra.HydraTest.readTransitionWithClass&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
       </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
       <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
       <DebugAllEnabled>false</DebugAllEnabled>
-      <RunAsTest>false</RunAsTest>
+      <RunAsTest>true</RunAsTest>
       <method v="2" />
     </configuration>
     <configuration name="HydraTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
@@ -294,7 +305,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="HydraTest.idleOrderPlacePlaced" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="HydraTest.readTransition" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="hydra-root.hydra.test" />
       <extension name="coverage">
         <pattern>
@@ -304,7 +315,7 @@
       </extension>
       <option name="PACKAGE_NAME" value="org.revcloud.hydra" />
       <option name="MAIN_CLASS_NAME" value="org.revcloud.hydra.HydraTest" />
-      <option name="METHOD_NAME" value="idleOrderPlacePlaced" />
+      <option name="METHOD_NAME" value="readTransition" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -317,19 +328,19 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Gradle.hydra-root [hydra:test --tests org.revcloud.hydra.HydraTest.idleOrderPlacePlaced]" />
-      <item itemvalue="Gradle.hydra-root [hydra:test --tests org.revcloud.hydra.HydraTest.idleOrdlerPlacePlaced]" />
-      <item itemvalue="Gradle.hydra-root [spotlessApply]" />
+      <item itemvalue="Gradle.HydraTest" />
+      <item itemvalue="Gradle.HydraTest.readTransition" />
+      <item itemvalue="Gradle.HydraTest.readTransitionWithClass" />
       <item itemvalue="JUnit.HydraTest" />
-      <item itemvalue="JUnit.HydraTest.idleOrderPlacePlaced" />
+      <item itemvalue="JUnit.HydraTest.readTransition" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Gradle.hydra-root [hydra:test --tests org.revcloud.hydra.HydraTest.idleOrderPlacePlaced]" />
-        <item itemvalue="Gradle.hydra-root [hydra:test --tests org.revcloud.hydra.HydraTest.idleOrdlerPlacePlaced]" />
+        <item itemvalue="Gradle.HydraTest" />
+        <item itemvalue="Gradle.HydraTest.readTransitionWithClass" />
         <item itemvalue="JUnit.HydraTest" />
-        <item itemvalue="JUnit.HydraTest.idleOrderPlacePlaced" />
-        <item itemvalue="Gradle.hydra-root [spotlessApply]" />
+        <item itemvalue="Gradle.HydraTest.readTransition" />
+        <item itemvalue="JUnit.HydraTest.readTransition" />
       </list>
     </recent_temporary>
   </component>
@@ -409,6 +420,8 @@
       <workItem from="1685429986069" duration="4222000" />
       <workItem from="1685439363131" duration="2940000" />
       <workItem from="1685519446781" duration="1150000" />
+      <workItem from="1685594343410" duration="7466000" />
+      <workItem from="1685610516903" duration="687000" />
     </task>
     <task id="LOCAL-00001" summary="- Fixed moshiReVoman&#10;- Added module-info.java to integrationTest module">
       <created>1678595183319</created>
@@ -813,6 +826,11 @@
           <url>file://$PROJECT_DIR$/src/integrationTest/java/org/revcloud/revoman/integration/core/pq/PQE2ETest.java</url>
           <line>40</line>
           <option name="timeStamp" value="7" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/hydra/src/main/kotlin/org/revcloud/hydra/config/MachineBuilder.kt</url>
+          <line>109</line>
+          <option name="timeStamp" value="8" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

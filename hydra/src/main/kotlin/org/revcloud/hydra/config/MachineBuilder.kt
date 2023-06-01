@@ -33,15 +33,19 @@ class MachineBuilder<StateT : Any, EventT : Any, ActionT : Any>(
     stateDefinitions[stateMatcher] = StateDefinitionBuilder<S>().apply(init).build()
   }
 
-  fun <S : StateT> state(clazz: Class<S>, init: Consumer<StateDefinitionBuilder<S>>) {
-    state(Matcher.any(clazz), init)
-  }
-
   inline fun <reified S : StateT> state(noinline init: StateDefinitionBuilder<S>.() -> Unit) {
     state(Matcher.any(), init)
   }
 
-  fun <S : StateT> state(state: S, clazz: Class<S>, init: StateDefinitionBuilder<S>.() -> Unit) {
+  fun <S : StateT> state(clazz: Class<S>, init: Consumer<StateDefinitionBuilder<S>>) {
+    state(Matcher.any(clazz), init)
+  }
+
+  inline fun <reified S : StateT> state(state: S, noinline init: StateDefinitionBuilder<S>.() -> Unit) {
+    state(Matcher.eq<StateT, S>(state), init)
+  }
+
+  fun <S : StateT> state(state: S, clazz: Class<S>, init: Consumer<StateDefinitionBuilder<S>>) {
     state(Matcher.eq(state, clazz), init)
   }
 
@@ -67,30 +71,30 @@ class MachineBuilder<StateT : Any, EventT : Any, ActionT : Any>(
 
     fun <E : EventT> on(
       eventMatcher: Matcher<EventT, E>,
-      createTransitionTo: S.(E) -> TransitionTo<StateT, ActionT>
+      createTransitionTo: S?.(E) -> TransitionTo<StateT, ActionT>
     ) {
       stateDefinition.transitions[eventMatcher] = { state, event ->
         @Suppress("UNCHECKED_CAST")
-        createTransitionTo((state as S), event as E)
+        createTransitionTo((state as S?), event as E)
       }
     }
 
-    fun <E : EventT> on(eventClass: Class<E>, createTransitionTo: S.(E) -> TransitionTo<StateT, ActionT>
+    fun <E : EventT> on(eventClass: Class<E>, createTransitionTo: S?.(E) -> TransitionTo<StateT, ActionT>
     ) = on(any(eventClass), createTransitionTo)
 
     inline fun <reified E : EventT> on(
-      noinline createTransitionTo: S.(E) -> TransitionTo<StateT, ActionT>
+      noinline createTransitionTo: S?.(E) -> TransitionTo<StateT, ActionT>
     ) = on(any(), createTransitionTo)
 
     fun <E : EventT> on(
       event: E,
       eventClass: Class<E>,
-      createTransitionTo: S.(E) -> TransitionTo<StateT, ActionT>
+      createTransitionTo: S?.(E) -> TransitionTo<StateT, ActionT>
     ) = on(eq(event, eventClass), createTransitionTo)
 
     inline fun <reified E : EventT> on(
       event: E,
-      noinline createTransitionTo: S.(E) -> TransitionTo<StateT, ActionT>
+      noinline createTransitionTo: S?.(E) -> TransitionTo<StateT, ActionT>
     ) = on(eq(event), createTransitionTo)
 
     fun onEnter(listener: BiConsumer<S, EventT>) = with(stateDefinition) {

@@ -1,27 +1,29 @@
 package org.revcloud.hydra.internal
 
-class Matcher<T : Any, out R : T> private constructor(private val clazz: Class<R>) {
+class Matcher<L : Any, out R : L> private constructor(private val clazz: Class<R>) {
 
-  private val predicates = mutableListOf<(T) -> Boolean>({ clazz.isInstance(it) })
+  private val predicates = mutableListOf<(L) -> Boolean>({ clazz.isInstance(it) })
 
-  fun where(predicate: R.() -> Boolean): Matcher<T, R> = apply {
+  fun where(predicate: R.() -> Boolean): Matcher<L, R> = apply {
     predicates.add {
       @Suppress("UNCHECKED_CAST")
       (it as R).predicate()
     }
   }
 
-  fun matches(value: T) = predicates.all { it(value) }
+  fun matches(value: L) = predicates.all { it(value) }
+  
+  fun matches(clazz: Class<out L>) = clazz == this.clazz
 
   companion object {
     @JvmStatic
-    fun <T : Any, R : T> any(clazz: Class<R>): Matcher<T, R> = Matcher(clazz)
+    fun <L : Any, R : L> any(clazz: Class<R>): Matcher<L, R> = Matcher(clazz)
 
     @JvmStatic
-    fun <T : Any, R : T> eq(value: R, clazz: Class<R>): Matcher<T, R> = any<T, R>(clazz).where { this == value }
+    fun <L : Any, R : L> eq(value: R, clazz: Class<R>): Matcher<L, R> = any<L, R>(clazz).where { this == value }
 
-    inline fun <T : Any, reified R : T> any(): Matcher<T, R> = any(R::class.java)
+    inline fun <L : Any, reified R : L> any(): Matcher<L, R> = any(R::class.java)
 
-    inline fun <T : Any, reified R : T> eq(value: R): Matcher<T, R> = any<T, R>().where { this == value }
+    inline fun <L : Any, reified R : L> eq(value: R): Matcher<L, R> = any<L, R>().where { this == value }
   }
 }
