@@ -20,7 +20,7 @@ class Hydra<StateT : Any, EventT : Any, ActionT : Any> private constructor(priva
   fun transition(event: EventT): Transition<StateT, EventT, ActionT> {
     val transition = synchronized(this) {
       val fromState = stateRef.get()
-      val transition = fromState.getTransition(event)
+      val transition = fromState.getMatchingTransition(event)
       if (transition is Transition.Valid) {
         stateRef.set(transition.toState)
       }
@@ -45,53 +45,39 @@ class Hydra<StateT : Any, EventT : Any, ActionT : Any> private constructor(priva
   }
 
   fun StateT.readTransitionAndNotifyListeners(event: EventT): Transition<StateT, EventT, ActionT> {
-    val transition = this.getTransition(event)
+    val transition = this.getMatchingTransition(event)
     notifyTransition(transition, event)
     return transition
   }
 
-  private fun StateT.getTransition(event: EventT): Transition<StateT, EventT, ActionT> {
-    for ((eventMatcher, createTransitionTo) in getDefinition().transitions) {
-      if (eventMatcher.matches(event)) {
-        val (toState, action) = createTransitionTo(this, event)
-        return Transition.Valid(this, event, toState, action)
-      }
-    }
-    return Transition.Invalid(this, event)
-  }
+  private fun StateT.getMatchingTransition(event: EventT): Transition<StateT, EventT, ActionT> =
+    getDefinition()?.getTransitionForEvent(event) ?: Transition.NoFromState(event)
 
-  fun readTransitionAndNotifyListeners(stateClass: Class<out StateT>, event: EventT): Transition<StateT, EventT, ActionT> {
-    val transition = getTransition(stateClass, event)
+  fun readTransitionAndNotifyListeners(fromStateClass: Class<out StateT>, event: EventT): Transition<StateT, EventT, ActionT> {
+    val transition = getMatchingTransition(fromStateClass, event)
     notifyTransition(transition, event)
     return transition
   }
 
-  private fun getTransition(stateClass: Class<out StateT>, event: EventT): Transition<StateT, EventT, ActionT> {
-    for ((eventMatcher, createTransitionTo) in getDefinition(stateClass).transitions) {
-      if (eventMatcher.matches(event)) {
-        val (toState, action) = createTransitionTo(null, event)
-        return Transition.Valid(null, event, toState, action)
-      }
-    }
-    return Transition.Invalid(null, event)
-  }
+  private fun getMatchingTransition(fromStateClass: Class<out StateT>, event: EventT): Transition<StateT, EventT, ActionT> =
+    getDefinition(fromStateClass)?.getTransitionForEvent(event) ?: Transition.NoFromState(event)
 
-  private fun getDefinition(stateClass: Class<out StateT>) = machine.stateDefinitions
-    .filter { it.key.matches(stateClass) }
+  private fun getDefinition(fromStateClass: Class<out StateT>): Machine.State<StateT, EventT, ActionT>? = machine.stateDefinitions
+    .filter { it.key.matches(fromStateClass) }
     .map { it.value }
-    .firstOrNull() ?: error("Missing definition for state ${this.javaClass.simpleName}!")
+    .firstOrNull()
 
   private fun StateT.getDefinition() = machine.stateDefinitions
     .filter { it.key.matches(this) }
     .map { it.value }
-    .firstOrNull() ?: error("Missing definition for state ${this.javaClass.simpleName}!")
+    .firstOrNull()
 
   private fun StateT.notifyOnEnter(cause: EventT) {
-    getDefinition().onEnterListeners.forEach { it(this, cause) }
+    getDefinition()?.onEnterListeners?.forEach { it(this, cause) }
   }
 
   private fun StateT.notifyOnExit(cause: EventT) {
-    getDefinition().onExitListeners.forEach { it(this, cause) }
+    getDefinition()?.onExitListeners?.forEach { it(this, cause) }
   }
 
   private fun Transition<StateT, EventT, ActionT>.notifyOnTransition() {

@@ -12,7 +12,7 @@ class Matcher<L : Any, out R : L> private constructor(private val clazz: Class<R
   }
 
   fun matches(value: L) = predicates.all { it(value) }
-  
+
   fun matches(clazz: Class<out L>) = clazz == this.clazz
 
   companion object {

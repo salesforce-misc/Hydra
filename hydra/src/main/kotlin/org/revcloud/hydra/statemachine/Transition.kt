@@ -1,7 +1,6 @@
 package org.revcloud.hydra.statemachine
 
 sealed class Transition<out StateT : Any, out EventT : Any, out ActionT : Any> {
-  abstract val fromState: StateT?
   abstract val event: EventT
   
   val isValid: Boolean
@@ -24,14 +23,18 @@ sealed class Transition<out StateT : Any, out EventT : Any, out ActionT : Any> {
   }
   
   data class Valid<out StateT : Any, out EventT : Any, out ActionT : Any> internal constructor(
-    override val fromState: StateT?,
+    val fromState: StateT?,
     override val event: EventT,
     val toState: StateT,
     val action: ActionT?
   ) : Transition<StateT, EventT, ActionT>()
 
   data class Invalid<out StateT : Any, out EventT : Any> internal constructor(
-    override val fromState: StateT?,
+    val fromState: StateT?,
     override val event: EventT
   ) : Transition<StateT, EventT, Nothing>()
+
+  data class NoFromState<out EventT : Any> internal constructor(
+    override val event: EventT
+  ) : Transition<Nothing, EventT, Nothing>()
 }
