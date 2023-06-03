@@ -32,7 +32,7 @@ ktor {
 sqldelight {
   databases {
     create("SqlDelight") {
-      packageName.set("org.revcloud.app.sqldelight")
+      packageName.set("org.revcloud.quote.sqldelight")
       dialect(libs.sqldelight.postgresql.get())
     }
   }

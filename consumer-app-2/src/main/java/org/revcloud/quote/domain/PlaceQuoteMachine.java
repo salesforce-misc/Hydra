@@ -33,6 +33,10 @@ public class PlaceQuoteMachine {
     orderHydra = prepareOrderHydra();
   }
 
+  public Hydra<Quote, Event, Action> getOrderHydra() {
+    return orderHydra;
+  }
+
   private Hydra<Quote, Event, Action> prepareOrderHydra() {
     return Hydra.create(
         mb -> {

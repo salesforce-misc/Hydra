@@ -1,5 +1,4 @@
 import io.gitlab.arturbosch.detekt.Detekt
-import io.gitlab.arturbosch.detekt.DetektPlugin
 import io.gitlab.arturbosch.detekt.report.ReportMergeTask
 
 plugins {
@@ -30,13 +29,9 @@ subprojects {
       xml.required = true
       html.required = true
     }
+    finalizedBy(detektReportMerge)
   }
-  plugins.withType<DetektPlugin> {
-    tasks.withType<Detekt> detekt@{
-      finalizedBy(detektReportMerge)
-      detektReportMerge.configure {
-        input.from(this@detekt.xmlReportFile)
-      }
-    }
+  detektReportMerge {
+    input.from(tasks.withType<Detekt>().map { it.xmlReportFile }) // or .sarifReportFile
   }
 }

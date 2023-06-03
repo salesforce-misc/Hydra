@@ -1,4 +1,4 @@
-import org.revcloud.app.repo.StateId;
+import org.revcloud.order.repo.StateId;
 import java.time.OffsetDateTime;
 
 CREATE TABLE IF NOT EXISTS state(

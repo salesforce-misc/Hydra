@@ -13,11 +13,13 @@ import org.revcloud.quote.repo.statePersistence
 import org.revcloud.hydra.Hydra
 import org.revcloud.quote.domain.PlaceQuoteMachine
 import org.revcloud.quote.domain.Quote
+import pl.jutupe.ktor_rabbitmq.RabbitMQInstance
 import kotlin.time.Duration.Companion.seconds
 
 class Dependencies(
   val env: Env,
   val statePersistence: StatePersistence,
+  val rabbitMq: RabbitMQInstance,
   val quoteMachine: Hydra<Quote, Event, Action>,
   val healthCheck: HealthCheckRegistry,
   val logger: KLogger
@@ -28,13 +30,17 @@ suspend fun init(env: Env): Dependencies {
   val hikari = hikari(env.dataSource)
   val healthCheck = HealthCheckRegistry(Dispatchers.Default) { register(HikariConnectionsHealthCheck(hikari, 1), 5.seconds) }
   val sqlDelight = sqlDelight(hikari)
-  val quoteMachine = PlaceQuoteMachine.quoteMachine;
+  val statePersistence =  statePersistence(sqlDelight.stateQueries)
+  val rabbitMq = rabbitMqInstance(env)
+  val kLogger = KotlinLogging.logger {}
+  val quoteMachine = PlaceQuoteMachine(rabbitMq, statePersistence, env, kLogger);
 
   return Dependencies(
     env,
-    statePersistence(sqlDelight.stateQueries),
-    quoteMachine,
+    statePersistence,
+    rabbitMq,
+    quoteMachine.orderHydra,
     healthCheck,
-    KotlinLogging.logger {}
+    kLogger
   )
 }

@@ -42,7 +42,9 @@ class HydraTest {
     final var transition =
         orderMachine.readTransitionAndNotifyListeners(Idle.INSTANCE, Place.INSTANCE);
     assertThat(transition.isValid()).isTrue();
-    assertThat(transition).isEqualTo(Transition.valid(Idle.INSTANCE, Place.INSTANCE, Placed.INSTANCE, OnPlaced.INSTANCE));
+    assertThat(transition)
+        .isEqualTo(
+            Transition.valid(Idle.INSTANCE, Place.INSTANCE, Placed.INSTANCE, OnPlaced.INSTANCE));
     assertThat(orderMachine.getState()).isEqualTo(Idle.INSTANCE);
     Mockito.verify(onIdleExit).accept(Idle.INSTANCE, Place.INSTANCE);
     Mockito.verify(onPlaceEnter).accept(Placed.INSTANCE, Place.INSTANCE);
@@ -52,15 +54,18 @@ class HydraTest {
   @DisplayName("Read transition using Class, with listeners, without changing the state")
   void readTransitionWithClass() {
     final var orderMachine = cloneOrderMachineWithInitialState(Idle.INSTANCE);
-    final var transition = orderMachine.readTransitionAndNotifyListeners(Idle.class, Place.INSTANCE);
+    final var transition =
+        orderMachine.readTransitionAndNotifyListeners(Idle.class, Place.INSTANCE);
     assertThat(transition.isValid()).isTrue();
-    assertThat(transition).isEqualTo(Transition.valid(null, Place.INSTANCE, Placed.INSTANCE, OnPlaced.INSTANCE));
+    assertThat(transition)
+        .isEqualTo(Transition.valid(null, Place.INSTANCE, Placed.INSTANCE, OnPlaced.INSTANCE));
     Mockito.verifyNoInteractions(onIdleExit);
     Mockito.verify(onPlaceEnter).accept(Placed.INSTANCE, Place.INSTANCE);
   }
 
   @Test
-  @DisplayName("Valid Transition - FromState: Idle, Event: Place, ToState: Placed, Action: OnPlaced")
+  @DisplayName(
+      "Valid Transition - FromState: Idle, Event: Place, ToState: Placed, Action: OnPlaced")
   void idleOrderPlacePlaced() {
     final var orderMachine = cloneOrderMachineWithInitialState(Idle.INSTANCE);
     final var transition = orderMachine.transition(Place.INSTANCE);
@@ -72,7 +77,8 @@ class HydraTest {
   }
 
   @Test
-  @DisplayName("Valid Transition - FromState: Placed, Event: PaymentFailed, ToState: Idle, Action: OnCancelled")
+  @DisplayName(
+      "Valid Transition - FromState: Placed, Event: PaymentFailed, ToState: Idle, Action: OnCancelled")
   void placedOrderPaymentFailed() {
     final var orderMachine = cloneOrderMachineWithInitialState(Placed.INSTANCE);
     final var transition = orderMachine.transition(PaymentFailed.INSTANCE);

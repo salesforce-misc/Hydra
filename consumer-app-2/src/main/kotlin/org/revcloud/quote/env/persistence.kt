@@ -8,8 +8,8 @@ import arrow.fx.coroutines.continuations.ResourceScope
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import org.revcloud.quote.repo.StateId
-import org.revcloud.app.sqldelight.SqlDelight
-import org.revcloud.app.sqldelight.State
+import org.revcloud.quote.sqldelight.SqlDelight
+import org.revcloud.quote.sqldelight.State
 import java.time.OffsetDateTime
 import javax.sql.DataSource
 
