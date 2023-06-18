@@ -31,7 +31,7 @@ graal-sdk = "23.0.0"
 underscore = "1.90"
 kotlin-faker = "1.14.0"
 immutables = "2.9.3"
-mockito = "5.3.1"
+mockito = "5.4.0"
 # Common dependencies
 junit = "5.9.3"
 kover = "0.7.1"
