@@ -2,7 +2,7 @@
 arrow = "1.1.6-alpha.91"
 suspendapp="0.4.0"
 hikari="5.0.1"
-cohort="2.0.2"
+cohort="2.1.0"
 cohort-ktor="1.7.3"
 ktor = "2.3.2"
 sqldelight="2.0.0-SNAPSHOT"
