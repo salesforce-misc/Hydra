@@ -1,4 +1,5 @@
 import com.diffplug.spotless.extra.wtp.EclipseWtpFormatterStep.XML
+import com.diffplug.spotless.LineEnding.PLATFORM_NATIVE
 
 plugins {
   java
@@ -16,29 +17,31 @@ repositories {
   maven("https://oss.sonatype.org/content/repositories/snapshots")
 }
 spotless {
+  lineEndings = PLATFORM_NATIVE
   kotlin {
-    target("src/main/java/**/*.kt", "src/test/java/**/*.kt")
-    targetExclude("$buildDir/generated/**/*.*")
-    ktlint()
-      .setUseExperimental(true)
-      .editorConfigOverride(mapOf("indent_size" to "2", "continuation_indent_size" to "2"))
+    ktfmt().googleStyle()
+    target("**/*.kt")
+    trimTrailingWhitespace()
+    endWithNewline()
+    targetExclude("**/build/**", "**/.gradle/**", "**/generated/**", "**/bin/**")
   }
   kotlinGradle {
-    target("*.gradle.kts")
-    ktlint()
-      .setUseExperimental(true)
-      .editorConfigOverride(mapOf("indent_size" to "2", "continuation_indent_size" to "2"))
+    ktfmt().googleStyle()
+    target("**/*.gradle.kts")
+    trimTrailingWhitespace()
+    endWithNewline()
+    targetExclude("**/build/**", "**/.gradle/**", "**/generated/**", "**/bin/**")
   }
   java {
     toggleOffOn()
-    target("src/main/java/**/*.java", "src/test/java/**/*.java")
-    targetExclude("$buildDir/generated/**/*.*")
+    target("**/*.java")
     importOrder()
     removeUnusedImports()
     googleJavaFormat()
     trimTrailingWhitespace()
     indentWithSpaces(2)
     endWithNewline()
+    targetExclude("**/build/**", "**/.gradle/**", "**/generated/**", "**/bin/**")
   }
   format("xml") {
     targetExclude("pom.xml")

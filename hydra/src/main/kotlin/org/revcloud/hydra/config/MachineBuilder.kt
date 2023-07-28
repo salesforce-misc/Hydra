@@ -41,7 +41,10 @@ class MachineBuilder<StateT : Any, EventT : Any, ActionT : Any>(
     state(Matcher.any(clazz), init)
   }
 
-  inline fun <reified S : StateT> state(state: S, noinline init: StateDefinitionBuilder<S>.() -> Unit) {
+  inline fun <reified S : StateT> state(
+    state: S,
+    noinline init: StateDefinitionBuilder<S>.() -> Unit
+  ) {
     state(Matcher.eq<StateT, S>(state), init)
   }
 
@@ -54,7 +57,11 @@ class MachineBuilder<StateT : Any, EventT : Any, ActionT : Any>(
   }
 
   fun build(): Machine<StateT, EventT, ActionT> {
-    return Machine(requireNotNull(initialState), stateDefinitions.toMap(), onTransitionListeners.toList())
+    return Machine(
+      requireNotNull(initialState),
+      stateDefinitions.toMap(),
+      onTransitionListeners.toList()
+    )
   }
 
   inner class StateDefinitionBuilder<S : StateT> {
@@ -65,7 +72,8 @@ class MachineBuilder<StateT : Any, EventT : Any, ActionT : Any>(
 
     inline fun <reified E : EventT> any(): Matcher<EventT, E> = Matcher.any()
 
-    fun <R : EventT> eq(value: R, eventClass: Class<R>): Matcher<EventT, R> = Matcher.eq(value, eventClass)
+    fun <R : EventT> eq(value: R, eventClass: Class<R>): Matcher<EventT, R> =
+      Matcher.eq(value, eventClass)
 
     inline fun <reified R : EventT> eq(value: R): Matcher<EventT, R> = Matcher.eq(value)
 
@@ -74,12 +82,13 @@ class MachineBuilder<StateT : Any, EventT : Any, ActionT : Any>(
       createTransitionTo: S?.(E) -> TransitionTo<StateT, ActionT>
     ) {
       stateDefinition.transitions[eventMatcher] = { state, event ->
-        @Suppress("UNCHECKED_CAST")
-        createTransitionTo((state as S?), event as E)
+        @Suppress("UNCHECKED_CAST") createTransitionTo((state as S?), event as E)
       }
     }
 
-    fun <E : EventT> on(eventClass: Class<E>, createTransitionTo: S?.(E) -> TransitionTo<StateT, ActionT>
+    fun <E : EventT> on(
+      eventClass: Class<E>,
+      createTransitionTo: S?.(E) -> TransitionTo<StateT, ActionT>
     ) = on(any(eventClass), createTransitionTo)
 
     inline fun <reified E : EventT> on(
@@ -97,19 +106,19 @@ class MachineBuilder<StateT : Any, EventT : Any, ActionT : Any>(
       noinline createTransitionTo: S?.(E) -> TransitionTo<StateT, ActionT>
     ) = on(eq(event), createTransitionTo)
 
-    fun onEnter(listener: BiConsumer<S, EventT>) = with(stateDefinition) {
-      onEnterListeners.add { state, cause ->
-        @Suppress("UNCHECKED_CAST")
-        listener.accept(state as S, cause)
+    fun onEnter(listener: BiConsumer<S, EventT>) =
+      with(stateDefinition) {
+        onEnterListeners.add { state, cause ->
+          @Suppress("UNCHECKED_CAST") listener.accept(state as S, cause)
+        }
       }
-    }
 
-    fun onExit(listener: BiConsumer<S, EventT>) = with(stateDefinition) {
-      onExitListeners.add { state, cause ->
-        @Suppress("UNCHECKED_CAST")
-        listener.accept(state as S, cause)
+    fun onExit(listener: BiConsumer<S, EventT>) =
+      with(stateDefinition) {
+        onExitListeners.add { state, cause ->
+          @Suppress("UNCHECKED_CAST") listener.accept(state as S, cause)
+        }
       }
-    }
 
     fun build() = stateDefinition
 
@@ -117,6 +126,7 @@ class MachineBuilder<StateT : Any, EventT : Any, ActionT : Any>(
     fun transitionTo(state: StateT, action: ActionT? = null): TransitionTo<StateT, ActionT> =
       TransitionTo(state, action)
 
-    fun S.dontTransition(action: ActionT? = null): TransitionTo<StateT, ActionT> = transitionTo(this, action)
+    fun S.dontTransition(action: ActionT? = null): TransitionTo<StateT, ActionT> =
+      transitionTo(this, action)
   }
 }

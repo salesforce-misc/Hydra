@@ -43,7 +43,7 @@ suspend inline fun <reified A : Any> respond(
   crossinline block: suspend context(Raise<DomainError>) () -> A
 ): Unit = effect {
   block(this)
-}.fold({ call.respond(status, it) }, { call.respond(status, it) })
+}.fold({ call.respond(status, it) }) { call.respond(status, it) }
 
 context(Raise<IncorrectJson>)
 @OptIn(ExperimentalSerializationApi::class)
