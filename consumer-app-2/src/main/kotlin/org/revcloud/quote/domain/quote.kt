@@ -42,25 +42,25 @@ sealed class Event {
   class PersistSuccess(val prePersist: Map<String, String>, val persistResult: Map<String, String>): Event()
 
   @Serializable
-  object PersistFailed: Event()
+  data object PersistFailed: Event()
 
   @Serializable
-  object Price: Event()
+  data object Price: Event()
 
   @Serializable
   class PricingSuccess(val prePricing: Map<String, String>): Event()
 
   @Serializable
-  object PricingFailed: Event()
+  data object PricingFailed: Event()
 
   @Serializable
-  object Tax: Event()
+  data object Tax: Event()
 
   @Serializable
-  object TaxFailed: Event()
+  data object TaxFailed: Event()
 
   @Serializable
-  object TaxSuccess: Event()
+  data object TaxSuccess: Event()
 }
 
 
@@ -68,26 +68,26 @@ sealed class Event {
 @Serializable
 sealed class Action {
   @Serializable
-  object PersistQuoteSync: Action()
+  data object PersistQuoteSync: Action()
   
   @Serializable
-  object PersistQuoteAsync: Action()
+  data object PersistQuoteAsync: Action()
 
   @Serializable
-  object OnPersistFailed: Action()
+  data object OnPersistFailed: Action()
 
   @Serializable
-  object PriceQuote: Action()
+  data object PriceQuote: Action()
 
   @Serializable
-  object OnPriceFailed: Action()
+  data object OnPriceFailed: Action()
 
   @Serializable
-  object TaxQuote: Action()
+  data object TaxQuote: Action()
 
   @Serializable
-  object OnTaxFailed: Action()
+  data object OnTaxFailed: Action()
 
   @Serializable
-  object OnCompleted: Action()
+  data object OnCompleted: Action()
 }

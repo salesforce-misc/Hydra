@@ -4,21 +4,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6ed80e62-f038-45bc-b42e-83dd15ec8dae" name="Changes" comment="- Fix Consumer apps&#10;- Upgrade Detekt 1.23.0&#10;&#10;Signed-off-by: Gopal S Akshintala &lt;gopala.akshintala@salesforce.com&gt;">
-      <change afterPath="$PROJECT_DIR$/hydra/src/test/java/org/revcloud/hydra/TimeMachine.java" afterDir="false" />
+    <list default="true" id="6ed80e62-f038-45bc-b42e-83dd15ec8dae" name="Changes" comment="spotlessApply&#10;&#10;Signed-off-by: Gopal S Akshintala &lt;gopala.akshintala@salesforce.com&gt;">
       <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dataSources/f96321ad-e1fe-420e-92ba-a15be3debce7.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/f96321ad-e1fe-420e-92ba-a15be3debce7.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/detekt.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/detekt.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/kotlinc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/kotlinc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/consumer-app/hydra-root.consumer-app.main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/consumer-app/hydra-root.consumer-app.main.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/hydra-root.test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/hydra-root.test.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/buildSrc/src/main/kotlin/hydra.root-conventions.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/buildSrc/src/main/kotlin/hydra.root-conventions.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/consumer-app-2/src/main/kotlin/org/revcloud/quote/routes/routes.kt" beforeDir="false" afterPath="$PROJECT_DIR$/consumer-app-2/src/main/kotlin/org/revcloud/quote/routes/routes.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/consumer-app/src/main/kotlin/org/revcloud/order/routes/routes.kt" beforeDir="false" afterPath="$PROJECT_DIR$/consumer-app/src/main/kotlin/org/revcloud/order/routes/routes.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hydra/src/main/kotlin/org/revcloud/hydra/Hydra.kt" beforeDir="false" afterPath="$PROJECT_DIR$/hydra/src/main/kotlin/org/revcloud/hydra/Hydra.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hydra/src/main/kotlin/org/revcloud/hydra/config/MachineBuilder.kt" beforeDir="false" afterPath="$PROJECT_DIR$/hydra/src/main/kotlin/org/revcloud/hydra/config/MachineBuilder.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hydra/src/main/kotlin/org/revcloud/hydra/internal/Machine.kt" beforeDir="false" afterPath="$PROJECT_DIR$/hydra/src/main/kotlin/org/revcloud/hydra/internal/Machine.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hydra/src/main/kotlin/org/revcloud/hydra/internal/Matcher.kt" beforeDir="false" afterPath="$PROJECT_DIR$/hydra/src/main/kotlin/org/revcloud/hydra/internal/Matcher.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hydra/src/main/kotlin/org/revcloud/hydra/statemachine/Transition.kt" beforeDir="false" afterPath="$PROJECT_DIR$/hydra/src/main/kotlin/org/revcloud/hydra/statemachine/Transition.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/consumer-app-2/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/consumer-app-2/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/consumer-app-2/src/main/kotlin/org/revcloud/quote/domain/quote.kt" beforeDir="false" afterPath="$PROJECT_DIR$/consumer-app-2/src/main/kotlin/org/revcloud/quote/domain/quote.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/consumer-app/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/consumer-app/build.gradle.kts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -120,6 +117,9 @@
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
+    &quot;Docker.consumer-app/docker-compose.yaml: Compose Deployment.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle./Users/gopala.akshintala/code-clones/work/hydra-root [wrapper].executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.Enable generate summary features in internal mode&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;SONARLINT_PRECOMMIT_ANALYSIS&quot;: &quot;false&quot;,
@@ -131,9 +131,10 @@
     &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5&quot;: &quot;&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
     &quot;jdk.selected.JAVA_MODULE&quot;: &quot;17&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;ktor.last.update.timestamp&quot;: &quot;1685769999534&quot;,
     &quot;last_directory_selection&quot;: &quot;/Users/gopala.akshintala/code-clones/work/hydra-root/src/test/kotlin/org/revcloud/hydra&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/gopala.akshintala/code-clones/work/hydra-root/consumer-app-2/src/main/kotlin/org/revcloud/app/domain&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/gopala.akshintala/code-clones/work/hydra-root&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -142,12 +143,15 @@
     &quot;project.structure.last.edited&quot;: &quot;SDKs&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;configurable.group.appearance&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
   &quot;keyToStringList&quot;: {
     &quot;DatabaseDriversLRU&quot;: [
       &quot;postgresql&quot;
+    ],
+    &quot;GitStage.ChangesTree.GroupingKeys&quot;: [
+      &quot;repository&quot;
     ]
   }
 }</component>
@@ -225,12 +229,12 @@
       <command value="gradle hydra:test --tests org.revcloud.hydra.HydraTest.idleOrderPlacePlaced" />
       <command value="gradle hydra:publish" />
       <command value="gradle clean build" />
-      <command value="gradle wrapper" />
       <command value="gradle spotlessApply" />
+      <command value="gradle wrapper" />
     </option>
   </component>
-  <component name="RunManager" selected="Gradle.hydra-root [spotlessApply]">
-    <configuration name="HydraTest.readTransition" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+  <component name="RunManager" selected="Docker.consumer-app/docker-compose.yaml: Compose Deployment">
+    <configuration name="/Users/gopala.akshintala/code-clones/work/hydra-root [wrapper]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -241,32 +245,7 @@
         </option>
         <option name="taskNames">
           <list>
-            <option value=":hydra:test" />
-            <option value="--tests" />
-            <option value="&quot;org.revcloud.hydra.HydraTest.readTransition&quot;" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <RunAsTest>true</RunAsTest>
-      <method v="2" />
-    </configuration>
-    <configuration name="hydra-root [clean build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" value="" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value="clean" />
-            <option value="build" />
+            <option value="wrapper" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -343,20 +322,28 @@
       </deployment>
       <method v="2" />
     </configuration>
+    <configuration name="consumer-app/docker-compose.yaml: Compose Deployment" type="docker-deploy" factoryName="docker-compose.yml" temporary="true" server-name="Docker">
+      <deployment type="docker-compose.yml">
+        <settings>
+          <option name="sourceFilePath" value="consumer-app/docker-compose.yaml" />
+        </settings>
+      </deployment>
+      <method v="2" />
+    </configuration>
     <list>
+      <item itemvalue="Docker.consumer-app/docker-compose.yaml: Compose Deployment" />
+      <item itemvalue="Gradle./Users/gopala.akshintala/code-clones/work/hydra-root [wrapper]" />
       <item itemvalue="Gradle.hydra-root [wrapper]" />
-      <item itemvalue="Gradle.hydra-root [clean build]" />
       <item itemvalue="Gradle.hydra-root [spotlessApply]" />
-      <item itemvalue="Gradle.HydraTest.readTransition" />
       <item itemvalue="JUnit.HydraTest.readTransition" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Docker.consumer-app/docker-compose.yaml: Compose Deployment" />
+        <item itemvalue="Gradle./Users/gopala.akshintala/code-clones/work/hydra-root [wrapper]" />
         <item itemvalue="JUnit.HydraTest.readTransition" />
         <item itemvalue="Gradle.hydra-root [wrapper]" />
         <item itemvalue="Gradle.hydra-root [spotlessApply]" />
-        <item itemvalue="Gradle.hydra-root [clean build]" />
-        <item itemvalue="Gradle.HydraTest.readTransition" />
       </list>
     </recent_temporary>
   </component>
@@ -449,7 +436,12 @@
       <workItem from="1687275907221" duration="1241000" />
       <workItem from="1689855762494" duration="750000" />
       <workItem from="1690444307069" duration="57000" />
-      <workItem from="1690546222712" duration="812000" />
+      <workItem from="1690546222712" duration="1106000" />
+      <workItem from="1690549220335" duration="1372000" />
+      <workItem from="1696476078089" duration="229000" />
+      <workItem from="1696478580499" duration="49000" />
+      <workItem from="1696478670635" duration="2045000" />
+      <workItem from="1696481195996" duration="596000" />
     </task>
     <task id="LOCAL-00001" summary="- Fixed moshiReVoman&#10;- Added module-info.java to integrationTest module">
       <created>1678595183319</created>
@@ -791,7 +783,15 @@
       <option name="project" value="LOCAL" />
       <updated>1685772042423</updated>
     </task>
-    <option name="localTasksCounter" value="48" />
+    <task id="LOCAL-00048" summary="spotlessApply&#10;&#10;Signed-off-by: Gopal S Akshintala &lt;gopala.akshintala@salesforce.com&gt;">
+      <option name="closed" value="true" />
+      <created>1690547158323</created>
+      <option name="number" value="00048" />
+      <option name="presentableId" value="LOCAL-00048" />
+      <option name="project" value="LOCAL" />
+      <updated>1690547158323</updated>
+    </task>
+    <option name="localTasksCounter" value="49" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -826,7 +826,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="Add back kotlin DSLs&#10;&#10;&#10;Signed-off-by: Gopal S Akshintala &lt;gopala.akshintala@salesforce.com&gt;" />
     <MESSAGE value="Move Hydra to a sub project&#10;&#10;&#10;Signed-off-by: Gopal S Akshintala &lt;gopala.akshintala@salesforce.com&gt;" />
     <MESSAGE value="Rabbitmq seems to be working with Sealed classes &#10;&#10;&#10;Signed-off-by: Gopal S Akshintala &lt;gopala.akshintala@salesforce.com&gt;" />
     <MESSAGE value="First working prototype&#10;&#10;&#10;Signed-off-by: Gopal S Akshintala &lt;gopala.akshintala@salesforce.com&gt;" />
@@ -851,7 +850,8 @@
     <MESSAGE value="Release: 0.0.5&#10;Change listener order&#10;&#10;Signed-off-by: Gopal S Akshintala &lt;gopala.akshintala@salesforce.com&gt;" />
     <MESSAGE value="Release 0.0.6&#10;&#10;Supports readOnly transitions with State Class&#10;&#10;Signed-off-by: Gopal S Akshintala &lt;gopala.akshintala@salesforce.com&gt;" />
     <MESSAGE value="- Fix Consumer apps&#10;- Upgrade Detekt 1.23.0&#10;&#10;Signed-off-by: Gopal S Akshintala &lt;gopala.akshintala@salesforce.com&gt;" />
-    <option name="LAST_COMMIT_MESSAGE" value="- Fix Consumer apps&#10;- Upgrade Detekt 1.23.0&#10;&#10;Signed-off-by: Gopal S Akshintala &lt;gopala.akshintala@salesforce.com&gt;" />
+    <MESSAGE value="spotlessApply&#10;&#10;Signed-off-by: Gopal S Akshintala &lt;gopala.akshintala@salesforce.com&gt;" />
+    <option name="LAST_COMMIT_MESSAGE" value="spotlessApply&#10;&#10;Signed-off-by: Gopal S Akshintala &lt;gopala.akshintala@salesforce.com&gt;" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -875,6 +875,14 @@
           <url>file://$PROJECT_DIR$/hydra/src/main/kotlin/org/revcloud/hydra/config/MachineBuilder.kt</url>
           <line>118</line>
           <option name="timeStamp" value="8" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/buildSrc/src/main/kotlin/hydra.root-conventions.gradle.kts</url>
+          <line>18</line>
+          <properties>
+            <option name="lambda-ordinal" value="0" />
+          </properties>
+          <option name="timeStamp" value="9" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
