@@ -29,7 +29,7 @@ kotlin-logging = "3.0.5"
 apache-commons-lang3 = "3.13.0"
 graal-sdk = "23.1.0"
 underscore = "1.94"
-kotlin-faker = "1.14.0"
+kotlin-faker = "1.15.0"
 immutables = "2.9.3"
 mockito = "5.5.0"
 # Common dependencies
