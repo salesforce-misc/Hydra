@@ -33,7 +33,7 @@ kotlin-faker = "1.15.0"
 immutables = "2.10.0"
 mockito = "5.7.0"
 # Common dependencies
-junit = "5.10.0"
+junit = "5.10.1"
 kover = "0.7.4"
 detekt = "1.23.3"
 spotless = "6.22.0"
