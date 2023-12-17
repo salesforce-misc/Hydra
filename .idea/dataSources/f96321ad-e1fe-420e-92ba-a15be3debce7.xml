@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dataSource name="hydra">
-  <database-model serializer="dbm" dbms="POSTGRES" family-id="POSTGRES" format-version="4.50">
+  <database-model serializer="dbm" dbms="POSTGRES" family-id="POSTGRES" format-version="4.51">
     <root id="1"/>
     <database id="2" parent="1" name="hydra">
       <Current>1</Current>
@@ -3439,7 +3439,7 @@
     <sequence id="263" parent="262" name="state_id_seq">
       <DasType>bigint|0s</DasType>
       <ObjectId>16388</ObjectId>
-      <SequenceIdentity>1(4)</SequenceIdentity>
+      <SequenceIdentity>1</SequenceIdentity>
       <StartValue>1</StartValue>
       <StateNumber>733</StateNumber>
       <OwnerName>postgres</OwnerName>

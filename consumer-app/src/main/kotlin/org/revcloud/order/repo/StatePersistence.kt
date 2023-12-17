@@ -1,10 +1,9 @@
 package org.revcloud.order.repo
 
-import org.revcloud.order.sqldelight.StateQueries
 import java.time.OffsetDateTime
+import org.revcloud.order.sqldelight.StateQueries
 
-@JvmInline
-value class StateId(val serial: Long)
+@JvmInline value class StateId(val serial: Long)
 
 fun interface StatePersistence {
   /** Creates a new State in the database, and returns the [StateId] of the newly created State */

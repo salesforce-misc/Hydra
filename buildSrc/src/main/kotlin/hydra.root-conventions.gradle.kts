@@ -1,21 +1,23 @@
-import com.diffplug.spotless.extra.wtp.EclipseWtpFormatterStep.XML
 import com.diffplug.spotless.LineEnding.PLATFORM_NATIVE
+import com.diffplug.spotless.extra.wtp.EclipseWtpFormatterStep.XML
 
 plugins {
   java
-  idea
   id("com.diffplug.spotless")
   id("io.gitlab.arturbosch.detekt")
 }
 
 version = "0.0.7"
+
 group = "com.salesforce.ccspayments"
+
 description = "Hydra - States, Events, Actions"
+
 repositories {
   mavenCentral()
-  maven("https://jitpack.io")
   maven("https://oss.sonatype.org/content/repositories/snapshots")
 }
+
 spotless {
   lineEndings = PLATFORM_NATIVE
   kotlin {
@@ -23,14 +25,14 @@ spotless {
     target("**/*.kt")
     trimTrailingWhitespace()
     endWithNewline()
-    targetExclude("**/build/**", "**/.gradle/**", "**/generated/**", "**/bin/**")
+    targetExclude("**/build/**", "**/.gradle/**", "**/generated/**", "**/bin/**", "**/out/**")
   }
   kotlinGradle {
     ktfmt().googleStyle()
     target("**/*.gradle.kts")
     trimTrailingWhitespace()
     endWithNewline()
-    targetExclude("**/build/**", "**/.gradle/**", "**/generated/**", "**/bin/**")
+    targetExclude("**/build/**", "**/.gradle/**", "**/generated/**", "**/bin/**", "**/out/**")
   }
   java {
     toggleOffOn()
@@ -41,7 +43,7 @@ spotless {
     trimTrailingWhitespace()
     indentWithSpaces(2)
     endWithNewline()
-    targetExclude("**/build/**", "**/.gradle/**", "**/generated/**", "**/bin/**")
+    targetExclude("**/build/**", "**/.gradle/**", "**/generated/**", "**/bin/**", "**/out/**")
   }
   format("xml") {
     targetExclude("pom.xml")
@@ -55,9 +57,10 @@ spotless {
     endWithNewline()
   }
 }
+
 detekt {
   parallel = true
   buildUponDefaultConfig = true
   baseline = file("$rootDir/detekt/baseline.xml")
-  config = files("$rootDir/detekt/config.yml")
+  config.setFrom(file("$rootDir/detekt/config.yml"))
 }

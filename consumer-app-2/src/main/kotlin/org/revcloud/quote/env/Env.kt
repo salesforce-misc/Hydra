@@ -23,12 +23,11 @@ data class Env(
     val password: String = System.getenv("POSTGRES_PASSWORD") ?: JDBC_PW,
     val driver: String = JDBC_DRIVER,
   )
-  
+
   data class RabbitMQ(
     val uri: String = System.getenv("RABBIT_MQ_URI") ?: RABBIT_MQ_URI,
     val exchange: String = "hydra",
     val queue: String = "hydra",
     val routingKey: String = "hydra"
   )
-  
 }

@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module version="4">
-  <component name="SonarLintModuleSettings">
-    <option name="uniqueId" value="b04c5e78-a36f-4db6-9c7d-def9bd612b17" />
+<module external.linked.project.id="hydra-root:test" external.linked.project.path="$MODULE_DIR$/../.." external.root.project.path="$MODULE_DIR$/../.." external.system.id="GRADLE" external.system.module.group="com.salesforce.ccspayments" external.system.module.type="sourceSet" external.system.module.version="0.0.7" type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_17">
+    <output-test url="file://$MODULE_DIR$/../../build/classes/java/test" />
+    <exclude-output />
+    <content url="file://$MODULE_DIR$/../../src/test" />
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module" module-name="hydra-root.main" />
   </component>
+  <component name="SonarLintModuleSettings">
+    <option name="uniqueId" value="1f9414f0-a930-4688-8903-3f78d275a62b" />
+  </component>
+  <component name="TestModuleProperties" production-module="hydra-root.main" />
 </module>

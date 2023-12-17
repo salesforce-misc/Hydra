@@ -1,0 +1,9 @@
+load("@rules_java//java:defs.bzl", "java_import")
+
+package(default_visibility = ["//visibility:public"])
+
+java_import(
+    name = "com_salesforce_hydra_hydra",
+    jars = glob(["build/libs/hydra-root-*.jar"]),
+    srcjar = glob(["build/libs/hydra-root-*-sources.jar"])[0],
+)

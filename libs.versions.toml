@@ -1,4 +1,5 @@
 [versions]
+kotlin = "2.0.0-Beta2"
 arrow = "1.2.1"
 suspendapp="0.4.0"
 hikari="5.1.0"
@@ -14,7 +15,6 @@ java-vavr = "0.10.4"
 kotlin-vavr = "0.10.2"
 jetbrains-annotations = "24.1.0"
 typeTools = "0.6.3"
-kotlin = "1.9.21"
 moshix = "0.25.1"
 kotest = "5.8.0"
 spotbugs = "6.0.4"

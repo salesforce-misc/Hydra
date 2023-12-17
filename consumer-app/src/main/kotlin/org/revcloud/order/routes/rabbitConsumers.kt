@@ -1,28 +1,28 @@
 package org.revcloud.order.routes
 
 import io.ktor.server.application.Application
+import kotlin.random.Random
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import mu.KLogger
+import org.revcloud.hydra.Hydra
+import org.revcloud.hydra.statemachine.Transition
 import org.revcloud.order.domain.Action
 import org.revcloud.order.domain.Event
 import org.revcloud.order.domain.Order
 import org.revcloud.order.env.Env
 import org.revcloud.order.repo.StatePersistence
-import org.revcloud.hydra.Hydra
-import org.revcloud.hydra.statemachine.Transition
 import pl.jutupe.ktor_rabbitmq.RabbitMQInstance
 import pl.jutupe.ktor_rabbitmq.consume
 import pl.jutupe.ktor_rabbitmq.publish
 import pl.jutupe.ktor_rabbitmq.rabbitConsumer
-import kotlin.random.Random
 
 context(Application, Hydra<Order, Event, Action>, StatePersistence, Env, KLogger)
 fun rabbitConsumers() = rabbitConsumer {
   consume<Event>(rabbitMQ.queue) { event ->
     info { "Consumed Event: $event" }
-    val order: Order = state // * NOTE 08/05/23 gopala.akshintala: This is needed for encoding below 
+    val order: Order = state // * NOTE 08/05/23 gopala.akshintala: This is needed for encoding below
     runBlocking { insert(Json.encodeToString(order)) }
     val transition = transition(event)
     onTransition(transition)

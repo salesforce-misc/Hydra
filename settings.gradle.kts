@@ -1,9 +1,5 @@
 dependencyResolutionManagement {
-  versionCatalogs {
-    create("libs") {
-      from(files("libs.versions.toml"))
-    }
-  }
+  versionCatalogs { create("libs") { from(files("libs.versions.toml")) } }
   pluginManagement {
     repositories {
       mavenCentral()
@@ -16,6 +12,9 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "hydra-root"
+
 include("consumer-app")
+
 include("consumer-app-2")
+
 include("hydra")

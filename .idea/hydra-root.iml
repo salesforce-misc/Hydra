@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module version="4">
+<module external.linked.project.id="hydra-root" external.linked.project.path="$MODULE_DIR$" external.root.project.path="$MODULE_DIR$" external.system.id="GRADLE" external.system.module.group="com.salesforce.ccspayments" external.system.module.version="0.0.7" type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_17" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$MODULE_DIR$">
+      <excludeFolder url="file://$MODULE_DIR$/.gradle" />
+      <excludeFolder url="file://$MODULE_DIR$/build" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
   <component name="SonarLintModuleSettings">
-    <option name="uniqueId" value="d31301d7-1e09-4611-8c47-2d5773886bf5" />
+    <option name="uniqueId" value="f9832bf4-6856-48c5-be5a-b18807e93310" />
   </component>
 </module>

@@ -8,13 +8,13 @@ import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.server.plugins.cors.maxAgeDuration
 import io.ktor.server.plugins.cors.routing.CORS
 import io.ktor.server.plugins.defaultheaders.DefaultHeaders
+import kotlin.time.Duration.Companion.days
 import kotlinx.serialization.json.Json
 import org.revcloud.quote.routes.health
 import org.revcloud.quote.routes.quoteRoutes
 import org.revcloud.quote.routes.rabbitConsumers
 import pl.jutupe.ktor_rabbitmq.RabbitMQ
 import pl.jutupe.ktor_rabbitmq.RabbitMQInstance
-import kotlin.time.Duration.Companion.days
 
 fun Application.app(module: Dependencies) {
   with(module.env) {
@@ -35,10 +35,12 @@ context(Env)
 fun Application.configure(rabbitMq: RabbitMQInstance) {
   install(DefaultHeaders)
   install(ContentNegotiation) {
-    json(Json {
-      prettyPrint = true
-      isLenient = true
-    })
+    json(
+      Json {
+        prettyPrint = true
+        isLenient = true
+      }
+    )
   }
   install(CORS) {
     allowHeader(HttpHeaders.Authorization)
@@ -46,7 +48,5 @@ fun Application.configure(rabbitMq: RabbitMQInstance) {
     allowNonSimpleContentTypes = true
     maxAgeDuration = 3.days
   }
-  install(RabbitMQ) {
-    rabbitMQInstance = rabbitMq
-  }
+  install(RabbitMQ) { rabbitMQInstance = rabbitMq }
 }

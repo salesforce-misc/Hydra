@@ -24,8 +24,7 @@ data class Machine<StateT : Any, EventT : Any, ActionT : Any>(
         ?.let { (_, createTransitionTo) ->
           val (toState, action) = createTransitionTo(null, event)
           Transition.Valid(null, event, toState, action)
-        }
-        ?: Transition.Invalid(null, event)
+        } ?: Transition.Invalid(null, event)
 
     data class TransitionTo<out StateT : Any, out ActionT : Any>
     internal constructor(val toState: StateT, val action: ActionT?)

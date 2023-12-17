@@ -19,4 +19,6 @@ ____
 States, Events, Actions
 ____
 
+This is a library to expose DSL which can be used to create State machines.
+
 == link:CONTRIBUTING.adoc[🙌🏼Wanna Collab & Contribute?]

@@ -40,14 +40,13 @@ typealias KtorCtx = PipelineContext<Unit, ApplicationCall>
 context(KtorCtx)
 suspend inline fun <reified A : Any> respond(
   status: HttpStatusCode,
-  crossinline block: suspend context(Raise<DomainError>) () -> A
-): Unit = effect {
-  block(this)
-}.fold({ call.respond(status, it) }) { call.respond(status, it) }
+  crossinline block: suspend Raise<DomainError>.() -> A
+): Unit = effect { block(this) }.fold({ call.respond(status, it) }) { call.respond(status, it) }
 
 context(Raise<IncorrectJson>)
 @OptIn(ExperimentalSerializationApi::class)
-private suspend inline fun <reified A : Any> PipelineContext<Unit, ApplicationCall>.receiveCatching(): A =
+private suspend inline fun <reified A : Any> PipelineContext<Unit, ApplicationCall>
+  .receiveCatching(): A =
   catch({ call.receive() }) { e: MissingFieldException -> raise(IncorrectJson(e)) }
 
 sealed interface DomainError

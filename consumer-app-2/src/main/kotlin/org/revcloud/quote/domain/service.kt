@@ -1,10 +1,11 @@
 package org.revcloud.quote.domain
 
-import mu.KLogger
 import kotlin.random.Random
+import mu.KLogger
 
 fun persistQuote(event: Event.Persist): Event {
-  return if (Random.nextBoolean()) Event.PersistSuccess(mapOf("id" to "1"), mapOf("id" to "2")) else Event.PersistFailed
+  return if (Random.nextBoolean()) Event.PersistSuccess(mapOf("id" to "1"), mapOf("id" to "2"))
+  else Event.PersistFailed
 }
 
 fun priceQuote(event: Event.Price): Event {

@@ -7,11 +7,11 @@ import arrow.fx.coroutines.closeable
 import arrow.fx.coroutines.continuations.ResourceScope
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
-import org.revcloud.order.sqldelight.SqlDelight
-import org.revcloud.order.repo.StateId
-import org.revcloud.order.sqldelight.State
 import java.time.OffsetDateTime
 import javax.sql.DataSource
+import org.revcloud.order.repo.StateId
+import org.revcloud.order.sqldelight.SqlDelight
+import org.revcloud.order.sqldelight.State
 
 suspend fun ResourceScope.hikari(env: Env.DataSource): HikariDataSource = autoCloseable {
   HikariDataSource(
@@ -42,5 +42,6 @@ private inline fun <A : Any, B> columnAdapter(
 ): ColumnAdapter<A, B> =
   object : ColumnAdapter<A, B> {
     override fun decode(databaseValue: B): A = decode(databaseValue)
+
     override fun encode(value: A): B = encode(value)
   }

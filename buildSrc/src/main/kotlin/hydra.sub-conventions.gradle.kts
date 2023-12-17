@@ -7,38 +7,43 @@ plugins {
   id("org.jetbrains.kotlinx.kover")
   id("com.adarshr.test-logger")
 }
+
 repositories {
   mavenCentral()
   maven("https://jitpack.io")
 }
+
 java {
-  toolchain {
-    languageVersion.set(JavaLanguageVersion.of(11))
-  }
+  toolchain { languageVersion.set(JavaLanguageVersion.of(11)) }
   withJavadocJar()
   withSourcesJar()
 }
+
 tasks {
   testlogger.theme = MOCHA
   withType<Jar> { duplicatesStrategy = DuplicatesStrategy.EXCLUDE }
   withType<PublishToMavenRepository>().configureEach {
     doLast {
-      logger.lifecycle("Successfully uploaded ${publication.groupId}:${publication.artifactId}:${publication.version} to ${repository.name}")
+      logger.lifecycle(
+        "Successfully uploaded ${publication.groupId}:${publication.artifactId}:${publication.version} to ${repository.name}"
+      )
     }
   }
   withType<PublishToMavenLocal>().configureEach {
     doLast {
-      logger.lifecycle("Successfully created ${publication.groupId}:${publication.artifactId}:${publication.version} in MavenLocal")
+      logger.lifecycle(
+        "Successfully created ${publication.groupId}:${publication.artifactId}:${publication.version} in MavenLocal"
+      )
     }
   }
 }
+
 testing {
   suites {
-    val test by getting(JvmTestSuite::class) {
-      useJUnitJupiter("5.9.3")
-    }
+    val test by getting(JvmTestSuite::class) { useJUnitJupiter("5.10.1") }
   }
 }
+
 publishing {
   publications.create<MavenPublication>("hydra") {
     from(components["java"])

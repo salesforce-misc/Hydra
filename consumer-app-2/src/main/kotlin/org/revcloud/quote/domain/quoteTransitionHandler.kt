@@ -16,10 +16,14 @@ fun quoteTransitionHandler(transition: Transition<Quote, Event, Action>) {
   val validTransition = (transition as? Transition.Valid) ?: return
   when (validTransition.action) {
     Action.PersistQuoteSync -> PersistQuoteSyncStep().execute(validTransition.event as Event.Place)
-    Action.PersistQuoteAsync -> PersistQuoteAsyncStep().execute(validTransition.event as Event.Place)
+    Action.PersistQuoteAsync ->
+      PersistQuoteAsyncStep().execute(validTransition.event as Event.Place)
     Action.PriceQuote -> PriceQuoteStep().execute(Event.Price)
     Action.TaxQuote -> TaxQuoteStep().execute(Event.Tax)
-    Action.OnPersistFailed, Action.OnPriceFailed, Action.OnTaxFailed, Action.OnCompleted -> postProcess()
+    Action.OnPersistFailed,
+    Action.OnPriceFailed,
+    Action.OnTaxFailed,
+    Action.OnCompleted -> postProcess()
     else -> postProcess()
   }
 }

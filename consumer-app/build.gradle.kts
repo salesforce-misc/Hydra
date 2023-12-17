@@ -4,10 +4,12 @@ plugins {
   alias(libs.plugins.kotlinx.serialization)
   alias(libs.plugins.sqldelight)
 }
+
 application {
   mainClass by "org.revcloud.app.MainKt"
   applicationDefaultJvmArgs = listOf("-Dio.ktor.development=true")
 }
+
 dependencies {
   implementation(project(":hydra"))
   compileOnly(libs.jetbrains.annotations)
@@ -24,6 +26,7 @@ dependencies {
   implementation(libs.bundles.kotlin.logging)
   testImplementation(libs.assertj.core)
 }
+
 ktor {
   docker {
     jreVersion = JavaVersion.VERSION_21
@@ -31,6 +34,7 @@ ktor {
     imageTag = "latest"
   }
 }
+
 sqldelight {
   databases {
     create("SqlDelight") {
@@ -39,11 +43,8 @@ sqldelight {
     }
   }
 }
+
 tasks {
-  withType<PublishToMavenRepository>().configureEach {
-    enabled = false
-  }
-  withType<PublishToMavenLocal>().configureEach {
-    enabled = false
-  }
+  withType<PublishToMavenRepository>().configureEach { enabled = false }
+  withType<PublishToMavenLocal>().configureEach { enabled = false }
 }

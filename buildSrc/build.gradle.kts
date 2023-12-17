@@ -1,12 +1,12 @@
-plugins {
-  `kotlin-dsl`
-}
+plugins { `kotlin-dsl` }
+
 repositories {
   mavenCentral()
   gradlePluginPortal()
   maven("https://jitpack.io")
   maven("https://oss.sonatype.org/content/repositories/snapshots")
 }
+
 dependencies {
   implementation(libs.kotlin.gradle)
   implementation(libs.spotless.gradle)
