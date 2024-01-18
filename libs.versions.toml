@@ -1,5 +1,5 @@
 [versions]
-kotlin = "2.0.0-Beta2"
+kotlin = "2.0.0-Beta3"
 arrow = "1.2.1"
 suspendapp="0.4.0"
 hikari="5.1.0"
