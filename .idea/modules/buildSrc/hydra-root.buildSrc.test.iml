@@ -24,40 +24,40 @@
           <arrayArguments>
             <arrayArg name="pluginClasspaths">
               <args>
-                <arg>$USER_HOME$/.sdkman/candidates/gradle/8.5/lib/gradle-kotlin-dsl-8.5.jar</arg>
-                <arg>$USER_HOME$/.sdkman/candidates/gradle/8.5/lib/gradle-kotlin-dsl-shared-runtime-8.5.jar</arg>
-                <arg>$USER_HOME$/.sdkman/candidates/gradle/8.5/lib/gradle-kotlin-dsl-tooling-models-8.5.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/8.5/generated-gradle-jars/gradle-api-8.5.jar</arg>
-                <arg>$USER_HOME$/.sdkman/candidates/gradle/8.5/lib/groovy-3.0.17.jar</arg>
-                <arg>$USER_HOME$/.sdkman/candidates/gradle/8.5/lib/groovy-ant-3.0.17.jar</arg>
-                <arg>$USER_HOME$/.sdkman/candidates/gradle/8.5/lib/groovy-astbuilder-3.0.17.jar</arg>
-                <arg>$USER_HOME$/.sdkman/candidates/gradle/8.5/lib/groovy-console-3.0.17.jar</arg>
-                <arg>$USER_HOME$/.sdkman/candidates/gradle/8.5/lib/groovy-datetime-3.0.17.jar</arg>
-                <arg>$USER_HOME$/.sdkman/candidates/gradle/8.5/lib/groovy-dateutil-3.0.17.jar</arg>
-                <arg>$USER_HOME$/.sdkman/candidates/gradle/8.5/lib/groovy-groovydoc-3.0.17.jar</arg>
-                <arg>$USER_HOME$/.sdkman/candidates/gradle/8.5/lib/groovy-json-3.0.17.jar</arg>
-                <arg>$USER_HOME$/.sdkman/candidates/gradle/8.5/lib/groovy-nio-3.0.17.jar</arg>
-                <arg>$USER_HOME$/.sdkman/candidates/gradle/8.5/lib/groovy-sql-3.0.17.jar</arg>
-                <arg>$USER_HOME$/.sdkman/candidates/gradle/8.5/lib/groovy-templates-3.0.17.jar</arg>
-                <arg>$USER_HOME$/.sdkman/candidates/gradle/8.5/lib/groovy-test-3.0.17.jar</arg>
-                <arg>$USER_HOME$/.sdkman/candidates/gradle/8.5/lib/groovy-xml-3.0.17.jar</arg>
-                <arg>$USER_HOME$/.sdkman/candidates/gradle/8.5/lib/javaparser-core-3.17.0.jar</arg>
-                <arg>$USER_HOME$/.sdkman/candidates/gradle/8.5/lib/kotlin-stdlib-1.9.20.jar</arg>
-                <arg>$USER_HOME$/.sdkman/candidates/gradle/8.5/lib/kotlin-reflect-1.9.20.jar</arg>
-                <arg>$USER_HOME$/.sdkman/candidates/gradle/8.5/lib/gradle-installation-beacon-8.5.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-sam-with-receiver-compiler-plugin-embeddable/1.9.20/5b04c29930350a551045a62fdbde3d84ebdeaf65/kotlin-sam-with-receiver-compiler-plugin-embeddable-1.9.20.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-assignment-compiler-plugin-embeddable/1.9.20/53843a4dd44f0748c8cb02e0355c6a58e454d3f0/kotlin-assignment-compiler-plugin-embeddable-1.9.20.jar</arg>
+                <arg>$USER_HOME$/.sdkman/candidates/gradle/8.6-rc-3/lib/gradle-kotlin-dsl-8.6.jar</arg>
+                <arg>$USER_HOME$/.sdkman/candidates/gradle/8.6-rc-3/lib/gradle-kotlin-dsl-shared-runtime-8.6.jar</arg>
+                <arg>$USER_HOME$/.sdkman/candidates/gradle/8.6-rc-3/lib/gradle-kotlin-dsl-tooling-models-8.6.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/8.6-rc-3/generated-gradle-jars/gradle-api-8.6-rc-3.jar</arg>
+                <arg>$USER_HOME$/.sdkman/candidates/gradle/8.6-rc-3/lib/groovy-3.0.17.jar</arg>
+                <arg>$USER_HOME$/.sdkman/candidates/gradle/8.6-rc-3/lib/groovy-ant-3.0.17.jar</arg>
+                <arg>$USER_HOME$/.sdkman/candidates/gradle/8.6-rc-3/lib/groovy-astbuilder-3.0.17.jar</arg>
+                <arg>$USER_HOME$/.sdkman/candidates/gradle/8.6-rc-3/lib/groovy-console-3.0.17.jar</arg>
+                <arg>$USER_HOME$/.sdkman/candidates/gradle/8.6-rc-3/lib/groovy-datetime-3.0.17.jar</arg>
+                <arg>$USER_HOME$/.sdkman/candidates/gradle/8.6-rc-3/lib/groovy-dateutil-3.0.17.jar</arg>
+                <arg>$USER_HOME$/.sdkman/candidates/gradle/8.6-rc-3/lib/groovy-groovydoc-3.0.17.jar</arg>
+                <arg>$USER_HOME$/.sdkman/candidates/gradle/8.6-rc-3/lib/groovy-json-3.0.17.jar</arg>
+                <arg>$USER_HOME$/.sdkman/candidates/gradle/8.6-rc-3/lib/groovy-nio-3.0.17.jar</arg>
+                <arg>$USER_HOME$/.sdkman/candidates/gradle/8.6-rc-3/lib/groovy-sql-3.0.17.jar</arg>
+                <arg>$USER_HOME$/.sdkman/candidates/gradle/8.6-rc-3/lib/groovy-templates-3.0.17.jar</arg>
+                <arg>$USER_HOME$/.sdkman/candidates/gradle/8.6-rc-3/lib/groovy-test-3.0.17.jar</arg>
+                <arg>$USER_HOME$/.sdkman/candidates/gradle/8.6-rc-3/lib/groovy-xml-3.0.17.jar</arg>
+                <arg>$USER_HOME$/.sdkman/candidates/gradle/8.6-rc-3/lib/javaparser-core-3.17.0.jar</arg>
+                <arg>$USER_HOME$/.sdkman/candidates/gradle/8.6-rc-3/lib/kotlin-stdlib-1.9.20.jar</arg>
+                <arg>$USER_HOME$/.sdkman/candidates/gradle/8.6-rc-3/lib/kotlin-reflect-1.9.20.jar</arg>
+                <arg>$USER_HOME$/.sdkman/candidates/gradle/8.6-rc-3/lib/gradle-installation-beacon-8.6.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-scripting-jvm/1.9.20/5277cafe6949e047a271433202f32e8377b00ebb/kotlin-scripting-jvm-1.9.20.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-scripting-common/1.9.20/d2abd0f9c63e61fa54bd43f29458c2606b02abdc/kotlin-scripting-common-1.9.20.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib/1.9.20/e58b4816ac517e9cc5df1db051120c63d4cde669/kotlin-stdlib-1.9.20.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains/annotations/13.0/919f0dfe192fb4e063e7dacadee7f8bb9a2672a9/annotations-13.0.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-script-runtime/1.9.20/6fdfef711b8e07f1a4d0979a60acd7bc8a800777/kotlin-script-runtime-1.9.20.jar</arg>
+                <arg>$KOTLIN_BUNDLED$/lib/assignment-compiler-plugin.jar</arg>
+                <arg>$KOTLIN_BUNDLED$/lib/sam-with-receiver-compiler-plugin.jar</arg>
               </args>
             </arrayArg>
             <arrayArg name="pluginOptions">
               <args>
-                <arg>plugin:org.jetbrains.kotlin.samWithReceiver:annotation=org.gradle.api.HasImplicitReceiver</arg>
                 <arg>plugin:org.jetbrains.kotlin.assignment:annotation=org.gradle.api.SupportsKotlinAssignmentOverloading</arg>
+                <arg>plugin:org.jetbrains.kotlin.samWithReceiver:annotation=org.gradle.api.HasImplicitReceiver</arg>
               </args>
             </arrayArg>
           </arrayArguments>
@@ -75,7 +75,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/.gradle/caches/8.5/generated-gradle-jars/gradle-api-8.5.jar!/" />
+          <root url="jar://$USER_HOME$/.gradle/caches/8.6-rc-3/generated-gradle-jars/gradle-api-8.6-rc-3.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -84,7 +84,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/.sdkman/candidates/gradle/8.5/lib/groovy-3.0.17.jar!/" />
+          <root url="jar://$USER_HOME$/.sdkman/candidates/gradle/8.6-rc-3/lib/groovy-3.0.17.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -93,7 +93,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/.sdkman/candidates/gradle/8.5/lib/groovy-ant-3.0.17.jar!/" />
+          <root url="jar://$USER_HOME$/.sdkman/candidates/gradle/8.6-rc-3/lib/groovy-ant-3.0.17.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -102,7 +102,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/.sdkman/candidates/gradle/8.5/lib/groovy-astbuilder-3.0.17.jar!/" />
+          <root url="jar://$USER_HOME$/.sdkman/candidates/gradle/8.6-rc-3/lib/groovy-astbuilder-3.0.17.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -111,7 +111,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/.sdkman/candidates/gradle/8.5/lib/groovy-console-3.0.17.jar!/" />
+          <root url="jar://$USER_HOME$/.sdkman/candidates/gradle/8.6-rc-3/lib/groovy-console-3.0.17.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -120,7 +120,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/.sdkman/candidates/gradle/8.5/lib/groovy-datetime-3.0.17.jar!/" />
+          <root url="jar://$USER_HOME$/.sdkman/candidates/gradle/8.6-rc-3/lib/groovy-datetime-3.0.17.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -129,7 +129,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/.sdkman/candidates/gradle/8.5/lib/groovy-dateutil-3.0.17.jar!/" />
+          <root url="jar://$USER_HOME$/.sdkman/candidates/gradle/8.6-rc-3/lib/groovy-dateutil-3.0.17.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -138,7 +138,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/.sdkman/candidates/gradle/8.5/lib/groovy-groovydoc-3.0.17.jar!/" />
+          <root url="jar://$USER_HOME$/.sdkman/candidates/gradle/8.6-rc-3/lib/groovy-groovydoc-3.0.17.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -147,7 +147,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/.sdkman/candidates/gradle/8.5/lib/groovy-json-3.0.17.jar!/" />
+          <root url="jar://$USER_HOME$/.sdkman/candidates/gradle/8.6-rc-3/lib/groovy-json-3.0.17.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -156,7 +156,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/.sdkman/candidates/gradle/8.5/lib/groovy-nio-3.0.17.jar!/" />
+          <root url="jar://$USER_HOME$/.sdkman/candidates/gradle/8.6-rc-3/lib/groovy-nio-3.0.17.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -165,7 +165,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/.sdkman/candidates/gradle/8.5/lib/groovy-sql-3.0.17.jar!/" />
+          <root url="jar://$USER_HOME$/.sdkman/candidates/gradle/8.6-rc-3/lib/groovy-sql-3.0.17.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -174,7 +174,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/.sdkman/candidates/gradle/8.5/lib/groovy-templates-3.0.17.jar!/" />
+          <root url="jar://$USER_HOME$/.sdkman/candidates/gradle/8.6-rc-3/lib/groovy-templates-3.0.17.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -183,7 +183,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/.sdkman/candidates/gradle/8.5/lib/groovy-test-3.0.17.jar!/" />
+          <root url="jar://$USER_HOME$/.sdkman/candidates/gradle/8.6-rc-3/lib/groovy-test-3.0.17.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -192,7 +192,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/.sdkman/candidates/gradle/8.5/lib/groovy-xml-3.0.17.jar!/" />
+          <root url="jar://$USER_HOME$/.sdkman/candidates/gradle/8.6-rc-3/lib/groovy-xml-3.0.17.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -201,7 +201,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/.sdkman/candidates/gradle/8.5/lib/javaparser-core-3.17.0.jar!/" />
+          <root url="jar://$USER_HOME$/.sdkman/candidates/gradle/8.6-rc-3/lib/javaparser-core-3.17.0.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -210,7 +210,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/.sdkman/candidates/gradle/8.5/lib/kotlin-stdlib-1.9.20.jar!/" />
+          <root url="jar://$USER_HOME$/.sdkman/candidates/gradle/8.6-rc-3/lib/kotlin-stdlib-1.9.20.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -219,7 +219,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/.sdkman/candidates/gradle/8.5/lib/kotlin-reflect-1.9.20.jar!/" />
+          <root url="jar://$USER_HOME$/.sdkman/candidates/gradle/8.6-rc-3/lib/kotlin-reflect-1.9.20.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -228,7 +228,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/.sdkman/candidates/gradle/8.5/lib/gradle-installation-beacon-8.5.jar!/" />
+          <root url="jar://$USER_HOME$/.sdkman/candidates/gradle/8.6-rc-3/lib/gradle-installation-beacon-8.6.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -237,7 +237,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/.sdkman/candidates/gradle/8.5/lib/gradle-kotlin-dsl-extensions-8.5.jar!/" />
+          <root url="jar://$USER_HOME$/.sdkman/candidates/gradle/8.6-rc-3/lib/gradle-kotlin-dsl-extensions-8.6.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -246,7 +246,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/.sdkman/candidates/gradle/8.5/lib/gradle-kotlin-dsl-8.5.jar!/" />
+          <root url="jar://$USER_HOME$/.sdkman/candidates/gradle/8.6-rc-3/lib/gradle-kotlin-dsl-8.6.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -255,7 +255,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/.sdkman/candidates/gradle/8.5/lib/gradle-kotlin-dsl-shared-runtime-8.5.jar!/" />
+          <root url="jar://$USER_HOME$/.sdkman/candidates/gradle/8.6-rc-3/lib/gradle-kotlin-dsl-shared-runtime-8.6.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -264,7 +264,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/.sdkman/candidates/gradle/8.5/lib/gradle-kotlin-dsl-tooling-models-8.5.jar!/" />
+          <root url="jar://$USER_HOME$/.sdkman/candidates/gradle/8.6-rc-3/lib/gradle-kotlin-dsl-tooling-models-8.6.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -273,35 +273,33 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/.gradle/caches/8.5/generated-gradle-jars/gradle-test-kit-8.5.jar!/" />
+          <root url="jar://$USER_HOME$/.gradle/caches/8.6-rc-3/generated-gradle-jars/gradle-test-kit-8.6-rc-3.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
       </library>
     </orderEntry>
     <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-reflect:1.9.20" level="project" />
-    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib:1.9.20" level="project" />
-    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-gradle-plugin:gradle81:1.9.10" level="project" />
-    <orderEntry type="library" name="Gradle: com.diffplug.spotless:spotless-plugin-gradle:6.22.0" level="project" />
-    <orderEntry type="library" name="Gradle: io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.23.1" level="project" />
-    <orderEntry type="library" name="Gradle: com.github.spotbugs.snom:spotbugs-gradle-plugin:5.1.3" level="project" />
-    <orderEntry type="library" name="Gradle: io.ktor.plugin:plugin:2.3.4" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.spotbugs.snom:spotbugs-gradle-plugin:6.0.7" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib:1.9.22" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-gradle-plugin:gradle82:2.0.0-Beta3" level="project" />
+    <orderEntry type="library" name="Gradle: com.diffplug.spotless:spotless-plugin-gradle:6.25.0" level="project" />
+    <orderEntry type="library" name="Gradle: io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.23.4" level="project" />
+    <orderEntry type="library" name="Gradle: io.ktor.plugin:plugin:2.3.7" level="project" />
     <orderEntry type="library" name="Gradle: org.jetbrains:annotations:13.0" level="project" />
-    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-gradle-plugin-model:1.9.10" level="project" />
-    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-gradle-plugin-api:gradle81:1.9.10" level="project" />
-    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-gradle-plugin-api:1.9.10" level="project" />
-    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-tooling-core:1.9.10" level="project" />
-    <orderEntry type="library" name="Gradle: com.diffplug.spotless:spotless-lib-extra:2.42.0" level="project" />
-    <orderEntry type="library" name="Gradle: com.diffplug.spotless:spotless-lib:2.42.0" level="project" />
-    <orderEntry type="library" name="Gradle: org.jetbrains.kotlinx:kover-gradle-plugin:0.7.3" level="project" />
-    <orderEntry type="library" name="Gradle: com.adarshr:gradle-test-logger-plugin:3.2.0" level="project" />
-    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.22" level="project" />
-    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-gradle-plugin-annotations:1.9.10" level="project" />
-    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-native-utils:1.9.10" level="project" />
-    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-project-model:1.9.10" level="project" />
-    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.22" level="project" />
-    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-util-klib:1.9.10" level="project" />
-    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-util-io:1.9.10" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-gradle-plugin-model:2.0.0-Beta3" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-gradle-plugin-api:2.0.0-Beta3" level="project" />
+    <orderEntry type="library" name="Gradle: com.diffplug.spotless:spotless-lib-extra:2.45.0" level="project" />
+    <orderEntry type="library" name="Gradle: com.diffplug.spotless:spotless-lib:2.45.0" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains.kotlinx:kover-gradle-plugin:0.7.5" level="project" />
+    <orderEntry type="library" name="Gradle: com.adarshr:gradle-test-logger-plugin:4.0.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.22" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-gradle-plugin-annotations:2.0.0-Beta3" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-native-utils:2.0.0-Beta3" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-tooling-core:2.0.0-Beta3" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.22" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-util-klib:2.0.0-Beta3" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-util-io:2.0.0-Beta3" level="project" />
     <orderEntry type="module-library" scope="RUNTIME">
       <library>
         <CLASSES>
@@ -315,60 +313,59 @@
     <orderEntry type="library" scope="RUNTIME" name="Gradle: com.diffplug.durian:durian-collect:1.2.0" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: com.diffplug.durian:durian-core:1.2.0" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.eclipse.jgit:org.eclipse.jgit:6.7.0.202309050840-r" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.jetbrains.kotlin:kotlin-gradle-plugin-idea-proto:1.9.10" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.jetbrains.kotlin:kotlin-gradle-plugin-idea:1.9.10" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.jetbrains.kotlin:kotlin-klib-commonizer-api:1.9.10" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.jetbrains.kotlin:kotlin-build-tools-api:1.9.10" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.jetbrains.kotlin:kotlin-android-extensions:1.9.10" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.jetbrains.kotlin:kotlin-compiler-runner:1.9.10" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.jetbrains.kotlin:kotlin-compiler-embeddable:1.9.10" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.jetbrains.kotlin:kotlin-scripting-compiler-embeddable:1.9.10" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.jetbrains.kotlin:kotlin-scripting-compiler-impl-embeddable:1.9.10" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: gradle.plugin.com.google.cloud.tools:jib-gradle-plugin:3.2.1" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: dev.equo.ide:solstice:1.7.3" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.jetbrains.kotlin:kotlin-gradle-plugin-idea-proto:2.0.0-Beta3" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.jetbrains.kotlin:kotlin-gradle-plugin-idea:2.0.0-Beta3" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.jetbrains.kotlin:kotlin-klib-commonizer-api:2.0.0-Beta3" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.jetbrains.kotlin:kotlin-build-statistics:2.0.0-Beta3" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.jetbrains.kotlin:kotlin-build-tools-api:2.0.0-Beta3" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.jetbrains.kotlin:kotlin-compiler-runner:2.0.0-Beta3" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.jetbrains.kotlin:kotlin-compiler-embeddable:2.0.0-Beta3" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.10" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: com.google.cloud.tools:jib-gradle-plugin:3.4.0" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: dev.equo.ide:solstice:1.7.5" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: com.googlecode.concurrent-trees:concurrent-trees:2.6.1" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: com.googlecode.javaewah:JavaEWAH:1.2.3" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.slf4j:slf4j-api:1.7.36" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: commons-codec:commons-codec:1.16.0" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.jetbrains.kotlin:kotlin-daemon-client:1.9.10" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: com.google.code.gson:gson:2.9.0" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.jetbrains.kotlin:kotlin-daemon-client:2.0.0-Beta3" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.5.0" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.jetbrains.kotlin:kotlin-daemon-embeddable:1.9.10" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.jetbrains.kotlin:kotlin-daemon-embeddable:2.0.0-Beta3" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.jetbrains.intellij.deps:trove4j:1.0.20200330" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.jetbrains.kotlin:kotlin-scripting-jvm:1.9.10" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.jetbrains.kotlin:kotlin-scripting-common:1.9.10" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.fusesource.jansi:jansi:2.4.0" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: com.google.http-client:google-http-client-apache-v2:1.34.0" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: com.google.auth:google-auth-library-oauth2-http:0.18.0" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: com.google.http-client:google-http-client:1.34.0" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.9.10" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: com.google.auth:google-auth-library-oauth2-http:1.10.0" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: com.google.http-client:google-http-client-apache-v2:1.42.2" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: com.google.http-client:google-http-client:1.42.2" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.apache.commons:commons-compress:1.21" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: com.google.guava:guava:31.1-jre" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.3" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: com.fasterxml.jackson.core:jackson-databind:2.13.3" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.ow2.asm:asm:9.2" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: com.google.guava:guava:32.1.2-jre" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.2" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: com.fasterxml.jackson.core:jackson-databind:2.15.2" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.ow2.asm:asm:9.5" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: com.google.cloud.tools:jib-gradle-plugin-extension-api:0.4.0" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: com.google.cloud.tools:jib-build-plan:0.4.0" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: com.google.cloud.tools:jib-plugins-extension-common:0.2.0" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: gradle.plugin.com.github.johnrengelman:shadow:7.1.2" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.graalvm.buildtools:native-gradle-plugin:0.9.23" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: com.squareup.okhttp3:okhttp:4.11.0" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: com.squareup.okhttp3:okhttp:4.12.0" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.tukaani:xz:1.9" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: com.diffplug.durian:durian-swt.os:4.2.1" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: com.diffplug.durian:durian-swt.os:4.2.2" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.eclipse.platform:org.eclipse.osgi:3.18.300" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.apache.httpcomponents:httpclient:4.5.10" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.apache.httpcomponents:httpcore:4.4.12" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: com.google.http-client:google-http-client-jackson2:1.32.1" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: com.google.http-client:google-http-client-gson:1.42.2" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: com.google.code.findbugs:jsr305:3.0.2" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: com.google.auto.value:auto-value-annotations:1.6.6" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: com.google.auth:google-auth-library-credentials:0.18.0" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: io.opencensus:opencensus-contrib-http-util:0.24.0" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: com.google.j2objc:j2objc-annotations:1.3" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: io.opencensus:opencensus-api:0.24.0" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: com.google.auto.value:auto-value-annotations:1.9" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: com.google.auth:google-auth-library-credentials:1.10.0" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.apache.httpcomponents:httpclient:4.5.13" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.apache.httpcomponents:httpcore:4.4.15" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: io.opencensus:opencensus-contrib-http-util:0.31.1" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: com.google.j2objc:j2objc-annotations:2.8" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: io.opencensus:opencensus-api:0.31.1" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: com.google.guava:failureaccess:1.0.1" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.checkerframework:checker-qual:3.12.0" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: com.google.errorprone:error_prone_annotations:2.11.0" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: com.fasterxml.jackson.core:jackson-core:2.13.3" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: com.fasterxml.jackson.core:jackson-annotations:2.13.3" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.checkerframework:checker-qual:3.33.0" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: com.google.errorprone:error_prone_annotations:2.18.0" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: com.fasterxml.jackson.core:jackson-annotations:2.15.2" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: com.fasterxml.jackson.core:jackson-core:2.15.2" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.ow2.asm:asm-commons:9.2" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.jdom:jdom2:2.0.6" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: commons-io:commons-io:2.11.0" level="project" />
@@ -379,12 +376,12 @@
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.graalvm.buildtools:utils:0.9.23" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.graalvm.buildtools:graalvm-reachability-metadata:0.9.23" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: commons-logging:commons-logging:1.2" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: io.grpc:grpc-context:1.22.1" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: io.grpc:grpc-context:1.27.2" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.ow2.asm:asm-analysis:9.2" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.ow2.asm:asm-tree:9.2" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.apache.ant:ant-launcher:1.10.11" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.apache.logging.log4j:log4j-api:2.17.1" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: com.squareup.okio:okio-jvm:3.2.0" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: com.squareup.okio:okio-jvm:3.6.0" level="project" />
   </component>
   <component name="SonarLintModuleSettings">
     <option name="uniqueId" value="a190efa5-ecee-472b-a3e7-fc39dd55745f" />
