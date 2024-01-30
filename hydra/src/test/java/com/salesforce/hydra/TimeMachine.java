@@ -1,12 +1,12 @@
-package org.revcloud.hydra;
+package com.salesforce.hydra;
 
-import static org.revcloud.hydra.TimeMachine.Action.BACKWARD;
-import static org.revcloud.hydra.TimeMachine.Action.FAST_BACKWARD;
-import static org.revcloud.hydra.TimeMachine.Action.FAST_FORWARD;
-import static org.revcloud.hydra.TimeMachine.Action.FORWARD;
-import static org.revcloud.hydra.TimeMachine.State.FUTURE;
-import static org.revcloud.hydra.TimeMachine.State.PAST;
-import static org.revcloud.hydra.TimeMachine.State.PRESENT;
+import static com.salesforce.hydra.TimeMachine.Action.BACKWARD;
+import static com.salesforce.hydra.TimeMachine.Action.FAST_BACKWARD;
+import static com.salesforce.hydra.TimeMachine.Action.FAST_FORWARD;
+import static com.salesforce.hydra.TimeMachine.Action.FORWARD;
+import static com.salesforce.hydra.TimeMachine.State.FUTURE;
+import static com.salesforce.hydra.TimeMachine.State.PAST;
+import static com.salesforce.hydra.TimeMachine.State.PRESENT;
 
 public class TimeMachine {
   private final Hydra<String, String, ?> timeMachine =

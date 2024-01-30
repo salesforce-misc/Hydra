@@ -1,10 +1,10 @@
-package org.revcloud.hydra
+package com.salesforce.hydra
 
+import com.salesforce.hydra.config.MachineBuilder
+import com.salesforce.hydra.internal.Machine
+import com.salesforce.hydra.statemachine.Transition
 import java.util.concurrent.atomic.AtomicReference
 import java.util.function.Consumer
-import org.revcloud.hydra.config.MachineBuilder
-import org.revcloud.hydra.internal.Machine
-import org.revcloud.hydra.statemachine.Transition
 
 class Hydra<StateT : Any, EventT : Any, ActionT : Any>
 private constructor(private val machine: Machine<StateT, EventT, ActionT>) {

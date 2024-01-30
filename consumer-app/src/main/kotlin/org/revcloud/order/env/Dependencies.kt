@@ -1,13 +1,13 @@
 package org.revcloud.order.env
 
 import arrow.fx.coroutines.continuations.ResourceScope
+import com.salesforce.hydra.Hydra
 import com.sksamuel.cohort.HealthCheckRegistry
 import com.sksamuel.cohort.hikari.HikariConnectionsHealthCheck
 import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.Dispatchers
 import mu.KLogger
 import mu.KotlinLogging
-import org.revcloud.hydra.Hydra
 import org.revcloud.order.domain.Action
 import org.revcloud.order.domain.Event
 import org.revcloud.order.domain.Order

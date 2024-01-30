@@ -2,10 +2,10 @@ package org.revcloud.quote.domain;
 
 import static org.revcloud.quote.domain.QuoteTransitionHandlerKt.quoteTransitionHandler;
 
+import com.salesforce.hydra.Hydra;
 import java.util.Map;
 import java.util.Random;
 import mu.KLogger;
-import org.revcloud.hydra.Hydra;
 import org.revcloud.quote.domain.Action.TaxQuote;
 import org.revcloud.quote.domain.Quote.Idle;
 import org.revcloud.quote.env.Env;

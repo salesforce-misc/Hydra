@@ -1,6 +1,6 @@
 package org.revcloud.order.domain;
 
-import org.revcloud.hydra.Hydra;
+import com.salesforce.hydra.Hydra;
 import org.revcloud.order.domain.Event.Cancel;
 import org.revcloud.order.domain.Event.PaymentFailed;
 import org.revcloud.order.domain.Event.PaymentSuccessful;

@@ -1,12 +1,12 @@
-package org.revcloud.hydra.config
+package com.salesforce.hydra.config
 
+import com.salesforce.hydra.internal.Machine
+import com.salesforce.hydra.internal.Machine.State
+import com.salesforce.hydra.internal.Machine.State.TransitionTo
+import com.salesforce.hydra.internal.Matcher
+import com.salesforce.hydra.statemachine.Transition
 import java.util.function.BiConsumer
 import java.util.function.Consumer
-import org.revcloud.hydra.internal.Machine
-import org.revcloud.hydra.internal.Machine.State
-import org.revcloud.hydra.internal.Machine.State.TransitionTo
-import org.revcloud.hydra.internal.Matcher
-import org.revcloud.hydra.statemachine.Transition
 
 class MachineBuilder<StateT : Any, EventT : Any, ActionT : Any>(
   machine: Machine<StateT, EventT, ActionT>? = null

@@ -1,5 +1,5 @@
 = Hydra 🐙
-Gopal S Akshintala <gopala.akshintala@salesforce.com>
+Gopal S Akshintala <gopalakshintala@gmail.com>
 :Revision: 1.0
 ifdef::env-github[]
 :tip-caption: :bulb:
@@ -8,17 +8,77 @@ ifdef::env-github[]
 :caution-caption: :fire:
 :warning-caption: :warning:
 endif::[]
+:hide-uri-scheme:
 :toc:
 :toc-placement: preamble
-:sourcedir: src/main/kotlin
+:javasourcedir: src/main/java
 :testdir: src/integrationTest/java
-:imagesdir: images
+:imagesdir: docs/images
 :prewrap!:
 
 ____
 States, Events, Actions
 ____
 
-This is a library to expose DSL which can be used to create State machines.
+This is a library to expose DSL, which can be used to create State machines.
 
-== link:CONTRIBUTING.adoc[🙌🏼Wanna Collab & Contribute?]
+== Example: Configure a Time-machine
+
+image::time-machine.png[Time Machine]
+
+We have 3 States PAST, PRESENT, FUTURE. These can be represented as plain simple Strings:
+
+[source,java,indent=0,options="nowrap"]
+----
+static final class State {
+  public static final String PAST = "Past";
+  public static final String PRESENT = "Present";
+  public static final String FUTURE = "Future";
+}
+----
+
+There are 4 actions that let you change from one state to another:
+
+[source,java,indent=0,options="nowrap"]
+----
+static final class Action {
+  public static final String FORWARD = "Forward";
+  public static final String BACKWARD = "Backward";
+  public static final String FAST_FORWARD = "FastForward";
+  public static final String FAST_BACKWARD = "FastBackward";
+}
+----
+
+Now weave these States and Actions into a Graph using this DSL:
+
+[source,java,indent=0,options="nowrap"]
+----
+final Hydra<String, String, ?> timeMachine = Hydra.create(mb -> {
+  mb.initialState(PRESENT);
+  mb.state(PRESENT, String.class, sb -> {
+    sb.on(FORWARD, String.class, (currentState, action) -> sb.transitionTo(FUTURE));
+    sb.on(BACKWARD, String.class, (currentState, action) -> sb.transitionTo(PAST));
+  });
+  mb.state(FUTURE, String.class, sb -> {
+    sb.on(BACKWARD, String.class, (currentState, action) -> sb.transitionTo(PRESENT));
+    sb.on(FAST_BACKWARD, String.class, (currentState, action) -> sb.transitionTo(PAST));
+  });
+  mb.state(PAST, String.class, sb -> {
+    sb.on(FORWARD, String.class, (currentState, action) -> sb.transitionTo(PRESENT));
+    sb.on(FAST_FORWARD, String.class, (currentState, action) -> sb.transitionTo(FUTURE));
+  });
+});
+----
+
+== Full-blown Applications
+
+Refer to these applications for full-blown apps using this library:
+
+* link:consumer-app/{javasourcedir}/org/revcloud/order/domain/OrderMachine.java[OrderMachine]
+* link:consumer-app-2/{javasourcedir}/org/revcloud/quote/domain/PlaceQuoteMachine.java[QuoteMachine]
+
+== 🙌🏼 Consume-Collaborate-Contribute
+
+* This link:CONTRIBUTING.adoc[CONTRIBUTING] doc has all the information to set up this library on your local and get hands-on.
+* Any issues or PRs are welcome! ♥️
+* Join this https://sfdc.co/revoman-slack[Slack Community] to discuss issues or PRs related to Consumption-Collaboration-Contribution

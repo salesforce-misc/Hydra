@@ -1,4 +1,4 @@
-package org.revcloud.hydra.statemachine
+package com.salesforce.hydra.statemachine
 
 sealed class Transition<out StateT : Any, out EventT : Any, out ActionT : Any> {
   abstract val event: EventT

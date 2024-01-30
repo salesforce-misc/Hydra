@@ -4,6 +4,7 @@ import arrow.core.raise.Raise
 import arrow.core.raise.catch
 import arrow.core.raise.effect
 import arrow.core.raise.fold
+import com.salesforce.hydra.Hydra
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.Application
 import io.ktor.server.application.ApplicationCall
@@ -16,7 +17,6 @@ import io.ktor.util.pipeline.PipelineContext
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.MissingFieldException
 import mu.KLogger
-import org.revcloud.hydra.Hydra
 import org.revcloud.quote.domain.Action
 import org.revcloud.quote.domain.Event
 import org.revcloud.quote.domain.Quote

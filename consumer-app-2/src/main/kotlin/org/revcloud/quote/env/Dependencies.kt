@@ -1,13 +1,13 @@
 package org.revcloud.quote.env
 
 import arrow.fx.coroutines.continuations.ResourceScope
+import com.salesforce.hydra.Hydra
 import com.sksamuel.cohort.HealthCheckRegistry
 import com.sksamuel.cohort.hikari.HikariConnectionsHealthCheck
 import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.Dispatchers
 import mu.KLogger
 import mu.KotlinLogging
-import org.revcloud.hydra.Hydra
 import org.revcloud.quote.domain.Action
 import org.revcloud.quote.domain.Event
 import org.revcloud.quote.domain.PlaceQuoteMachine

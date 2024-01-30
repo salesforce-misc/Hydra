@@ -1,4 +1,4 @@
-package org.revcloud.hydra.internal
+package com.salesforce.hydra.internal
 
 class Matcher<L : Any, out R : L> private constructor(private val clazz: Class<R>) {
 

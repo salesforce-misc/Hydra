@@ -1,7 +1,7 @@
-package org.revcloud.hydra.internal
+package com.salesforce.hydra.internal
 
+import com.salesforce.hydra.statemachine.Transition
 import java.util.function.Consumer
-import org.revcloud.hydra.statemachine.Transition
 
 data class Machine<StateT : Any, EventT : Any, ActionT : Any>(
   val initialState: StateT,

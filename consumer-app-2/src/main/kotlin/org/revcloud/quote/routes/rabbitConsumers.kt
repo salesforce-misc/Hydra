@@ -1,8 +1,8 @@
 package org.revcloud.quote.routes
 
+import com.salesforce.hydra.Hydra
 import io.ktor.server.application.Application
 import mu.KLogger
-import org.revcloud.hydra.Hydra
 import org.revcloud.quote.domain.Action
 import org.revcloud.quote.domain.Event
 import org.revcloud.quote.domain.Quote

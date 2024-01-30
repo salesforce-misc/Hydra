@@ -7,7 +7,7 @@ plugins {
   id("io.gitlab.arturbosch.detekt")
 }
 
-version = "0.0.7"
+version = "0.0.8"
 
 group = "com.salesforce.ccspayments"
 
