@@ -24,27 +24,27 @@
           <arrayArguments>
             <arrayArg name="pluginClasspaths">
               <args>
-                <arg>$USER_HOME$/.sdkman/candidates/gradle/8.6-rc-3/lib/gradle-kotlin-dsl-8.6.jar</arg>
-                <arg>$USER_HOME$/.sdkman/candidates/gradle/8.6-rc-3/lib/gradle-kotlin-dsl-shared-runtime-8.6.jar</arg>
-                <arg>$USER_HOME$/.sdkman/candidates/gradle/8.6-rc-3/lib/gradle-kotlin-dsl-tooling-models-8.6.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/8.6-rc-3/generated-gradle-jars/gradle-api-8.6-rc-3.jar</arg>
-                <arg>$USER_HOME$/.sdkman/candidates/gradle/8.6-rc-3/lib/groovy-3.0.17.jar</arg>
-                <arg>$USER_HOME$/.sdkman/candidates/gradle/8.6-rc-3/lib/groovy-ant-3.0.17.jar</arg>
-                <arg>$USER_HOME$/.sdkman/candidates/gradle/8.6-rc-3/lib/groovy-astbuilder-3.0.17.jar</arg>
-                <arg>$USER_HOME$/.sdkman/candidates/gradle/8.6-rc-3/lib/groovy-console-3.0.17.jar</arg>
-                <arg>$USER_HOME$/.sdkman/candidates/gradle/8.6-rc-3/lib/groovy-datetime-3.0.17.jar</arg>
-                <arg>$USER_HOME$/.sdkman/candidates/gradle/8.6-rc-3/lib/groovy-dateutil-3.0.17.jar</arg>
-                <arg>$USER_HOME$/.sdkman/candidates/gradle/8.6-rc-3/lib/groovy-groovydoc-3.0.17.jar</arg>
-                <arg>$USER_HOME$/.sdkman/candidates/gradle/8.6-rc-3/lib/groovy-json-3.0.17.jar</arg>
-                <arg>$USER_HOME$/.sdkman/candidates/gradle/8.6-rc-3/lib/groovy-nio-3.0.17.jar</arg>
-                <arg>$USER_HOME$/.sdkman/candidates/gradle/8.6-rc-3/lib/groovy-sql-3.0.17.jar</arg>
-                <arg>$USER_HOME$/.sdkman/candidates/gradle/8.6-rc-3/lib/groovy-templates-3.0.17.jar</arg>
-                <arg>$USER_HOME$/.sdkman/candidates/gradle/8.6-rc-3/lib/groovy-test-3.0.17.jar</arg>
-                <arg>$USER_HOME$/.sdkman/candidates/gradle/8.6-rc-3/lib/groovy-xml-3.0.17.jar</arg>
-                <arg>$USER_HOME$/.sdkman/candidates/gradle/8.6-rc-3/lib/javaparser-core-3.17.0.jar</arg>
-                <arg>$USER_HOME$/.sdkman/candidates/gradle/8.6-rc-3/lib/kotlin-stdlib-1.9.20.jar</arg>
-                <arg>$USER_HOME$/.sdkman/candidates/gradle/8.6-rc-3/lib/kotlin-reflect-1.9.20.jar</arg>
-                <arg>$USER_HOME$/.sdkman/candidates/gradle/8.6-rc-3/lib/gradle-installation-beacon-8.6.jar</arg>
+                <arg>$USER_HOME$/.sdkman/candidates/gradle/8.6/lib/gradle-kotlin-dsl-8.6.jar</arg>
+                <arg>$USER_HOME$/.sdkman/candidates/gradle/8.6/lib/gradle-kotlin-dsl-shared-runtime-8.6.jar</arg>
+                <arg>$USER_HOME$/.sdkman/candidates/gradle/8.6/lib/gradle-kotlin-dsl-tooling-models-8.6.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/8.6/generated-gradle-jars/gradle-api-8.6.jar</arg>
+                <arg>$USER_HOME$/.sdkman/candidates/gradle/8.6/lib/groovy-3.0.17.jar</arg>
+                <arg>$USER_HOME$/.sdkman/candidates/gradle/8.6/lib/groovy-ant-3.0.17.jar</arg>
+                <arg>$USER_HOME$/.sdkman/candidates/gradle/8.6/lib/groovy-astbuilder-3.0.17.jar</arg>
+                <arg>$USER_HOME$/.sdkman/candidates/gradle/8.6/lib/groovy-console-3.0.17.jar</arg>
+                <arg>$USER_HOME$/.sdkman/candidates/gradle/8.6/lib/groovy-datetime-3.0.17.jar</arg>
+                <arg>$USER_HOME$/.sdkman/candidates/gradle/8.6/lib/groovy-dateutil-3.0.17.jar</arg>
+                <arg>$USER_HOME$/.sdkman/candidates/gradle/8.6/lib/groovy-groovydoc-3.0.17.jar</arg>
+                <arg>$USER_HOME$/.sdkman/candidates/gradle/8.6/lib/groovy-json-3.0.17.jar</arg>
+                <arg>$USER_HOME$/.sdkman/candidates/gradle/8.6/lib/groovy-nio-3.0.17.jar</arg>
+                <arg>$USER_HOME$/.sdkman/candidates/gradle/8.6/lib/groovy-sql-3.0.17.jar</arg>
+                <arg>$USER_HOME$/.sdkman/candidates/gradle/8.6/lib/groovy-templates-3.0.17.jar</arg>
+                <arg>$USER_HOME$/.sdkman/candidates/gradle/8.6/lib/groovy-test-3.0.17.jar</arg>
+                <arg>$USER_HOME$/.sdkman/candidates/gradle/8.6/lib/groovy-xml-3.0.17.jar</arg>
+                <arg>$USER_HOME$/.sdkman/candidates/gradle/8.6/lib/javaparser-core-3.17.0.jar</arg>
+                <arg>$USER_HOME$/.sdkman/candidates/gradle/8.6/lib/kotlin-stdlib-1.9.20.jar</arg>
+                <arg>$USER_HOME$/.sdkman/candidates/gradle/8.6/lib/kotlin-reflect-1.9.20.jar</arg>
+                <arg>$USER_HOME$/.sdkman/candidates/gradle/8.6/lib/gradle-installation-beacon-8.6.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-scripting-jvm/1.9.20/5277cafe6949e047a271433202f32e8377b00ebb/kotlin-scripting-jvm-1.9.20.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-scripting-common/1.9.20/d2abd0f9c63e61fa54bd43f29458c2606b02abdc/kotlin-scripting-common-1.9.20.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib/1.9.20/e58b4816ac517e9cc5df1db051120c63d4cde669/kotlin-stdlib-1.9.20.jar</arg>
@@ -75,7 +75,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/.gradle/caches/8.6-rc-3/generated-gradle-jars/gradle-api-8.6-rc-3.jar!/" />
+          <root url="jar://$USER_HOME$/.gradle/caches/8.6/generated-gradle-jars/gradle-api-8.6.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -84,7 +84,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/.sdkman/candidates/gradle/8.6-rc-3/lib/groovy-3.0.17.jar!/" />
+          <root url="jar://$USER_HOME$/.sdkman/candidates/gradle/8.6/lib/groovy-3.0.17.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -93,7 +93,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/.sdkman/candidates/gradle/8.6-rc-3/lib/groovy-ant-3.0.17.jar!/" />
+          <root url="jar://$USER_HOME$/.sdkman/candidates/gradle/8.6/lib/groovy-ant-3.0.17.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -102,7 +102,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/.sdkman/candidates/gradle/8.6-rc-3/lib/groovy-astbuilder-3.0.17.jar!/" />
+          <root url="jar://$USER_HOME$/.sdkman/candidates/gradle/8.6/lib/groovy-astbuilder-3.0.17.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -111,7 +111,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/.sdkman/candidates/gradle/8.6-rc-3/lib/groovy-console-3.0.17.jar!/" />
+          <root url="jar://$USER_HOME$/.sdkman/candidates/gradle/8.6/lib/groovy-console-3.0.17.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -120,7 +120,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/.sdkman/candidates/gradle/8.6-rc-3/lib/groovy-datetime-3.0.17.jar!/" />
+          <root url="jar://$USER_HOME$/.sdkman/candidates/gradle/8.6/lib/groovy-datetime-3.0.17.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -129,7 +129,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/.sdkman/candidates/gradle/8.6-rc-3/lib/groovy-dateutil-3.0.17.jar!/" />
+          <root url="jar://$USER_HOME$/.sdkman/candidates/gradle/8.6/lib/groovy-dateutil-3.0.17.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -138,7 +138,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/.sdkman/candidates/gradle/8.6-rc-3/lib/groovy-groovydoc-3.0.17.jar!/" />
+          <root url="jar://$USER_HOME$/.sdkman/candidates/gradle/8.6/lib/groovy-groovydoc-3.0.17.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -147,7 +147,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/.sdkman/candidates/gradle/8.6-rc-3/lib/groovy-json-3.0.17.jar!/" />
+          <root url="jar://$USER_HOME$/.sdkman/candidates/gradle/8.6/lib/groovy-json-3.0.17.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -156,7 +156,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/.sdkman/candidates/gradle/8.6-rc-3/lib/groovy-nio-3.0.17.jar!/" />
+          <root url="jar://$USER_HOME$/.sdkman/candidates/gradle/8.6/lib/groovy-nio-3.0.17.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -165,7 +165,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/.sdkman/candidates/gradle/8.6-rc-3/lib/groovy-sql-3.0.17.jar!/" />
+          <root url="jar://$USER_HOME$/.sdkman/candidates/gradle/8.6/lib/groovy-sql-3.0.17.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -174,7 +174,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/.sdkman/candidates/gradle/8.6-rc-3/lib/groovy-templates-3.0.17.jar!/" />
+          <root url="jar://$USER_HOME$/.sdkman/candidates/gradle/8.6/lib/groovy-templates-3.0.17.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -183,7 +183,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/.sdkman/candidates/gradle/8.6-rc-3/lib/groovy-test-3.0.17.jar!/" />
+          <root url="jar://$USER_HOME$/.sdkman/candidates/gradle/8.6/lib/groovy-test-3.0.17.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -192,7 +192,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/.sdkman/candidates/gradle/8.6-rc-3/lib/groovy-xml-3.0.17.jar!/" />
+          <root url="jar://$USER_HOME$/.sdkman/candidates/gradle/8.6/lib/groovy-xml-3.0.17.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -201,7 +201,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/.sdkman/candidates/gradle/8.6-rc-3/lib/javaparser-core-3.17.0.jar!/" />
+          <root url="jar://$USER_HOME$/.sdkman/candidates/gradle/8.6/lib/javaparser-core-3.17.0.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -210,7 +210,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/.sdkman/candidates/gradle/8.6-rc-3/lib/kotlin-stdlib-1.9.20.jar!/" />
+          <root url="jar://$USER_HOME$/.sdkman/candidates/gradle/8.6/lib/kotlin-stdlib-1.9.20.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -219,7 +219,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/.sdkman/candidates/gradle/8.6-rc-3/lib/kotlin-reflect-1.9.20.jar!/" />
+          <root url="jar://$USER_HOME$/.sdkman/candidates/gradle/8.6/lib/kotlin-reflect-1.9.20.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -228,7 +228,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/.sdkman/candidates/gradle/8.6-rc-3/lib/gradle-installation-beacon-8.6.jar!/" />
+          <root url="jar://$USER_HOME$/.sdkman/candidates/gradle/8.6/lib/gradle-installation-beacon-8.6.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -237,7 +237,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/.sdkman/candidates/gradle/8.6-rc-3/lib/gradle-kotlin-dsl-extensions-8.6.jar!/" />
+          <root url="jar://$USER_HOME$/.sdkman/candidates/gradle/8.6/lib/gradle-kotlin-dsl-extensions-8.6.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -246,7 +246,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/.sdkman/candidates/gradle/8.6-rc-3/lib/gradle-kotlin-dsl-8.6.jar!/" />
+          <root url="jar://$USER_HOME$/.sdkman/candidates/gradle/8.6/lib/gradle-kotlin-dsl-8.6.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -255,7 +255,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/.sdkman/candidates/gradle/8.6-rc-3/lib/gradle-kotlin-dsl-shared-runtime-8.6.jar!/" />
+          <root url="jar://$USER_HOME$/.sdkman/candidates/gradle/8.6/lib/gradle-kotlin-dsl-shared-runtime-8.6.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -264,7 +264,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/.sdkman/candidates/gradle/8.6-rc-3/lib/gradle-kotlin-dsl-tooling-models-8.6.jar!/" />
+          <root url="jar://$USER_HOME$/.sdkman/candidates/gradle/8.6/lib/gradle-kotlin-dsl-tooling-models-8.6.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -273,7 +273,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/.gradle/caches/8.6-rc-3/generated-gradle-jars/gradle-test-kit-8.6-rc-3.jar!/" />
+          <root url="jar://$USER_HOME$/.gradle/caches/8.6/generated-gradle-jars/gradle-test-kit-8.6.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
