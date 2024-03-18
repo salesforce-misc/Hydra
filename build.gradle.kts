@@ -12,6 +12,7 @@ import io.gitlab.arturbosch.detekt.report.ReportMergeTask
 plugins {
   id(libs.plugins.kover.pluginId)
   id(libs.plugins.detekt.pluginId) apply false
+  alias(libs.plugins.nexus.publish)
 }
 
 allprojects { apply(plugin = "hydra.root-conventions") }
@@ -38,3 +39,5 @@ subprojects {
     }
   }
 }
+
+nexusPublishing { this.repositories { sonatype { stagingProfileId = STAGING_PROFILE_ID } } }

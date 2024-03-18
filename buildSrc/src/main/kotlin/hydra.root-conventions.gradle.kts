@@ -14,11 +14,9 @@ plugins {
   id("io.gitlab.arturbosch.detekt")
 }
 
-version = "0.0.8"
+group = GROUP_ID
 
-group = "com.salesforce.ccspayments"
-
-description = "Hydra - States, Events, Actions"
+version = VERSION
 
 repositories {
   mavenCentral()

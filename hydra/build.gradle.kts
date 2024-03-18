@@ -5,7 +5,10 @@
  *  http://www.apache.org/licenses/LICENSE-2.0
  **************************************************************************************************/
 
-plugins { id("hydra.kt-conventions") }
+plugins {
+  id("hydra.kt-conventions")
+  id("hydra.publishing-conventions")
+}
 
 dependencies {
   testImplementation(libs.assertj.core)

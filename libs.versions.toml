@@ -32,6 +32,8 @@ underscore = "1.97"
 kotlin-faker = "1.15.0"
 immutables = "2.10.0"
 mockito = "5.10.0"
+nexus-publish = "2.0.0-rc-2"
+
 # Common dependencies
 junit = "5.10.1"
 kover = "0.7.5"
@@ -157,4 +159,5 @@ moshix = { id = "dev.zacsweers.moshix", version.ref = "moshix" }
 kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
 ktor = { id = "io.ktor.plugin", version.ref = "ktor" }
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
-sqldelight = { id = "app.cash.sqldelight", version.ref = "sqldelight" } 
+sqldelight = { id = "app.cash.sqldelight", version.ref = "sqldelight" }
+nexus-publish = { id = "io.github.gradle-nexus.publish-plugin", version.ref = "nexus-publish" }

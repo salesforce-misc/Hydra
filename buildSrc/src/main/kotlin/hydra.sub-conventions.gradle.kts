@@ -9,8 +9,6 @@ import com.adarshr.gradle.testlogger.theme.ThemeType.MOCHA
 
 plugins {
   java
-  `maven-publish`
-  signing
   id("org.jetbrains.kotlinx.kover")
   id("com.adarshr.test-logger")
 }
