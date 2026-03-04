@@ -7,4 +7,5 @@
  */
 const val GROUP_ID = "com.salesforce.hydra"
 const val VERSION = "0.1.1"
+const val ARTIFACT_ID = "hydra"
 const val STAGING_PROFILE_ID = "1ea0a23e61ba7d"

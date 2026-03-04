@@ -1,22 +1,26 @@
-/***************************************************************************************************
- *  Copyright (c) 2023, Salesforce, Inc. All rights reserved. SPDX-License-Identifier: 
- *           Apache License Version 2.0 
- *  For full license text, see the LICENSE file in the repo root or
- *  http://www.apache.org/licenses/LICENSE-2.0
- **************************************************************************************************/
-
+/**
+ * ************************************************************************************************
+ * Copyright (c) 2023, Salesforce, Inc. All rights reserved. SPDX-License-Identifier: Apache License
+ * Version 2.0 For full license text, see the LICENSE file in the repo root or
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * ************************************************************************************************
+ */
+import com.adarshr.gradle.testlogger.theme.ThemeType.MOCHA
 import com.diffplug.spotless.LineEnding.PLATFORM_NATIVE
 import com.diffplug.spotless.extra.wtp.EclipseWtpFormatterStep.XML
+import io.gitlab.arturbosch.detekt.Detekt
 
 plugins {
-  java
   id("com.diffplug.spotless")
   id("io.gitlab.arturbosch.detekt")
+  id("com.adarshr.test-logger")
 }
+
+version = VERSION
 
 group = GROUP_ID
 
-version = VERSION
+description = "Hydra - An Orchestrator that deals with States, Events and Transitions"
 
 repositories {
   mavenCentral()
@@ -26,39 +30,34 @@ repositories {
 spotless {
   lineEndings = PLATFORM_NATIVE
   kotlin {
+    target("src/*/kotlin/**/*.kt", "src/*/java/**/*.kt")
+    targetExclude("build/**", ".gradle/**", "generated/**", "**/bin/**", "out/**", "tmp/**")
     ktfmt().googleStyle()
-    target("**/*.kt")
     trimTrailingWhitespace()
     endWithNewline()
-    targetExclude("**/build/**", "**/.gradle/**", "**/generated/**", "**/bin/**", "**/out/**")
   }
   kotlinGradle {
+    target("*.gradle.kts", "src/**/*.gradle.kts")
+    targetExclude("build/**", ".gradle/**", "generated/**", "**/bin/**", "out/**", "tmp/**")
     ktfmt().googleStyle()
-    target("**/*.gradle.kts")
     trimTrailingWhitespace()
     endWithNewline()
-    targetExclude("**/build/**", "**/.gradle/**", "**/generated/**", "**/bin/**", "**/out/**")
   }
   java {
-    toggleOffOn()
-    target("**/*.java")
+    target("src/*/java/**/*.java")
+    targetExclude("build/**", ".gradle/**", "generated/**", "**/bin/**", "out/**", "tmp/**")
+    googleJavaFormat()
     importOrder()
     removeUnusedImports()
-    googleJavaFormat()
+    forbidWildcardImports()
     trimTrailingWhitespace()
-    indentWithSpaces(2)
+    leadingTabsToSpaces(2)
     endWithNewline()
-    targetExclude("**/build/**", "**/.gradle/**", "**/generated/**", "**/bin/**", "**/out/**")
-  }
-  format("xml") {
-    targetExclude("pom.xml")
-    target("*.xml")
-    eclipseWtp(XML)
   }
   format("documentation") {
     target("*.md", "*.adoc")
     trimTrailingWhitespace()
-    indentWithSpaces(2)
+    leadingTabsToSpaces()
     endWithNewline()
   }
 }
@@ -69,3 +68,7 @@ detekt {
   baseline = file("$rootDir/detekt/baseline.xml")
   config.setFrom(file("$rootDir/detekt/config.yml"))
 }
+
+testlogger.theme = MOCHA
+
+tasks.withType<Detekt>().configureEach { reports { xml.required.set(true) } }

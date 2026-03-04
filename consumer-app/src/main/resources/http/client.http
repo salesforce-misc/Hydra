@@ -1,9 +1,0 @@
-POST http://localhost:7070/order/place
-Content-Type: application/json
-
-{
-  "type": "org.revcloud.app.domain.Action.Place"
-}
-
-###
-

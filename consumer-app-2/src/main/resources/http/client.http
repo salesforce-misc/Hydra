@@ -1,9 +1,0 @@
-POST http://localhost:7070/quote/place
-Content-Type: application/json
-
-{
-  "type": "org.revcloud.quote.domain.Action.Place"
-}
-
-###
-

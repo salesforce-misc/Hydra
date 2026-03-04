@@ -1,13 +1,13 @@
-/***************************************************************************************************
- *  Copyright (c) 2023, Salesforce, Inc. All rights reserved. SPDX-License-Identifier: 
- *           Apache License Version 2.0 
- *  For full license text, see the LICENSE file in the repo root or
- *  http://www.apache.org/licenses/LICENSE-2.0
- **************************************************************************************************/
-
+/**
+ * ************************************************************************************************
+ * Copyright (c) 2023, Salesforce, Inc. All rights reserved. SPDX-License-Identifier: Apache License
+ * Version 2.0 For full license text, see the LICENSE file in the repo root or
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * ************************************************************************************************
+ */
 import org.gradle.api.artifacts.ExternalModuleDependencyBundle
-import org.gradle.api.artifacts.MinimalExternalModuleDependency
 import org.gradle.api.artifacts.VersionCatalog
+import org.gradle.api.artifacts.VersionConstraint
 import org.gradle.api.provider.Property
 import org.gradle.api.provider.Provider
 import org.gradle.plugin.use.PluginDependency
@@ -15,22 +15,20 @@ import org.gradle.plugin.use.PluginDependency
 val Provider<PluginDependency>.pluginId: String
   get() = get().pluginId
 
-infix fun <T> Property<T>.by(value: T) {
+infix fun <T : Any> Property<T>.by(value: T) {
   set(value)
 }
 
-private fun VersionCatalog.getLibrary(library: String): Provider<MinimalExternalModuleDependency> =
-  findLibrary(library).get()
-
-private fun VersionCatalog.getBundle(bundle: String) = findBundle(bundle).get()
-
-private fun VersionCatalog.getPlugin(plugin: String): Provider<PluginDependency> =
-  findPlugin(plugin).get()
+internal val VersionCatalog.jdk: VersionConstraint
+  get() = getVersion("jdk")
 
 internal val VersionCatalog.kotestBundle: Provider<ExternalModuleDependencyBundle>
   get() = getBundle("kotest")
 
-internal val VersionCatalog.rabbitMQ: Provider<MinimalExternalModuleDependency>
-  get() = getLibrary("rabbitmq-client")
-internal val VersionCatalog.ktorRabbitMQ: Provider<MinimalExternalModuleDependency>
-  get() = getLibrary("ktor-rabbitmq")
+private fun VersionCatalog.getLibrary(library: String) = findLibrary(library).get()
+
+private fun VersionCatalog.getBundle(bundle: String) = findBundle(bundle).get()
+
+private fun VersionCatalog.getPlugin(plugin: String) = findPlugin(plugin).get()
+
+private fun VersionCatalog.getVersion(plugin: String) = findVersion(plugin).get()

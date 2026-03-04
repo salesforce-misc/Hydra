@@ -5,7 +5,6 @@
  * http://www.apache.org/licenses/LICENSE-2.0
  * ************************************************************************************************
  */
-import org.gradle.kotlin.dsl.invoke
 
 plugins {
   `maven-publish`
@@ -13,23 +12,28 @@ plugins {
   `java-library`
 }
 
+group = GROUP_ID
+
+version = VERSION
+
+description = "Hydra - An Orchestrator that deals with States, Events and Transitions"
+
 repositories { mavenCentral() }
 
 java {
   withJavadocJar()
   withSourcesJar()
-  toolchain { languageVersion = JavaLanguageVersion.of(11) }
 }
 
 publishing {
   publications.create<MavenPublication>("hydra") {
-    artifactId = "hydra"
+    artifactId = ARTIFACT_ID
     from(components["java"])
     pom {
       name.set("hydra")
-      description.set("Hydra - An Orchestrator that deals with States, Events and Transitions")
+      description.set(project.description)
       url.set("https://github.com/salesforce-misc/Hydra")
-      inceptionYear.set("2024")
+      inceptionYear.set("2023")
       licenses {
         license {
           name.set("The Apache License, Version 2.0")

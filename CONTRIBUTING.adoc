@@ -23,13 +23,22 @@ endif::[]
 
 == Source-code Setup
 
-=== Install Java 11
+=== Install Java
 
-It needs JDK 11 installed in your system. I recommend doing it via https://sdkman.io/install[SDKMAN]. After you install SDKMAN, run `sdk list java` -> Pick Identifier for your favorite java 11 dist -> Run `sdk install java <Identifier-you-picked>`  to install Java.
+It needs JDK 21 installed in your system.
+Recommendation is to do it via https://sdkman.io/install[SDKMAN].
+After you install SDKMAN,
+run `sdk list java` -> Pick Identifier for your favorite java distribution -> Run `sdk install java <Identifier-you-picked>`
+to install Java. For example:
+
+[source,bash]
+----
+sdk install java 21.0.8-amzn
+----
 
 === Build with Gradle
 
-This is a simple Gradle project and has its own Gradle wrapper. So nothing to install, run just this command:
+This is a simple Gradle project and has its own Gradle wrapper. You may need `npm` installed and nothing else, run just this command:
 
 [source,bash]
 ----
@@ -44,12 +53,13 @@ You can run/debug the existing unit tests or write your own to play with the too
 
 * The code-base is a mix of Java and Kotlin.
 If you're a Java developer and new to Kotlin, don't worry, Kotlin is a JVM language and can be used anywhere Java is used.
-In fact, it has got the reputation of *"Better Java!"*.
+In fact, it has got the reputation of *"Better Java!"*
 * A typical Java developer can ramp up on Kotlin in less than a week. These resources can help catalyze your ramp-up:
+** https://play.kotlinlang.org/byExample/overview[Learn Kotlin by Example]
 ** https://www.coursera.org/learn/kotlin-for-java-developers[*Kotlin for Java Developers | Coursera*], a free course
 ** https://www.kotlinprimer.com/[The Kotlin Primer], tailor-made to facilitate Kotlin adoption inside Java-centric organizations
-* If you use Intellij, Kotlin plugin comes bundled.
-Similar development aids should be present for other code editors too.
+* If you use Intellij, the Kotlin plugin comes bundled.
+* If you use VS-Code-based IDEs (e.g., Cursor, Windsurf), install this official https://github.com/Kotlin/kotlin-lsp[Kotlin Language Server plugin]. Similar development aids should be present for other code editors too.
 
 == Code Formatting
 
@@ -61,6 +71,17 @@ It may be slow for the first run, but subsequent runs should be faster.
 
 == Manual publishing
 
+=== Gradle Nexus Publish Plugin
+
+We use https://github.com/gradle-nexus/publish-plugin#publishing-to-maven-central-via-sonatype-central[Gradle Nexus Publish Plugin]
+to publish to Maven Central. Follow the usage instructions to set up Sonatype credentials and add them to your `~/.gradle/gradle.properties`.
+
+[source,bash]
+----
+sonatypeUsername=<your-username>
+sonatypePassword=<your-password>
+----
+
 === Versioning Strategy
 
 ====
@@ -71,17 +92,19 @@ It may be slow for the first run, but subsequent runs should be faster.
 * B = Profit (Feature / Improvement)
 * C = Broke something by accident (Bug)
 
-Follow the Versioning Strategy to increment version link:buildSrc/{sourcedir}/Config.kt[here]
+Follow the Versioning Strategy to increment version link:buildSrc/{sourcedir}/Config.kt[here].
+For SNAPSHOT releases, add a `-SNAPSHOT` at the end of version number
 
-* For SNAPSHOT releases, add a `-SNAPSHOT` at the end of version number
-* Run this command to publish it to Nexus:
+=== Publish
+
+Run this command to publish it to Nexus:
 
 [source,bash]
 ----
 ./gradlew publishToSonatype closeAndReleaseSonatypeStagingRepository -Dorg.gradle.parallel=false --no-configuration-cache
 ----
 
-* You can monitor for the new version jar to reflect in link:https://repo1.maven.org/maven2/com/salesforce/hydra/hydra/[Maven Central]. It usually takes less than 30 minutes.
+* You can monitor for the new version jar to reflect in https://repo1.maven.org/maven2/com/salesforce/hydra/hydra/[Maven Central]. It usually takes less than 30 minutes.
 
 == Code of Conduct
 Please follow our link:CODE_OF_CONDUCT.md[Code of Conduct]

@@ -81,4 +81,3 @@ Refer to these applications for full-blown apps using this library:
 
 * This link:CONTRIBUTING.adoc[CONTRIBUTING] doc has all the information to set up this library on your local and get hands-on.
 * Any issues or PRs are welcome! ♥️
-* Join this https://sfdc.co/revoman-slack[Slack Community] to discuss issues or PRs related to Consumption-Collaboration-Contribution
