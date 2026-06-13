@@ -11,22 +11,86 @@ endif::[]
 :hide-uri-scheme:
 :toc:
 :toc-placement: preamble
-:javasourcedir: src/main/java
-:testdir: src/integrationTest/java
+:kotlinsourcedir: src/main/kotlin
+:testdir: src/test/java
 :imagesdir: docs/images
 :prewrap!:
+
+image:https://img.shields.io/maven-central/v/com.salesforce.hydra/hydra?label=Maven%20Central[Maven Central,link=https://repo1.maven.org/maven2/com/salesforce/hydra/hydra/]
+image:https://img.shields.io/badge/License-Apache_2.0-blue.svg[License: Apache 2.0,link=LICENSE]
+image:https://img.shields.io/badge/JDK-21%2B-orange.svg[JDK 21+]
+image:https://img.shields.io/badge/Kotlin-%E2%9C%93-7F52FF.svg[Kotlin]
 
 ____
 States, Events, Actions
 ____
 
-This is a library to expose DSL, which can be used to create State machines.
+**Hydra** is a tiny, thread-safe, type-safe library that exposes a fluent DSL for building *finite state machines* on the JVM — usable from both Java and Kotlin. You declare the states your system can be in, the events that move it between them, and Hydra gives you a machine that makes only the *legal* moves, models every outcome as a type, and notifies listeners as it goes.
 
-== Example: Configure a Time-machine
+It is small enough to read in one sitting, yet built for the demanding case: **driving long-running, asynchronous orchestrators** where steps complete on different threads or hosts minutes apart, and the durable truth lives outside the JVM. That second use case is why Hydra exists — see <<Driving asynchronous orchestrators>>.
+
+== Why a state machine?
+
+Think of a state machine as a **subway map**:
+
+* **Stations** are *states* — the discrete places the system can be (`Idle`, `Placed`, `Shipped`).
+* **Turnstiles between stations** are *events* — you cannot teleport from any station to any other; you may only take the connections the map allows.
+* A **transition** is one ride through one turnstile: it either *works* (you arrive at the next station), or it is *not allowed* (you pushed a turnstile that does not exist here), or there is *no such station* on this map at all.
+
+Modelling a workflow this way — instead of a tangle of `if`/`else` and callbacks — buys you three things that matter at scale:
+
+1. **The legal moves are explicit.** Illegal transitions are rejected by construction, not discovered at runtime.
+2. **Failures are *types*, not nulls or booleans.** Every push returns a sealed `Transition` — `Valid`, `Invalid`, or `NoFromState` — so the caller is *forced* to handle "this can't happen" rather than silently ignoring it.
+3. **Durable resume.** Because the position is an explicit value, a run that dies mid-flight knows exactly which step it was at and can resume from there.
+
+== Features
+
+* **Type-safe generics** — `Hydra<StateT, EventT, ActionT>`. States, events, and the optional action payload are all your own types; the compiler keeps them straight.
+* **Thread-safe by design** — the current state lives in a single `AtomicReference`, and each `transition` does a `synchronized` match-and-move. Safe to drive from many concurrent worker threads; the state never tears.
+* **Sealed `Transition` outcomes** — `Valid(fromState, event, toState, action)` / `Invalid(fromState, event)` / `NoFromState(event)`. Three honest results, exhaustively handled.
+* **Lifecycle listeners** — register `onEnter`, `onExit`, and `onTransition` hooks to fire side effects (logging, metrics, persistence) as the machine moves.
+* **Read-only transitions** — compute *what the next move would be* and fire listeners **without** mutating in-memory state. The key enabler for async orchestration (see below).
+* **Flexible matching** — match an event/state by value (`eq`), by type (`any(Class)`), or by an arbitrary predicate (`where { … }`).
+* **Immutable rebuilds** — `cloneWith { … }` derives a new machine from an existing one (e.g. with a different initial state) without mutating the original.
+* **Java- and Kotlin-friendly** — every builder hook has both a Java `Consumer`/`BiConsumer` overload and a Kotlin lambda-with-receiver overload.
+
+== Install
+
+Hydra is published to Maven Central as `com.salesforce.hydra:hydra`.
+
+[source,kotlin,subs="attributes"]
+.build.gradle.kts
+----
+dependencies {
+    implementation("com.salesforce.hydra:hydra:0.1.1")
+}
+----
+
+[source,groovy,subs="attributes"]
+.build.gradle
+----
+dependencies {
+    implementation 'com.salesforce.hydra:hydra:0.1.1'
+}
+----
+
+[source,xml,subs="attributes"]
+.pom.xml
+----
+<dependency>
+  <groupId>com.salesforce.hydra</groupId>
+  <artifactId>hydra</artifactId>
+  <version>0.1.1</version>
+</dependency>
+----
+
+NOTE: Requires **JDK 21+**.
+
+== Quick start: configure a Time-machine
 
 image::time-machine.png[Time Machine]
 
-We have 3 States PAST, PRESENT, FUTURE. These can be represented as plain simple Strings:
+We have 3 states PAST, PRESENT, FUTURE. These can be represented as plain simple Strings:
 
 [source,java,indent=0,options="nowrap"]
 ----
@@ -49,7 +113,7 @@ static final class Action {
 }
 ----
 
-Now weave these States and Actions into a Graph using this DSL:
+Now weave these States and Actions into a graph using the DSL:
 
 [source,java,indent=0,options="nowrap"]
 ----
@@ -70,14 +134,160 @@ final Hydra<String, String, ?> timeMachine = Hydra.create(mb -> {
 });
 ----
 
-== Full-blown Applications
+Read `mb.state(PRESENT, …)` as *"declare the PRESENT station and the turnstiles leaving it."* That is the whole map. The lambda passed to `on(...)` receives `(fromState, event)` and returns where to go via `sb.transitionTo(nextState)`.
 
-Refer to these applications for full-blown apps using this library:
+Drive it by pushing events:
 
-* link:consumer-app/{javasourcedir}/org/revcloud/order/domain/OrderMachine.java[OrderMachine]
-* link:consumer-app-2/{javasourcedir}/org/revcloud/quote/domain/PlaceQuoteMachine.java[QuoteMachine]
+[source,java,indent=0,options="nowrap"]
+----
+timeMachine.transition(FORWARD);          // PRESENT -> FUTURE, mutates current state
+timeMachine.getState();                   // "Future"
+----
+
+== A richer example: an Order machine
+
+State machines earn their keep when transitions carry *actions*, fire *listeners*, and *reject* illegal moves. Here states and events are distinct types (matched by class), and each valid transition emits an action:
+
+[source,java,indent=0,options="nowrap"]
+----
+Hydra<Order, Event, Action> orderMachine = Hydra.create(mb -> {
+  mb.initialState(Idle.INSTANCE);
+
+  mb.state(Idle.class, sb -> {
+    sb.onExit(onIdleExit);                                  // listener: leaving Idle
+    sb.on(Place.class, (state, event) ->
+        sb.transitionTo(Placed.INSTANCE, OnPlaced.INSTANCE)); // carries an action
+  });
+
+  mb.state(Placed.class, sb -> {
+    sb.onEnter(onPlacedEnter);                              // listener: arriving at Placed
+    sb.on(PaymentSuccessful.class, (s, e) -> sb.transitionTo(Processed.INSTANCE, OnPaid.INSTANCE));
+    sb.on(PaymentFailed.class,     (s, e) -> sb.transitionTo(Idle.INSTANCE,      OnCancelled.INSTANCE));
+    sb.on(Cancel.class,            (s, e) -> sb.transitionTo(Idle.INSTANCE,      OnCancelled.INSTANCE));
+  });
+
+  mb.state(Processed.class, sb -> {
+    sb.on(Ship.class,   (s, e) -> sb.transitionTo(Delivered.INSTANCE, OnShipped.INSTANCE));
+    sb.on(Cancel.class, (s, e) -> sb.transitionTo(Idle.INSTANCE,      OnCancelled.INSTANCE));
+  });
+
+  mb.state(Delivered.class, sb -> sb.onEnter(onDeliveredEnter));
+});
+----
+
+A valid push returns a `Transition.Valid` carrying everything about the move; an illegal push returns `Transition.Invalid` and leaves the state untouched:
+
+[source,java,indent=0,options="nowrap"]
+----
+var t1 = orderMachine.transition(Place.INSTANCE);
+t1.isValid();            // true   — Idle --Place--> Placed, action = OnPlaced
+
+var t2 = orderMachine.transition(Cancel.INSTANCE);  // from Placed
+t2.isValid();            // true   — Placed --Cancel--> Idle, action = OnCancelled
+
+var t3 = orderMachine.transition(Cancel.INSTANCE);  // from Idle — not allowed
+t3.isValid();            // false  — Transition.Invalid(Idle, Cancel); state stays Idle
+----
+
+The runnable versions of both machines live in the tests:
+
+* link:{testdir}/com/salesforce/hydra/TimeMachine.java[`TimeMachine.java`] — the string-state machine above.
+* link:{testdir}/com/salesforce/hydra/OrderDomain.java[`OrderDomain.java`] + link:{testdir}/com/salesforce/hydra/HydraTest.java[`HydraTest.java`] — the typed Order machine, with listeners, actions, and invalid-transition assertions.
+
+== API guide
+
+=== Building a machine
+
+`Hydra.create(...)` takes a builder lambda. Inside it:
+
+[cols="1,3",options="header"]
+|===
+| Builder call | Purpose
+| `mb.initialState(s)` | The state the machine starts in (required).
+| `mb.state(value, Class, sb -> …)` | Declare a state matched by *value equality*.
+| `mb.state(Class, sb -> …)` | Declare a state matched by *type*.
+| `mb.onTransition(listener)` | A machine-wide listener fired on every transition.
+|===
+
+Inside a state builder (`sb`):
+
+[cols="1,3",options="header"]
+|===
+| Builder call | Purpose
+| `sb.on(event, Class, (state, event) -> …)` | A transition triggered by an event matched by value.
+| `sb.on(Class, (state, event) -> …)` | A transition triggered by an event matched by type.
+| `sb.transitionTo(state[, action])` | Move to `state`, optionally carrying an `action` payload.
+| `sb.dontTransition([action])` | Stay in the current state (a self-loop), optionally emitting an action.
+| `sb.onEnter(listener)` / `sb.onExit(listener)` | Fire side effects when the state is entered / exited.
+|===
+
+=== Driving a machine
+
+[cols="1,3",options="header"]
+|===
+| Method | Behaviour
+| `transition(event)` | Match-and-move. **Mutates** the current state (thread-safe), fires listeners, returns the `Transition`.
+| `readTransitionAndNotifyListeners(fromStateClass, fromState, event)` | Computes the move and fires listeners **without mutating** in-memory state. See below.
+| `getState()` / `state` | The current state.
+| `cloneWith { mb -> … }` | A new machine derived from this one (e.g. a different initial state); the original is untouched.
+|===
+
+=== The `Transition` type
+
+Every push returns one of exactly three sealed cases:
+
+[source,kotlin,indent=0,options="nowrap"]
+----
+sealed class Transition<StateT, EventT, ActionT> {
+  data class Valid(fromState, event, toState, action)  // the turnstile opened
+  data class Invalid(fromState, event)                 // not a legal move from here
+  data class NoFromState(event)                        // no definition for this state
+  val isValid get() = this is Valid
+}
+----
+
+Because the failure modes are *types*, your orchestration logic becomes a total `switch`/`when` over the three cases — the compiler reminds you to handle each.
+
+== Driving asynchronous orchestrators
+
+A plain `transition(event)` mutating an in-memory `AtomicReference` is perfect for a synchronous, single-process machine. But Hydra was built for the harder case: an **asynchronous orchestrator** whose steps finish on a *different* thread or host, minutes later, and call back to ask "what runs next?"
+
+In that world the JVM's in-memory state is not the source of truth — a database row (or other durable store) is. So Hydra offers `readTransitionAndNotifyListeners(...)`, which answers *"given I just finished step X with exit event E, what is the next step?"* and fires listeners — **without** mutating the in-memory reference. The orchestrator persists the real position; Hydra is consulted as a pure, side-effect-free routing function.
+
+[source,java,indent=0,options="nowrap"]
+----
+// A worker finishes a step on some host and calls back:
+var transition = hydra.readTransitionAndNotifyListeners(
+    finishedStep.getClass(), finishedStep, exitEvent);
+
+if (transition.isValid()) {
+  var nextStep = ((Transition.Valid<Step, Event, ?>) transition).getToState();
+  // dispatch nextStep durably (e.g. enqueue it) and advance the persisted state
+} else {
+  // Invalid / NoFromState — mark the run failed
+}
+----
+
+This pattern — **draw the DAG with Hydra, drive it step-by-step with a read-only transition, and keep durable state in your own store** — is exactly how Hydra is used in production at Salesforce to sequence multi-step business pipelines in the **Revenue Cloud / Revenue Lifecycle Management** domain (the `OrderMachine` and `PlaceQuoteMachine` examples nod to that lineage). Hydra stays a small, dependency-light engine; the orchestration, transport, and persistence layers live in the consuming application.
+
+== Building from source
+
+This is a standard Gradle project with its own wrapper — no local Gradle install needed.
+
+[source,bash]
+----
+./gradlew build          # full build incl. tests
+./gradlew test           # unit tests
+./gradlew spotlessApply  # fix code formatting
+----
+
+See link:DEVELOPMENT.md[DEVELOPMENT.md] for the full development guide and link:CONTRIBUTING.adoc[CONTRIBUTING] for setup, formatting, versioning, and publishing.
 
 == 🙌🏼 Consume-Collaborate-Contribute
 
 * This link:CONTRIBUTING.adoc[CONTRIBUTING] doc has all the information to set up this library on your local and get hands-on.
 * Any issues or PRs are welcome! ♥️
+
+== License
+
+Hydra is licensed under the link:LICENSE[Apache License 2.0]. © 2023 Salesforce, Inc.
