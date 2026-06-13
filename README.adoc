@@ -11,9 +11,7 @@ endif::[]
 :hide-uri-scheme:
 :toc:
 :toc-placement: preamble
-:kotlinsourcedir: src/main/kotlin
 :testdir: src/test/java
-:imagesdir: docs/images
 :prewrap!:
 
 image:https://img.shields.io/maven-central/v/com.salesforce.hydra/hydra?label=Maven%20Central[Maven Central,link=https://repo1.maven.org/maven2/com/salesforce/hydra/hydra/]
@@ -33,7 +31,7 @@ It is small enough to read in one sitting, yet built for the demanding case: **d
 
 Think of a state machine as a **subway map**:
 
-* **Stations** are *states* — the discrete places the system can be (`Idle`, `Placed`, `Shipped`).
+* **Stations** are *states* — the discrete places the system can be (`Cart`, `Placed`, `Shipped`).
 * **Turnstiles between stations** are *events* — you cannot teleport from any station to any other; you may only take the connections the map allows.
 * A **transition** is one ride through one turnstile: it either *works* (you arrive at the next station), or it is *not allowed* (you pushed a turnstile that does not exist here), or there is *no such station* on this map at all.
 
@@ -86,113 +84,160 @@ dependencies {
 
 NOTE: Requires **JDK 21+**.
 
-== Quick start: configure a Time-machine
+== Core concepts: State, Event, Action
 
-image::time-machine.png[Time Machine]
+A Hydra machine is a https://en.wikipedia.org/wiki/Mealy_machine[**Mealy machine**] — and the three type parameters of `Hydra<StateT, EventT, ActionT>` are its three independent vocabularies. The single most important thing to internalise is that **Event and Action sit on opposite ends of a transition**:
 
-We have 3 states PAST, PRESENT, FUTURE. These can be represented as plain simple Strings:
+[cols="1,1,4",options="header"]
+|===
+| Concept | Direction | What it is
+| **State** | — | *Where* the machine is. A discrete position, held one at a time. May carry context (e.g. `Placed(amount, address)`).
+| **Event** | **input** ↓ | Something that happened *to* the machine — the **cause**. You *push* it in. Often a bare signal (`PaymentSucceeded`).
+| **Action** | **output** ↑ | A command the machine *emits* on a transition — the **effect**. You *receive* it. Carries the data the doer needs (`ShipParcel(address)`).
+|===
 
-[source,java,indent=0,options="nowrap"]
-----
-static final class State {
-  public static final String PAST = "Past";
-  public static final String PRESENT = "Present";
-  public static final String FUTURE = "Future";
-}
-----
+You **push Events in** and **receive Actions out** — never the reverse. Because they are distinct types, the compiler enforces that one-way arrow: `transition(event)` will not accept an `Action`. (See <<Why are Event and Action different types?>>.)
 
-There are 4 actions that let you change from one state to another:
+== Quick start: an Order machine
 
-[source,java,indent=0,options="nowrap"]
-----
-static final class Action {
-  public static final String FORWARD = "Forward";
-  public static final String BACKWARD = "Backward";
-  public static final String FAST_FORWARD = "FastForward";
-  public static final String FAST_BACKWARD = "FastBackward";
-}
-----
+Model the lifecycle of an order. Each edge reads **`Event / Action`** — the event that drives the move, then the action emitted on it (a *dashed* edge emits no action):
 
-Now weave these States and Actions into a graph using the DSL:
+image::docs/images/order-machine.svg[Order machine — a Mealy machine,align=center]
+
+Three distinct type families — `State`, `Event`, `Action` — modelled as sealed interfaces of records (JDK 21):
 
 [source,java,indent=0,options="nowrap"]
 ----
-final Hydra<String, String, ?> timeMachine = Hydra.create(mb -> {
-  mb.initialState(PRESENT);
-  mb.state(PRESENT, String.class, sb -> {
-    sb.on(FORWARD, String.class, (currentState, action) -> sb.transitionTo(FUTURE));
-    sb.on(BACKWARD, String.class, (currentState, action) -> sb.transitionTo(PAST));
-  });
-  mb.state(FUTURE, String.class, sb -> {
-    sb.on(BACKWARD, String.class, (currentState, action) -> sb.transitionTo(PRESENT));
-    sb.on(FAST_BACKWARD, String.class, (currentState, action) -> sb.transitionTo(PAST));
-  });
-  mb.state(PAST, String.class, sb -> {
-    sb.on(FORWARD, String.class, (currentState, action) -> sb.transitionTo(PRESENT));
-    sb.on(FAST_FORWARD, String.class, (currentState, action) -> sb.transitionTo(FUTURE));
-  });
-});
+sealed interface OrderState {}
+record Cart()                                  implements OrderState {}
+record Placed(long amountCents, String address) implements OrderState {}
+record Shipped(long amountCents, String address) implements OrderState {}
+record Cancelled()                             implements OrderState {}
+
+sealed interface OrderEvent {}                                 // INPUTS — what happened to us
+record Checkout(long amountCents, String address) implements OrderEvent {}
+record PaymentSucceeded()           implements OrderEvent {}   // a bare signal — no data
+record PaymentFailed(String reason) implements OrderEvent {}
+record Cancel()                     implements OrderEvent {}
+
+sealed interface OrderAction {}                                // OUTPUTS — commands we emit
+record ChargeCard(long amountCents) implements OrderAction {}
+record ShipParcel(String address)   implements OrderAction {}
+record RefundCard(long amountCents) implements OrderAction {}
 ----
 
-Read `mb.state(PRESENT, …)` as *"declare the PRESENT station and the turnstiles leaving it."* That is the whole map. The lambda passed to `on(...)` receives `(fromState, event)` and returns where to go via `sb.transitionTo(nextState)`.
-
-Drive it by pushing events:
+Weave them into a machine. Each `sb.on(Event.class, …)` declares an edge; `sb.transitionTo(nextState, action)` says where to go and what to emit:
 
 [source,java,indent=0,options="nowrap"]
 ----
-timeMachine.transition(FORWARD);          // PRESENT -> FUTURE, mutates current state
-timeMachine.getState();                   // "Future"
-----
+Hydra<OrderState, OrderEvent, OrderAction> orderMachine = Hydra.create(mb -> {
+  mb.initialState(new Cart());
 
-== A richer example: an Order machine
-
-State machines earn their keep when transitions carry *actions*, fire *listeners*, and *reject* illegal moves. Here states and events are distinct types (matched by class), and each valid transition emits an action:
-
-[source,java,indent=0,options="nowrap"]
-----
-Hydra<Order, Event, Action> orderMachine = Hydra.create(mb -> {
-  mb.initialState(Idle.INSTANCE);
-
-  mb.state(Idle.class, sb -> {
-    sb.onExit(onIdleExit);                                  // listener: leaving Idle
-    sb.on(Place.class, (state, event) ->
-        sb.transitionTo(Placed.INSTANCE, OnPlaced.INSTANCE)); // carries an action
-  });
+  mb.state(Cart.class, sb ->
+      sb.on(Checkout.class, (cart, checkout) ->
+          sb.transitionTo(
+              new Placed(checkout.amountCents(), checkout.address()),  // next STATE
+              new ChargeCard(checkout.amountCents()))));               // ACTION emitted
 
   mb.state(Placed.class, sb -> {
-    sb.onEnter(onPlacedEnter);                              // listener: arriving at Placed
-    sb.on(PaymentSuccessful.class, (s, e) -> sb.transitionTo(Processed.INSTANCE, OnPaid.INSTANCE));
-    sb.on(PaymentFailed.class,     (s, e) -> sb.transitionTo(Idle.INSTANCE,      OnCancelled.INSTANCE));
-    sb.on(Cancel.class,            (s, e) -> sb.transitionTo(Idle.INSTANCE,      OnCancelled.INSTANCE));
+    sb.onExit(onPlacedExit);                                           // listener: leaving Placed
+    // ★ The Mealy point: a BARE event in, a data-carrying action out.
+    //   PaymentSucceeded has no payload; ShipParcel's address comes from the STATE.
+    sb.on(PaymentSucceeded.class, (placed, event) ->
+        sb.transitionTo(
+            new Shipped(placed.amountCents(), placed.address()),
+            new ShipParcel(placed.address())));
+    // A transition may emit NO action — the payload is optional.
+    sb.on(PaymentFailed.class, (placed, event) -> sb.transitionTo(new Cancelled()));
   });
 
-  mb.state(Processed.class, sb -> {
-    sb.on(Ship.class,   (s, e) -> sb.transitionTo(Delivered.INSTANCE, OnShipped.INSTANCE));
-    sb.on(Cancel.class, (s, e) -> sb.transitionTo(Idle.INSTANCE,      OnCancelled.INSTANCE));
+  mb.state(Shipped.class, sb -> {
+    sb.onEnter(onShippedEnter);                                        // listener: arriving at Shipped
+    sb.on(Cancel.class, (shipped, event) ->
+        sb.transitionTo(new Cancelled(), new RefundCard(shipped.amountCents())));
   });
 
-  mb.state(Delivered.class, sb -> sb.onEnter(onDeliveredEnter));
+  mb.state(Cancelled.class, sb -> {});                                 // terminal — no outgoing edges
 });
 ----
 
-A valid push returns a `Transition.Valid` carrying everything about the move; an illegal push returns `Transition.Invalid` and leaves the state untouched:
+Drive it by pushing **events**. Each valid push moves the state *and* hands you an **action** — which you then carry out by calling your own code (here, a payment gateway and a warehouse):
 
 [source,java,indent=0,options="nowrap"]
 ----
-var t1 = orderMachine.transition(Place.INSTANCE);
-t1.isValid();            // true   — Idle --Place--> Placed, action = OnPlaced
+// 1. Push an event. The machine moves AND tells you what to do next.
+var checkout = orderMachine.transition(new Checkout(4999, "1 Market St"));
+orderMachine.getState();                              // Placed[amountCents=4999, address=1 Market St]
 
-var t2 = orderMachine.transition(Cancel.INSTANCE);  // from Placed
-t2.isValid();            // true   — Placed --Cancel--> Idle, action = OnCancelled
+// 2. Do something with the emitted action — call your own code.
+var action = ((Transition.Valid<OrderState, OrderEvent, OrderAction>) checkout).getAction();
+switch (action) {
+  case ChargeCard c -> paymentGateway.charge(c.amountCents());   // ← ChargeCard[4999] → real charge
+  case ShipParcel s -> warehouse.dispatch(s.address());
+  case RefundCard r -> paymentGateway.refund(r.amountCents());
+}
 
-var t3 = orderMachine.transition(Cancel.INSTANCE);  // from Idle — not allowed
-t3.isValid();            // false  — Transition.Invalid(Idle, Cancel); state stays Idle
+// Next event: a bare PaymentSucceeded comes back in, ShipParcel goes out → warehouse.dispatch(...)
+var paid = orderMachine.transition(new PaymentSucceeded());
+
+// An illegal push is rejected; the state is left untouched and there is no action to run.
+var bad = orderMachine.transition(new Cancel());      // from Cart, Cancel isn't a legal move
+bad.isValid();                                        // false — Transition.Invalid
 ----
 
-The runnable versions of both machines live in the tests:
+The `switch` is how you *consume* an action — the detail this glosses is covered next.
 
-* link:{testdir}/com/salesforce/hydra/TimeMachine.java[`TimeMachine.java`] — the string-state machine above.
-* link:{testdir}/com/salesforce/hydra/OrderDomain.java[`OrderDomain.java`] + link:{testdir}/com/salesforce/hydra/HydraTest.java[`HydraTest.java`] — the typed Order machine, with listeners, actions, and invalid-transition assertions.
+The runnable version, with listener and payload assertions, lives in the tests:
+
+* link:{testdir}/com/salesforce/hydra/OrderDomain.java[`OrderDomain.java`] — the `State` / `Event` / `Action` type families above.
+* link:{testdir}/com/salesforce/hydra/HydraTest.java[`HydraTest.java`] — the machine wired up, asserting the emitted actions (incl. the bare-event → data-action edge), the optional no-action transition, listeners, and invalid-transition rejection.
+
+== Handling actions
+
+**This is the part to get right: Hydra does not perform actions — it only *hands them to you*.** An `Action` is a plain value, a *command* describing an effect ("charge €49.99"). Hydra computes which command a transition emits; *you* interpret it and do the real-world work. That separation is deliberate — it keeps the machine pure (no I/O, no blocking) and lets you perform the effect wherever and whenever you like (inline, on another thread, after a durable enqueue).
+
+There are two places to consume an action; pick by *when* you need it.
+
+=== 1. Pull it from the returned `Transition` (synchronous, at the call site)
+
+The driver gets the action back and dispatches it. Because `OrderAction` is a **sealed** type, an exhaustive `switch` needs no `default` — add a new action variant later and the compiler flags every `switch` that forgot it:
+
+[source,java,indent=0,options="nowrap"]
+----
+var transition = orderMachine.transition(new Checkout(4999, "1 Market St"));
+
+if (transition instanceof Transition.Valid<OrderState, OrderEvent, OrderAction> valid) {
+  perform(valid.getAction());   // Hydra handed us the command; WE perform it
+}
+
+// Interpret the command and do the real work. Exhaustive over the sealed OrderAction.
+void perform(OrderAction action) {
+  switch (action) {
+    case ChargeCard c -> paymentGateway.charge(c.amountCents());
+    case ShipParcel s -> warehouse.dispatch(s.address());
+    case RefundCard r -> paymentGateway.refund(r.amountCents());
+  }
+}
+----
+
+That `Checkout` push moves the order to `Placed` *and* returns `ChargeCard(4999)`; `perform(...)` is what actually calls the payment gateway. Hydra never touched the gateway — see `testDispatchActionPerformsSideEffect` in the tests.
+
+=== 2. React to it in a listener (decoupled, fire-and-forget)
+
+If the *same* effect should run no matter which edge produced the move, register an `onTransition` listener once instead of dispatching at every call site. Listeners receive the whole `Transition`, action included:
+
+[source,java,indent=0,options="nowrap"]
+----
+mb.onTransition(t -> {
+  if (t instanceof Transition.Valid<OrderState, OrderEvent, OrderAction> v && v.getAction() != null) {
+    perform(v.getAction());           // central side-effect sink
+  }
+});
+----
+
+Use `onEnter` / `onExit` when the effect depends on the *state* reached rather than the action (Moore-style — e.g. "whenever we arrive at `Shipped`, send the confirmation email").
+
+TIP: For an **asynchronous orchestrator**, you usually don't perform the effect inline at all — you treat the action as a *job to enqueue*, hand it to a worker, and let that worker run it and report back. Same "Hydra emits, you dispatch" split, just across a queue. See <<Driving asynchronous orchestrators>>.
 
 == API guide
 
@@ -247,6 +292,30 @@ sealed class Transition<StateT, EventT, ActionT> {
 ----
 
 Because the failure modes are *types*, your orchestration logic becomes a total `switch`/`when` over the three cases — the compiler reminds you to handle each.
+
+== Why are Event and Action different types?
+
+It is tempting to think an Event and an Action are the same kind of thing — both are "stuff that happens around a transition." They are not, and conflating them is the most common source of confusion. They are opposite ends of one edge:
+
+[cols="1,1",options="header"]
+|===
+| Event | Action
+| **Input** — arrives from the outside world. | **Output** — emitted by the machine.
+| You *push* it: `machine.transition(event)`. | You *receive* it: `transition.getAction()`.
+| The **cause** ("payment succeeded"). | The **effect** ("charge the card", "ship the parcel").
+| Often a bare signal with no data. | Usually carries data the downstream doer needs.
+| Past tense — it already happened. | Imperative — go do this.
+|===
+
+A quick test when you are unsure which one you are holding: **ask who produced it.** If the *outside world* produced it (a callback fired, a timer elapsed, a user clicked), it's an Event. If the *machine* produced it as a consequence of moving, it's an Action.
+
+Keeping them as separate type parameters buys real things:
+
+1. **Compile-time direction safety.** `transition(EventT)` cannot accept an `Action`, so you can never accidentally feed an output back in as an input.
+2. **Different shapes.** An event like `PaymentSucceeded` is a bare signal; the action it triggers, `ShipParcel(address)`, needs a payload — and that payload often comes from the **State**, not the event (see the ★ edge in the example above). Forcing both into one type would lose that.
+3. **Decoupling decision from doing.** The machine *decides* and *emits a command* — it never runs the command itself. Some other code (the call site, a listener, or a worker on another host) interprets the action and *performs* it (see <<Handling actions>>). That separation keeps the machine pure and is what makes the async pattern below possible — the machine never blocks on the side effect.
+
+NOTE: The Action payload is **optional**. A transition that emits nothing — `sb.transitionTo(nextState)` — is perfectly valid (the `PaymentFailed → Cancelled` edge above). If your machine never emits actions, give `ActionT` a wildcard: `Hydra<MyState, MyEvent, ?>`.
 
 == Driving asynchronous orchestrators
 

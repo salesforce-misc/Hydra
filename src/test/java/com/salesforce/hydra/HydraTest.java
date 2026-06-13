@@ -9,6 +9,20 @@ package com.salesforce.hydra;
 
 import static com.google.common.truth.Truth.assertThat;
 
+import com.salesforce.hydra.OrderDomain.Cancel;
+import com.salesforce.hydra.OrderDomain.Cancelled;
+import com.salesforce.hydra.OrderDomain.Cart;
+import com.salesforce.hydra.OrderDomain.ChargeCard;
+import com.salesforce.hydra.OrderDomain.Checkout;
+import com.salesforce.hydra.OrderDomain.OrderAction;
+import com.salesforce.hydra.OrderDomain.OrderEvent;
+import com.salesforce.hydra.OrderDomain.OrderState;
+import com.salesforce.hydra.OrderDomain.PaymentFailed;
+import com.salesforce.hydra.OrderDomain.PaymentSucceeded;
+import com.salesforce.hydra.OrderDomain.Placed;
+import com.salesforce.hydra.OrderDomain.RefundCard;
+import com.salesforce.hydra.OrderDomain.ShipParcel;
+import com.salesforce.hydra.OrderDomain.Shipped;
 import com.salesforce.hydra.statemachine.Transition;
 import java.util.function.BiConsumer;
 import org.junit.jupiter.api.DisplayName;
@@ -17,135 +31,192 @@ import org.mockito.Mockito;
 
 class HydraTest {
 
-  Hydra<OrderDomain.Order, OrderDomain.Event, OrderDomain.Action> cloneOrderMachineWithInitialState(
-      OrderDomain.Order state) {
-    return orderMachine.cloneWith(mb -> mb.initialState(state));
+  private static final long AMOUNT = 4_999L;
+  private static final String ADDRESS = "1 Market St, San Francisco";
+
+  Hydra<OrderState, OrderEvent, OrderAction> orderMachineStartingAt(OrderState initialState) {
+    return orderMachine.cloneWith(mb -> mb.initialState(initialState));
   }
 
   @Test
-  void initialStateShouldBeIdle() {
-    assertThat(orderMachine.getState()).isEqualTo(OrderDomain.Idle.INSTANCE);
+  void testInitialStateIsCart() {
+    assertThat(orderMachine.getState()).isEqualTo(new Cart());
   }
 
   @Test
-  @DisplayName("Read transition with listeners, without changing the state")
-  void readTransition() {
-    final var orderMachine = cloneOrderMachineWithInitialState(OrderDomain.Idle.INSTANCE);
-    final var transition =
-        orderMachine.readTransitionAndNotifyListeners(
-            OrderDomain.Idle.class, OrderDomain.Idle.INSTANCE, OrderDomain.Place.INSTANCE);
+  @DisplayName("Checkout (event w/ data) -> Placed, emits ChargeCard (action w/ data)")
+  void testCheckoutPlacesOrderAndEmitsCharge() {
+    final var machine = orderMachineStartingAt(new Cart());
+
+    final var transition = machine.transition(new Checkout(AMOUNT, ADDRESS));
+
     assertThat(transition.isValid()).isTrue();
-    assertThat(transition)
-        .isEqualTo(
-            Transition.valid(
-                OrderDomain.Idle.INSTANCE,
-                OrderDomain.Place.INSTANCE,
-                OrderDomain.Placed.INSTANCE,
-                OrderDomain.OnPlaced.INSTANCE));
-    assertThat(orderMachine.getState()).isEqualTo(OrderDomain.Idle.INSTANCE);
-    Mockito.verify(onIdleExit).accept(OrderDomain.Idle.INSTANCE, OrderDomain.Place.INSTANCE);
-    Mockito.verify(onPlaceEnter).accept(OrderDomain.Placed.INSTANCE, OrderDomain.Place.INSTANCE);
+    assertThat(machine.getState()).isEqualTo(new Placed(AMOUNT, ADDRESS));
+    assertThat(actionOf(transition)).isEqualTo(new ChargeCard(AMOUNT));
   }
 
   @Test
   @DisplayName(
-      "Valid Transition - FromState: Idle, Event: Place, ToState: Placed, Action: OnPlaced")
-  void idleOrderPlacePlaced() {
-    final var orderMachine = cloneOrderMachineWithInitialState(OrderDomain.Idle.INSTANCE);
-    final var transition = orderMachine.transition(OrderDomain.Place.INSTANCE);
-    assertThat(orderMachine.getState()).isEqualTo(OrderDomain.Placed.INSTANCE);
+      "Mealy star edge: bare event PaymentSucceeded -> ShipParcel action sourced from STATE")
+  void testPaymentSucceededShipsUsingAddressFromState() {
+    // The event carries NO data; the emitted action's address comes from the Placed STATE.
+    // This is why Event and Action are different types: input signal vs. data-carrying output.
+    final var machine = orderMachineStartingAt(new Placed(AMOUNT, ADDRESS));
+
+    final var transition = machine.transition(new PaymentSucceeded());
+
     assertThat(transition.isValid()).isTrue();
-    assertThat(transition)
-        .isEqualTo(
-            Transition.valid(
-                OrderDomain.Idle.INSTANCE,
-                OrderDomain.Place.INSTANCE,
-                OrderDomain.Placed.INSTANCE,
-                OrderDomain.OnPlaced.INSTANCE));
+    assertThat(machine.getState()).isEqualTo(new Shipped(AMOUNT, ADDRESS));
+    assertThat(actionOf(transition)).isEqualTo(new ShipParcel(ADDRESS));
   }
 
   @Test
-  @DisplayName(
-      "Valid Transition - FromState: Placed, Event: PaymentFailed, ToState: Idle, Action: OnCancelled")
-  void placedOrderPaymentFailed() {
-    final var orderMachine = cloneOrderMachineWithInitialState(OrderDomain.Placed.INSTANCE);
-    final var transition = orderMachine.transition(OrderDomain.PaymentFailed.INSTANCE);
-    assertThat(orderMachine.getState()).isEqualTo(OrderDomain.Idle.INSTANCE);
-    assertThat(transition)
-        .isEqualTo(
-            Transition.valid(
-                OrderDomain.Placed.INSTANCE,
-                OrderDomain.PaymentFailed.INSTANCE,
-                OrderDomain.Idle.INSTANCE,
-                OrderDomain.OnCancelled.INSTANCE));
+  @DisplayName("PaymentFailed -> Cancelled with NO action (action payload is optional)")
+  void testPaymentFailedCancelsWithoutAction() {
+    final var machine = orderMachineStartingAt(new Placed(AMOUNT, ADDRESS));
+
+    final var transition = machine.transition(new PaymentFailed("card declined"));
+
+    assertThat(transition.isValid()).isTrue();
+    assertThat(machine.getState()).isEqualTo(new Cancelled());
+    assertThat(actionOf(transition)).isNull();
   }
 
   @Test
-  @DisplayName("Invalid Transition - FromState: Idle, Event: Cancel - Invalid Transition")
-  void invalidTransitionCancelInIdle() {
-    final var orderMachine = cloneOrderMachineWithInitialState(OrderDomain.Idle.INSTANCE);
-    final var transition = orderMachine.transition(OrderDomain.Cancel.INSTANCE);
-    assertThat(orderMachine.getState()).isEqualTo(OrderDomain.Idle.INSTANCE);
+  @DisplayName("Cancel a Shipped order -> Cancelled, emits RefundCard sourced from STATE")
+  void testCancelShippedOrderRefunds() {
+    final var machine = orderMachineStartingAt(new Shipped(AMOUNT, ADDRESS));
+
+    final var transition = machine.transition(new Cancel());
+
+    assertThat(transition.isValid()).isTrue();
+    assertThat(machine.getState()).isEqualTo(new Cancelled());
+    assertThat(actionOf(transition)).isEqualTo(new RefundCard(AMOUNT));
+  }
+
+  @Test
+  @DisplayName("Invalid transition: Cancel while in Cart - rejected, state unchanged")
+  void testCancelInCartIsInvalid() {
+    final var machine = orderMachineStartingAt(new Cart());
+
+    final var transition = machine.transition(new Cancel());
+
     assertThat(transition.isValid()).isFalse();
-    assertThat(transition)
-        .isEqualTo(Transition.invalid(OrderDomain.Idle.INSTANCE, OrderDomain.Cancel.INSTANCE));
+    assertThat(transition).isInstanceOf(Transition.Invalid.class);
+    assertThat(machine.getState()).isEqualTo(new Cart());
   }
 
-  final BiConsumer<OrderDomain.Idle, OrderDomain.Event> onIdleExit = Mockito.mock();
-  final BiConsumer<OrderDomain.Placed, OrderDomain.Event> onPlaceEnter = Mockito.mock();
-  final BiConsumer<OrderDomain.Delivered, OrderDomain.Event> DeliveredEnter = Mockito.mock();
-  public final Hydra<OrderDomain.Order, OrderDomain.Event, OrderDomain.Action> orderMachine =
+  @Test
+  @DisplayName("Read-only transition computes the move and fires listeners without mutating state")
+  void testReadTransitionDoesNotMutateState() {
+    final var machine = orderMachineStartingAt(new Placed(AMOUNT, ADDRESS));
+
+    final var transition =
+        machine.readTransitionAndNotifyListeners(
+            Placed.class, new Placed(AMOUNT, ADDRESS), new PaymentSucceeded());
+
+    assertThat(transition.isValid()).isTrue();
+    assertThat(actionOf(transition)).isEqualTo(new ShipParcel(ADDRESS));
+    // State is untouched — durable truth lives outside the in-memory machine.
+    assertThat(machine.getState()).isEqualTo(new Placed(AMOUNT, ADDRESS));
+    Mockito.verify(onShippedEnter).accept(new Shipped(AMOUNT, ADDRESS), new PaymentSucceeded());
+  }
+
+  @Test
+  @DisplayName("onExit / onEnter listeners fire on a valid transition")
+  void testEnterAndExitListenersFire() {
+    final var machine = orderMachineStartingAt(new Placed(AMOUNT, ADDRESS));
+
+    machine.transition(new PaymentSucceeded());
+
+    Mockito.verify(onPlacedExit).accept(new Placed(AMOUNT, ADDRESS), new PaymentSucceeded());
+    Mockito.verify(onShippedEnter).accept(new Shipped(AMOUNT, ADDRESS), new PaymentSucceeded());
+  }
+
+  @Test
+  @DisplayName("Handling an action: switch over the emitted command and perform the side effect")
+  void testDispatchActionPerformsSideEffect() {
+    final var machine = orderMachineStartingAt(new Cart());
+
+    // 1. Drive the machine. Hydra returns the action — it does NOT perform it.
+    final var transition = machine.transition(new Checkout(AMOUNT, ADDRESS));
+    final OrderAction action = actionOf(transition);
+
+    // 2. WE interpret the action and perform the effect (exhaustive over the sealed type).
+    perform(action, effects);
+
+    // 3. The effect happened because we dispatched it — Hydra only handed us the command.
+    Mockito.verify(effects).chargeCard(AMOUNT);
+    Mockito.verifyNoMoreInteractions(effects);
+  }
+
+  /** A sink for the real-world side effects an {@link OrderAction} commands. */
+  interface Effects {
+    void chargeCard(long amountCents);
+
+    void shipParcel(String address);
+
+    void refundCard(long amountCents);
+  }
+
+  /** Interpret a command and perform it. Exhaustive switch — the compiler enforces coverage. */
+  private static void perform(OrderAction action, Effects effects) {
+    switch (action) {
+      case ChargeCard c -> effects.chargeCard(c.amountCents());
+      case ShipParcel s -> effects.shipParcel(s.address());
+      case RefundCard r -> effects.refundCard(r.amountCents());
+    }
+  }
+
+  @SuppressWarnings("unchecked")
+  private static OrderAction actionOf(Transition<OrderState, OrderEvent, OrderAction> transition) {
+    return ((Transition.Valid<OrderState, OrderEvent, OrderAction>) transition).getAction();
+  }
+
+  final Effects effects = Mockito.mock();
+  final BiConsumer<Placed, OrderEvent> onPlacedExit = Mockito.mock();
+  final BiConsumer<Shipped, OrderEvent> onShippedEnter = Mockito.mock();
+
+  public final Hydra<OrderState, OrderEvent, OrderAction> orderMachine =
       Hydra.create(
           mb -> {
-            mb.initialState(OrderDomain.Idle.INSTANCE);
+            mb.initialState(new Cart());
 
             mb.state(
-                OrderDomain.Idle.class,
+                Cart.class,
+                sb ->
+                    sb.on(
+                        Checkout.class,
+                        (cart, checkout) ->
+                            sb.transitionTo(
+                                new Placed(checkout.amountCents(), checkout.address()),
+                                new ChargeCard(checkout.amountCents()))));
+
+            mb.state(
+                Placed.class,
                 sb -> {
-                  sb.onExit(onIdleExit);
+                  sb.onExit(onPlacedExit);
+                  // Star edge: bare event in, data-carrying action out — address read from STATE.
                   sb.on(
-                      OrderDomain.Place.class,
-                      (currentState, action) ->
+                      PaymentSucceeded.class,
+                      (placed, event) ->
                           sb.transitionTo(
-                              OrderDomain.Placed.INSTANCE, OrderDomain.OnPlaced.INSTANCE));
+                              new Shipped(placed.amountCents(), placed.address()),
+                              new ShipParcel(placed.address())));
+                  // No-action transition — the action payload is optional.
+                  sb.on(PaymentFailed.class, (placed, event) -> sb.transitionTo(new Cancelled()));
                 });
 
             mb.state(
-                OrderDomain.Placed.class,
+                Shipped.class,
                 sb -> {
-                  sb.onEnter(onPlaceEnter);
+                  sb.onEnter(onShippedEnter);
                   sb.on(
-                      OrderDomain.PaymentFailed.class,
-                      (currentState, action) ->
-                          sb.transitionTo(
-                              OrderDomain.Idle.INSTANCE, OrderDomain.OnCancelled.INSTANCE));
-                  sb.on(
-                      OrderDomain.PaymentSuccessful.class,
-                      (currentState, action) ->
-                          sb.transitionTo(
-                              OrderDomain.Processed.INSTANCE, OrderDomain.OnPaid.INSTANCE));
-                  sb.on(
-                      OrderDomain.Cancel.class,
-                      (currentState, action) ->
-                          sb.transitionTo(
-                              OrderDomain.Idle.INSTANCE, OrderDomain.OnCancelled.INSTANCE));
+                      Cancel.class,
+                      (shipped, event) ->
+                          sb.transitionTo(new Cancelled(), new RefundCard(shipped.amountCents())));
                 });
 
-            mb.state(
-                OrderDomain.Processed.class,
-                sb -> {
-                  sb.on(
-                      OrderDomain.Ship.class,
-                      (currentState, action) ->
-                          sb.transitionTo(
-                              OrderDomain.Delivered.INSTANCE, OrderDomain.OnShipped.INSTANCE));
-                  sb.on(
-                      OrderDomain.Cancel.class,
-                      (currentState, action) ->
-                          sb.transitionTo(
-                              OrderDomain.Idle.INSTANCE, OrderDomain.OnCancelled.INSTANCE));
-                });
-
-            mb.state(OrderDomain.Delivered.class, sb -> sb.onEnter(DeliveredEnter));
+            mb.state(Cancelled.class, sb -> {});
           });
 }

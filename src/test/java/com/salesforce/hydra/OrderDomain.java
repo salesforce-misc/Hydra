@@ -7,147 +7,55 @@
 
 package com.salesforce.hydra;
 
-import org.jetbrains.annotations.NotNull;
-
-class OrderDomain {
+/**
+ * Domain types for the example Order machine.
+ *
+ * <p>A Mealy machine has three independent "alphabets", and Hydra gives each its own type parameter
+ * — {@code Hydra<StateT, EventT, ActionT>}:
+ *
+ * <ul>
+ *   <li>{@link OrderState} — where the order <em>is</em> (a position; may carry context).
+ *   <li>{@link OrderEvent} — an <em>input</em>: something that happened <em>to</em> the order (a
+ *       cause; often a bare signal).
+ *   <li>{@link OrderAction} — an <em>output</em>: a command the machine <em>emits</em> on a
+ *       transition (an effect; carries the data the doer needs).
+ * </ul>
+ *
+ * <p>Events and Actions are deliberately <em>different</em> types: you push Events in and receive
+ * Actions out, and the compiler enforces that one-way arrow.
+ */
+final class OrderDomain {
 
   private OrderDomain() {}
 
-  // Order
-  interface Order {}
+  // ── State: where the order is. Carries the context that later steps need. ──
+  sealed interface OrderState {}
 
-  static final class Idle implements Order {
-    @NotNull public static final Idle INSTANCE;
+  record Cart() implements OrderState {}
 
-    private Idle() {}
+  record Placed(long amountCents, String address) implements OrderState {}
 
-    static {
-      INSTANCE = new Idle();
-    }
-  }
+  record Shipped(long amountCents, String address) implements OrderState {}
 
-  static final class Placed implements Order {
-    @NotNull public static final Placed INSTANCE;
+  record Cancelled() implements OrderState {}
 
-    private Placed() {}
+  // ── Event: INPUT — something that happened TO the order. May be bare or carry data. ──
+  sealed interface OrderEvent {}
 
-    static {
-      INSTANCE = new Placed();
-    }
-  }
+  record Checkout(long amountCents, String address) implements OrderEvent {}
 
-  static final class Processed implements Order {
-    @NotNull public static final Processed INSTANCE;
+  record PaymentSucceeded() implements OrderEvent {} // a bare signal — no data
 
-    private Processed() {}
+  record PaymentFailed(String reason) implements OrderEvent {}
 
-    static {
-      INSTANCE = new Processed();
-    }
-  }
+  record Cancel() implements OrderEvent {} // also bare
 
-  static final class Delivered implements Order {
-    @NotNull public static final Delivered INSTANCE;
+  // ── Action: OUTPUT — a command the machine EMITS on a transition. Always carries data. ──
+  sealed interface OrderAction {}
 
-    private Delivered() {}
+  record ChargeCard(long amountCents) implements OrderAction {}
 
-    static {
-      INSTANCE = new Delivered();
-    }
-  }
+  record ShipParcel(String address) implements OrderAction {}
 
-  interface Event {}
-
-  static final class Place implements Event {
-    @NotNull public static final Place INSTANCE;
-
-    private Place() {}
-
-    static {
-      INSTANCE = new Place();
-    }
-  }
-
-  static final class PaymentFailed implements Event {
-    @NotNull public static final PaymentFailed INSTANCE;
-
-    private PaymentFailed() {}
-
-    static {
-      INSTANCE = new PaymentFailed();
-    }
-  }
-
-  static final class PaymentSuccessful implements Event {
-    @NotNull public static final PaymentSuccessful INSTANCE;
-
-    private PaymentSuccessful() {}
-
-    static {
-      INSTANCE = new PaymentSuccessful();
-    }
-  }
-
-  static final class Ship implements Event {
-    @NotNull public static final Ship INSTANCE;
-
-    private Ship() {}
-
-    static {
-      INSTANCE = new Ship();
-    }
-  }
-
-  static final class Cancel implements Event {
-    @NotNull public static final Cancel INSTANCE;
-
-    private Cancel() {}
-
-    static {
-      INSTANCE = new Cancel();
-    }
-  }
-
-  // Action
-  interface Action {}
-
-  static final class OnPlaced implements Action {
-    @NotNull public static final OnPlaced INSTANCE;
-
-    private OnPlaced() {}
-
-    static {
-      INSTANCE = new OnPlaced();
-    }
-  }
-
-  static final class OnPaid implements Action {
-    @NotNull public static final OnPaid INSTANCE;
-
-    private OnPaid() {}
-
-    static {
-      INSTANCE = new OnPaid();
-    }
-  }
-
-  static final class OnShipped implements Action {
-    @NotNull public static final OnShipped INSTANCE;
-
-    private OnShipped() {}
-
-    static {
-      INSTANCE = new OnShipped();
-    }
-  }
-
-  static final class OnCancelled implements Action {
-    @NotNull public static final OnCancelled INSTANCE;
-
-    private OnCancelled() {}
-
-    static {
-      INSTANCE = new OnCancelled();
-    }
-  }
+  record RefundCard(long amountCents) implements OrderAction {}
 }
