@@ -280,7 +280,7 @@ Inside a state builder (`sb`):
 |===
 | Method | Behaviour
 | `transition(event)` | Match-and-move. **Mutates** the current state (thread-safe), fires listeners, returns the `Transition`.
-| `readTransitionAndNotifyListeners(fromStateClass, fromState, event)` | Computes the move and fires listeners **without mutating** in-memory state. See below.
+| `readTransitionAndNotifyListeners(fromState, event)` | Computes the move and fires listeners **without mutating** in-memory state — derives the state's class from the instance. (A 3-arg `(fromStateClass, fromState, event)` overload exists for when the class is known separately.) See below.
 | `getState()` / `state` | The current state.
 | `cloneWith { mb -> … }` | A new machine derived from this one (e.g. a different initial state); the original is untouched.
 |===
@@ -334,8 +334,7 @@ In that world the JVM's in-memory state is not the source of truth — a databas
 [source,java,indent=0,options="nowrap"]
 ----
 // A worker finishes a step on some host and calls back:
-var transition = hydra.readTransitionAndNotifyListeners(
-    finishedStep.getClass(), finishedStep, exitEvent);
+var transition = hydra.readTransitionAndNotifyListeners(finishedStep, exitEvent);
 
 if (transition.isValid()) {
   var nextStep = ((Transition.Valid<Step, Event, ?>) transition).getToState();

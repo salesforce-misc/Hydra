@@ -8,8 +8,7 @@ In that world the JVM's in-memory state is not the source of truth — a databas
 [source,java,indent=0,options="nowrap"]
 ----
 // A worker finishes a step on some host and calls back:
-var transition = hydra.readTransitionAndNotifyListeners(
-    finishedStep.getClass(), finishedStep, exitEvent);
+var transition = hydra.readTransitionAndNotifyListeners(finishedStep, exitEvent);
 
 if (transition.isValid()) {
   var nextStep = ((Transition.Valid<Step, Event, ?>) transition).getToState();

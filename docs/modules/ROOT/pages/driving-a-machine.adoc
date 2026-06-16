@@ -32,7 +32,7 @@ Inside a state builder (`sb`):
 |===
 | Method | Behaviour
 | `transition(event)` | Match-and-move. *Mutates* the current state (thread-safe), fires listeners, returns the `Transition`.
-| `readTransitionAndNotifyListeners(fromStateClass, fromState, event)` | Computes the move and fires listeners *without mutating* in-memory state. See xref:async-orchestration.adoc[Async Orchestrators].
+| `readTransitionAndNotifyListeners(fromState, event)` | Computes the move and fires listeners *without mutating* in-memory state — derives the class from the instance (a 3-arg `(fromStateClass, fromState, event)` overload also exists). See xref:async-orchestration.adoc[Async Orchestrators].
 | `getState()` / `state` | The current state.
 | `cloneWith { mb -> … }` | A new machine derived from this one (e.g. a different initial state); the original is untouched.
 |===
