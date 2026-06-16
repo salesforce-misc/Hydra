@@ -90,6 +90,61 @@ transition.action?.let { effects.perform(message.runId, it) }
 enqueueNext(message.runId, advanced)
 ----
 
+=== Persist and resurrect: how a *different* process rehydrates the state
+
+The enqueuing process and the dequeue handler share *nothing* in memory — they
+may be different JVMs on different hosts, separated by minutes. The only thing
+that crosses between them is bytes: the message on the queue, and the row in the
+database. So the run's position has to round-trip through serialization.
+
+*On the way down (persist).* The typed `OrderState` is serialized to text and
+written into the `current_state` column. Because `OrderState` is a *sealed*
+hierarchy, the serializer tags each row with its concrete variant — Kotlin uses
+kotlinx-serialization's sealed-class polymorphism, Java uses Jackson's
+`@JsonTypeInfo`/`@JsonSubTypes`:
+
+[source,kotlin,indent=0]
+----
+// CursorStore.advance(...) — write the new position as TEXT
+val encoded = orderJson.encodeToString(OrderState.serializer(), newState)
+//  Charging(4999, "1 Market St", "SKU-1", 1)
+//    → {"type":"Charging","amountCents":4999,"address":"1 Market St","sku":"SKU-1","qty":1}
+----
+
+*On the way up (resurrect).* A dequeue handler in a brand-new process pulls a
+`{runId, event, expectedVersion}` message, then *rehydrates* the run purely from
+the database — it constructs a fresh `Hydra` (zero in-memory position) and reads
+the typed state back out of the row:
+
+[source,kotlin,indent=0]
+----
+// A fresh process: new Hydra, no shared state with whoever ran the previous step
+private val hydra = orderMachine()
+
+fun onDequeue(message: StepMessage) {
+  val cursor = store.load(message.runId) ?: return        // SELECT … WHERE run_id = ?
+  // load() turns the stored TEXT back into a typed OrderState:
+  //   {"type":"Charging",…} → Charging(4999, "1 Market St", "SKU-1", 1)
+  val transition = hydra.readTransitionAndNotifyListeners(cursor.state, message.event)
+  // … CAS-advance, perform the action, enqueue the next step …
+}
+----
+
+[source,kotlin,indent=0]
+----
+// CursorStore.load(...) — the resurrection step
+val state = orderJson.decodeFromString(OrderState.serializer(), row[currentState])
+Cursor(runId = row[runId], state = state, status = …, version = row[version])
+----
+
+The handler never trusts its own memory or the message for the position — it
+re-derives everything from the row. That is what lets *any* worker, in *any*
+process, pick up *any* run: the state is data in the database, not an object on
+some heap. Reconstructing the typed `OrderState` is the literal "resurrection,"
+and feeding it to a freshly-built `Hydra` is what makes the engine stateless and
+horizontally scalable — add more dequeue handlers and they all read the same
+source of truth.
+
 === Crash mid-flight, resume from the cursor
 
 image::async-resume.svg[Crash and resume sequence,align=center]
