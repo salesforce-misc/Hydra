@@ -1,0 +1,52 @@
+= Handling Actions
+:description: Hydra does not perform actions — it hands them to you. The two places to consume an action, and why the decision/doing split keeps the machine pure.
+
+*This is the part to get right: Hydra does not perform actions — it only _hands them to you_.* An `Action` is a plain value, a _command_ describing an effect ("charge €49.99"). Hydra computes which command a transition emits; _you_ interpret it and do the real-world work.
+
+That separation is deliberate — it keeps the machine pure (no I/O, no blocking) and lets you perform the effect wherever and whenever you like (inline, on another thread, after a durable enqueue).
+
+There are two places to consume an action; pick by _when_ you need it.
+
+== 1. Pull it from the returned `Transition` (synchronous, at the call site)
+
+The driver gets the action back and dispatches it. Because `OrderAction` is a *sealed* type, an exhaustive `switch` needs no `default` — add a new action variant later and the compiler flags every `switch` that forgot it:
+
+[source,java,indent=0,options="nowrap"]
+----
+var transition = orderMachine.transition(new Checkout(4999, "1 Market St"));
+
+if (transition instanceof Transition.Valid<OrderState, OrderEvent, OrderAction> valid) {
+  perform(valid.getAction());   // Hydra handed us the command; WE perform it
+}
+
+// Interpret the command and do the real work. Exhaustive over the sealed OrderAction.
+void perform(OrderAction action) {
+  switch (action) {
+    case ChargeCard c -> paymentGateway.charge(c.amountCents());
+    case ShipParcel s -> warehouse.dispatch(s.address());
+    case RefundCard r -> paymentGateway.refund(r.amountCents());
+  }
+}
+----
+
+That `Checkout` push moves the order to `Placed` _and_ returns `ChargeCard(4999)`; `perform(...)` is what actually calls the payment gateway. Hydra never touched the gateway.
+
+== 2. React to it in a listener (decoupled, fire-and-forget)
+
+If the _same_ effect should run no matter which edge produced the move, register an `onTransition` listener once instead of dispatching at every call site. Listeners receive the whole `Transition`, action included:
+
+[source,java,indent=0,options="nowrap"]
+----
+mb.onTransition(t -> {
+  if (t instanceof Transition.Valid<OrderState, OrderEvent, OrderAction> v && v.getAction() != null) {
+    perform(v.getAction());           // central side-effect sink
+  }
+});
+----
+
+Use `onEnter` / `onExit` when the effect depends on the _state_ reached rather than the action (Moore-style — e.g. "whenever we arrive at `Shipped`, send the confirmation email").
+
+[TIP]
+====
+For an *asynchronous orchestrator*, you usually don't perform the effect inline at all — you treat the action as a _job to enqueue_, hand it to a worker, and let that worker run it and report back. Same "Hydra emits, you dispatch" split, just across a queue. See xref:async-orchestration.adoc[Driving asynchronous orchestrators].
+====

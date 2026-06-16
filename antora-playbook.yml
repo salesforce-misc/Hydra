@@ -1,0 +1,19 @@
+antora:
+  extensions:
+  - require: '@antora/lunr-extension'
+site:
+  title: Hydra
+  url: https://salesforce-misc.github.io/Hydra
+  start_page: hydra::index.adoc
+content:
+  sources:
+  - url: .
+    branches: HEAD
+    start_path: docs
+ui:
+  bundle:
+    url: https://gitlab.com/antora/antora-ui-default/-/jobs/artifacts/HEAD/raw/build/ui-bundle.zip?job=bundle-stable
+    snapshot: true
+  supplemental_files: ./docs/supplemental-ui
+output:
+  dir: ./build/site

@@ -1,0 +1,51 @@
+= Building & Driving a Machine
+:description: The builder API for declaring states and edges, and the methods for driving the machine — transition, the read-only transition, getState, and cloneWith.
+
+== Building a machine
+
+`Hydra.create(...)` takes a builder lambda. Inside it:
+
+[cols="1,3",options="header"]
+|===
+| Builder call | Purpose
+| `mb.initialState(s)` | The state the machine starts in (required).
+| `mb.state(value, Class, sb -> …)` | Declare a state matched by _value equality_.
+| `mb.state(Class, sb -> …)` | Declare a state matched by _type_.
+| `mb.onTransition(listener)` | A machine-wide listener fired on every transition.
+|===
+
+Inside a state builder (`sb`):
+
+[cols="1,3",options="header"]
+|===
+| Builder call | Purpose
+| `sb.on(event, Class, (state, event) -> …)` | A transition triggered by an event matched by value.
+| `sb.on(Class, (state, event) -> …)` | A transition triggered by an event matched by type.
+| `sb.transitionTo(state[, action])` | Move to `state`, optionally carrying an `action` payload.
+| `sb.dontTransition([action])` | Stay in the current state (a self-loop), optionally emitting an action.
+| `sb.onEnter(listener)` / `sb.onExit(listener)` | Fire side effects when the state is entered / exited.
+|===
+
+== Driving a machine
+
+[cols="1,3",options="header"]
+|===
+| Method | Behaviour
+| `transition(event)` | Match-and-move. *Mutates* the current state (thread-safe), fires listeners, returns the `Transition`.
+| `readTransitionAndNotifyListeners(fromStateClass, fromState, event)` | Computes the move and fires listeners *without mutating* in-memory state. See xref:async-orchestration.adoc[Async Orchestrators].
+| `getState()` / `state` | The current state.
+| `cloneWith { mb -> … }` | A new machine derived from this one (e.g. a different initial state); the original is untouched.
+|===
+
+== Thread safety
+
+The current state lives in a single `AtomicReference`, and each `transition` does a `synchronized` match-and-move. Safe to drive from many concurrent worker threads; the state never tears.
+
+[source,java,indent=0,options="nowrap"]
+----
+// Push an event. The machine moves AND tells you what to do next.
+var checkout = orderMachine.transition(new Checkout(4999, "1 Market St"));
+orderMachine.getState();   // Placed[amountCents=4999, address=1 Market St]
+----
+
+Each valid push moves the state _and_ hands you an action to xref:handling-actions.adoc[carry out]. An illegal push is rejected; the state is left untouched and there is no action to run — the outcome is one of three xref:transition-outcomes.adoc[sealed `Transition` cases].

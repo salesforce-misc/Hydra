@@ -281,3 +281,6 @@ fabric.properties
 .idea/caches/build_file_checksums.ser
 
 .vscode/
+
+# cmux browser QA assets (screenshots, traces)
+cmux-assets/

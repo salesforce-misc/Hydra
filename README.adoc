@@ -18,6 +18,7 @@ image:https://img.shields.io/maven-central/v/com.salesforce.hydra/hydra?label=Ma
 image:https://img.shields.io/badge/License-Apache_2.0-blue.svg[License: Apache 2.0,link=LICENSE]
 image:https://img.shields.io/badge/JDK-21%2B-orange.svg[JDK 21+]
 image:https://img.shields.io/badge/Kotlin-%E2%9C%93-7F52FF.svg[Kotlin]
+image:https://img.shields.io/badge/Docs-Antora-1A9E95.svg[Documentation,link=https://salesforce-misc.github.io/Hydra/hydra/index.html]
 
 ____
 States, Events, Actions
@@ -26,6 +27,13 @@ ____
 **Hydra** is a tiny, thread-safe, type-safe library that exposes a fluent DSL for building *finite state machines* on the JVM — usable from both Java and Kotlin. You declare the states your system can be in, the events that move it between them, and Hydra gives you a machine that makes only the *legal* moves, models every outcome as a type, and notifies listeners as it goes.
 
 It is small enough to read in one sitting, yet built for the demanding case: **driving long-running, asynchronous orchestrators** where steps complete on different threads or hosts minutes apart, and the durable truth lives outside the JVM. That second use case is why Hydra exists — see <<Driving asynchronous orchestrators>>.
+
+[TIP]
+====
+*📖 Full documentation: https://salesforce-misc.github.io/Hydra/hydra/index.html*
+
+The sections below are a quick start. Every concept has a focused page on the docs site.
+====
 
 == Why a state machine?
 
@@ -338,6 +346,30 @@ if (transition.isValid()) {
 ----
 
 This pattern — **draw the DAG with Hydra, drive it step-by-step with a read-only transition, and keep durable state in your own store** — is exactly how Hydra is used in production at Salesforce to sequence multi-step business pipelines in the **Revenue Cloud / Revenue Lifecycle Management** domain (the `OrderMachine` and `PlaceQuoteMachine` examples nod to that lineage). Hydra stays a small, dependency-light engine; the orchestration, transport, and persistence layers live in the consuming application.
+
+== Documentation
+
+Full docs: https://salesforce-misc.github.io/Hydra/hydra/index.html
+
+Each topic links to its published page. The source for every page lives in `docs/modules/ROOT/pages/<page-name>.adoc` (one concept per file).
+
+[%noheader,cols="1,1",frame=none,grid=none]
+|===
+| https://salesforce-misc.github.io/Hydra/hydra/index.html[Overview]
+| https://salesforce-misc.github.io/Hydra/hydra/why-state-machine.html[Why a State Machine?]
+
+| https://salesforce-misc.github.io/Hydra/hydra/getting-started.html[Getting Started]
+| https://salesforce-misc.github.io/Hydra/hydra/core-concepts.html[State, Event & Action]
+
+| https://salesforce-misc.github.io/Hydra/hydra/driving-a-machine.html[Building & Driving]
+| https://salesforce-misc.github.io/Hydra/hydra/transition-outcomes.html[Transition Outcomes]
+
+| https://salesforce-misc.github.io/Hydra/hydra/handling-actions.html[Handling Actions]
+| https://salesforce-misc.github.io/Hydra/hydra/async-orchestration.html[Async Orchestrators]
+
+| https://salesforce-misc.github.io/Hydra/hydra/event-vs-action.html[Event vs Action]
+| https://salesforce-misc.github.io/Hydra/hydra/contributing.html[Contributing]
+|===
 
 == Building from source
 

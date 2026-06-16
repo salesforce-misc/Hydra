@@ -1,0 +1,37 @@
+= Driving Asynchronous Orchestrators
+:description: Hydra's reason for being — drawing a workflow DAG once, then driving it step by step with a read-only transition while durable state lives in your own store.
+
+A plain `transition(event)` mutating an in-memory `AtomicReference` is perfect for a synchronous, single-process machine. But Hydra was built for the harder case: an *asynchronous orchestrator* whose steps finish on a _different_ thread or host, minutes later, and call back to ask "what runs next?"
+
+In that world the JVM's in-memory state is not the source of truth — a database row (or other durable store) is. So Hydra offers `readTransitionAndNotifyListeners(...)`, which answers _"given I just finished step X with exit event E, what is the next step?"_ and fires listeners — *without* mutating the in-memory reference. The orchestrator persists the real position; Hydra is consulted as a pure, side-effect-free routing function.
+
+[source,java,indent=0,options="nowrap"]
+----
+// A worker finishes a step on some host and calls back:
+var transition = hydra.readTransitionAndNotifyListeners(
+    finishedStep.getClass(), finishedStep, exitEvent);
+
+if (transition.isValid()) {
+  var nextStep = ((Transition.Valid<Step, Event, ?>) transition).getToState();
+  // dispatch nextStep durably (e.g. enqueue it) and advance the persisted state
+} else {
+  // Invalid / NoFromState — mark the run failed
+}
+----
+
+== The pattern
+
+[.lead]
+Draw the DAG with Hydra, drive it step-by-step with a read-only transition, and keep durable state in your own store.
+
+. *Draw the DAG once.* Each step of the pipeline is a state; each step's exit signal is an event; the next step (and any side effect) is the action. The whole pipeline is one Hydra machine — the map of legal moves.
+. *Persist the real position.* When a step finishes, your orchestrator writes the new position to its durable store (a DB row, a workflow record).
+That store — not the JVM — is the source of truth.
+. *Consult Hydra as a router.* Call `readTransitionAndNotifyListeners(...)` to compute the next step from the just-finished one, firing listeners along the way, without touching in-memory state.
+. *Dispatch the next step.* Enqueue it to a worker — possibly on another host, possibly minutes later. When _that_ finishes, the loop repeats.
+
+Because the position is an explicit, persisted value, a run that dies mid-flight resumes from exactly where it stopped.
+
+== In production
+
+This is exactly how Hydra is used in production at Salesforce to sequence multi-step business pipelines in the *Revenue Cloud / Revenue Lifecycle Management* domain (the `OrderMachine` and `PlaceQuoteMachine` examples nod to that lineage). Hydra stays a small, dependency-light engine; the orchestration, transport, and persistence layers live in the consuming application.

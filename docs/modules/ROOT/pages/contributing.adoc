@@ -1,0 +1,16 @@
+= Contributing
+:description: Consume, collaborate, contribute — how to get hands-on with Hydra.
+
+[.lead]
+🙌🏼 Consume · Collaborate · Contribute
+
+* The link:{gh-blob}/CONTRIBUTING.adoc[CONTRIBUTING] doc has all the information to set up this library on your local and get hands-on.
+* Any issues or PRs are welcome! ♥️
+
+== Style
+
+This codebase heavily uses *functional programming* concepts — prefer state transformation over mutation, use monadic operations (`map`, `flatMap`, `fold`) over `when` expressions, and build immutable data flow. See link:{gh-blob}/STYLE.md[STYLE.md] for the full style guide.
+
+== License
+
+Hydra is licensed under the link:{gh-blob}/LICENSE[Apache License 2.0]. © 2023 Salesforce, Inc.

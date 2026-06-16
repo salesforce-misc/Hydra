@@ -1,0 +1,75 @@
+    {{!--
+      Hydra theme toggle — this partial is the single switch for the custom skin.
+      Loaded by the bundle's head.hbs AFTER head-styles (site.css), so everything
+      here layers on top of the stock Antora UI without forking the bundle.
+
+      To disable the theme: empty this file (reverts to stock UI).
+      To swap the theme:    point the <link> below at a different css file.
+      To re-skin in place:  edit the :root tokens in css/hydra-theme.css.
+    --}}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=Hanken+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap">
+    <link rel="stylesheet" href="{{{uiRootPath}}}/css/hydra-theme.css">
+    {{!--
+      Theme toggle behaviour. Runs inline in <head> so the active theme is set
+      on <html> BEFORE first paint — no flash of the wrong theme (FOUC).
+
+      Resolution order:
+        1. explicit choice saved in localStorage ("light" | "dark")
+        2. otherwise the OS preference (prefers-color-scheme) — kept live, so a
+           user who never toggled tracks their OS until they do.
+      The toggle button (#hy-theme-toggle, markup in header-content) is wired on
+      DOMContentLoaded; clicking it saves an explicit choice and stops the OS
+      from overriding it.
+    --}}
+    <script>
+      (function () {
+        var KEY = "hy-theme";
+        var root = document.documentElement;
+        var mql = window.matchMedia("(prefers-color-scheme: dark)");
+
+        function stored() {
+          try { return localStorage.getItem(KEY); } catch (e) { return null; }
+        }
+        function resolved() {
+          var s = stored();
+          return s === "light" || s === "dark" ? s : (mql.matches ? "dark" : "light");
+        }
+        function apply(theme) {
+          root.setAttribute("data-theme", theme);
+        }
+
+        // 1. Pre-paint: apply immediately (no FOUC).
+        apply(resolved());
+
+        // 2. Follow the OS while the user hasn't made an explicit choice.
+        mql.addEventListener("change", function () {
+          if (!stored()) apply(mql.matches ? "dark" : "light");
+        });
+
+        // 3. Wire the button once the DOM is ready.
+        document.addEventListener("DOMContentLoaded", function () {
+          var btn = document.getElementById("hy-theme-toggle");
+          if (btn) {
+            btn.addEventListener("click", function () {
+              var next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+              try { localStorage.setItem(KEY, next); } catch (e) {}
+              apply(next);
+            });
+          }
+
+          // Landing hero (home page only): opt INTO the departure-board reveal
+          // animation. The board is fully visible by default; we add `.hy-anim`
+          // to play the staggered service-line reveal ONLY when the element is
+          // present and the user hasn't asked for reduced motion. So a paused
+          // tab, a no-JS client, or a reduced-motion user always sees the
+          // finished board — the animation is pure enhancement.
+          var board = document.querySelector(".hy-board");
+          if (board &&
+              !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+            board.classList.add("hy-anim");
+          }
+        });
+      })();
+    </script>

@@ -1,0 +1,47 @@
+= Core Concepts: State, Event & Action
+:description: The three independent vocabularies of a Hydra machine — and why Event and Action sit on opposite ends of a transition.
+
+A Hydra machine is a https://en.wikipedia.org/wiki/Mealy_machine[*Mealy machine*] — and the three type parameters of `Hydra<StateT, EventT, ActionT>` are its three independent vocabularies. The single most important thing to internalise is that *Event and Action sit on opposite ends of a transition*:
+
+[cols="1,1,4",options="header"]
+|===
+| Concept | Direction | What it is
+| *State* | — | _Where_ the machine is. A discrete position, held one at a time. May carry context (e.g. `Placed(amount, address)`).
+| *Event* | *input* ↓ | Something that happened _to_ the machine — the *cause*. You _push_ it in. Often a bare signal (`PaymentSucceeded`).
+| *Action* | *output* ↑ | A command the machine _emits_ on a transition — the *effect*. You _receive_ it. Carries the data the doer needs (`ShipParcel(address)`).
+|===
+
+You *push Events in* and *receive Actions out* — never the reverse. Because they are distinct types, the compiler enforces that one-way arrow: `transition(event)` will not accept an `Action`.
+
+[TIP]
+====
+A quick test when you are unsure which one you are holding: *ask who produced it.* If the _outside world_ produced it (a callback fired, a timer elapsed, a user clicked), it's an *Event*. If the _machine_ produced it as a consequence of moving, it's an *Action*.
+====
+
+For the full rationale — and the real things keeping them as separate type parameters buys you — see xref:event-vs-action.adoc[Why are Event and Action different types?].
+
+== The three families, in code
+
+Each vocabulary is modelled as a sealed interface of records, so the compiler can check exhaustiveness when you `switch` over it:
+
+[source,java,indent=0,options="nowrap"]
+----
+sealed interface OrderState {}                                 // WHERE we are
+record Cart()                                   implements OrderState {}
+record Placed(long amountCents, String address) implements OrderState {}
+record Shipped(long amountCents, String address) implements OrderState {}
+record Cancelled()                              implements OrderState {}
+
+sealed interface OrderEvent {}                                 // INPUTS — what happened to us
+record Checkout(long amountCents, String address) implements OrderEvent {}
+record PaymentSucceeded()           implements OrderEvent {}   // a bare signal — no data
+record PaymentFailed(String reason) implements OrderEvent {}
+record Cancel()                     implements OrderEvent {}
+
+sealed interface OrderAction {}                                // OUTPUTS — commands we emit
+record ChargeCard(long amountCents) implements OrderAction {}
+record ShipParcel(String address)   implements OrderAction {}
+record RefundCard(long amountCents) implements OrderAction {}
+----
+
+NOTE: The Action payload is *optional*. A transition that emits nothing — `sb.transitionTo(nextState)` — is perfectly valid (the `PaymentFailed → Cancelled` edge). If your machine never emits actions, give `ActionT` a wildcard: `Hydra<MyState, MyEvent, ?>`.

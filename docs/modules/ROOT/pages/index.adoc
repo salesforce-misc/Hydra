@@ -1,0 +1,255 @@
+= Hydra
+:page-layout: home
+:page-description: Hydra is a tiny, thread-safe, type-safe library with a fluent DSL for building finite state machines on the JVM — usable from Java and Kotlin. Declare your states and the events that move between them; Hydra makes only the legal moves, models every outcome as a type, and emits an action on each transition.
+:!page-toc:
+
+// =============================================================================
+// LANDING PAGE
+//
+// Renders with the custom `home` layout (docs/supplemental-ui/layouts/home.hbs)
+// — full-bleed, no docs sidebar/TOC. The markup below is one AsciiDoc
+// passthrough block; `subs=attributes+` lets {hydra-version} / {gh-blob}
+// resolve. The landing's styles are scoped under `.hy-home` in
+// docs/supplemental-ui/css/hydra-theme.css (§15+).
+//
+// IDENTITY: transit / wayfinding signage. Hydra's own README frames a state
+// machine as a subway map (stations = states, turnstiles = events). So the
+// SIGNATURE is a midnight "departure board" of the Order machine's transition
+// table, and the diagram is redrawn as a themed inline metro map. All
+// substantive prose lives in the dedicated pages this links to.
+//
+// The board mirrors the REAL Order machine in the README / OrderDomain.java:
+// Cart -Checkout/ChargeCard-> Placed -PaymentSucceeded/ShipParcel-> Shipped,
+// with PaymentFailed (no action) and Cancel/RefundCard both reaching Cancelled.
+// =============================================================================
+
+[subs="attributes+"]
+++++
+<section class="hy-hero">
+  <div class="hy-hero__copy">
+    <p class="hy-eyebrow"><span class="hy-eyebrow__dot"></span>Finite State Machine · JVM</p>
+    <h1 class="hy-hero__title">Your workflow is a subway map.<br><span class="hy-hero__title-accent">Hydra only takes the legal rides.</span></h1>
+    <p class="hy-hero__lede">
+      A tiny, thread-safe, type-safe library with a fluent DSL for
+      <strong>finite state machines</strong> on the JVM — usable from Java and Kotlin.
+      Declare the states your system can be in and the events that move between them.
+      Hydra makes <strong>only the legal moves</strong>, models every outcome as a type,
+      and emits an <strong>action</strong> on each transition — built for the hard case:
+      <a href="async-orchestration.html">driving long-running asynchronous orchestrators</a>.
+    </p>
+    <div class="hy-hero__cta">
+      <a class="hy-btn hy-btn--primary" href="getting-started.html">Get started <span aria-hidden="true">→</span></a>
+      <a class="hy-btn hy-btn--ghost" href="https://github.com/salesforce-misc/Hydra">View on GitHub</a>
+    </div>
+    <p class="hy-hero__meta">
+      <span class="hy-tag">v{hydra-version}</span>
+      <span class="hy-dot-sep">·</span> Apache-2.0
+      <span class="hy-dot-sep">·</span> JDK&nbsp;21+
+      <span class="hy-dot-sep">·</span> Java &amp; Kotlin
+      <span class="hy-dot-sep">·</span> a Mealy machine
+    </p>
+  </div>
+
+  <!-- SIGNATURE: a departure board. The Order machine's transition table read
+       as a live line-status board — each service (transition) reveals on load:
+       where you ARRIVE, the EVENT that takes you there, the ACTION it emits. -->
+  <figure class="hy-board" aria-label="The Order machine as a departure board: four transitions, the event that drives each and the action it emits.">
+    <figcaption class="hy-board__bar">
+      <span class="hy-board__roundel" aria-hidden="true"></span>
+      <span class="hy-board__name">Order Line</span>
+      <span class="hy-board__live"><span class="hy-board__live-dot"></span>in service</span>
+    </figcaption>
+    <div class="hy-board__head">
+      <span>#</span><span>Arrives at</span><span>Via event</span><span>Emits action</span>
+    </div>
+    <ol class="hy-board__rows">
+      <li class="hy-svc" style="--i:0">
+        <span class="hy-svc__idx">01</span>
+        <span class="hy-svc__station"><span class="hy-svc__stop hy-stop--placed"></span>Placed</span>
+        <span class="hy-svc__event">Checkout</span>
+        <span class="hy-svc__action">ChargeCard</span>
+      </li>
+      <li class="hy-svc" style="--i:1">
+        <span class="hy-svc__idx">02</span>
+        <span class="hy-svc__station"><span class="hy-svc__stop hy-stop--shipped"></span>Shipped</span>
+        <span class="hy-svc__event">PaymentSucceeded</span>
+        <span class="hy-svc__action">ShipParcel</span>
+      </li>
+      <li class="hy-svc" style="--i:2">
+        <span class="hy-svc__idx">03</span>
+        <span class="hy-svc__station"><span class="hy-svc__stop hy-stop--cancelled"></span>Cancelled</span>
+        <span class="hy-svc__event">PaymentFailed</span>
+        <span class="hy-svc__action hy-svc__action--none">no action</span>
+      </li>
+      <li class="hy-svc" style="--i:3">
+        <span class="hy-svc__idx">04</span>
+        <span class="hy-svc__station"><span class="hy-svc__stop hy-stop--cancelled"></span>Cancelled</span>
+        <span class="hy-svc__event">Cancel</span>
+        <span class="hy-svc__action">RefundCard</span>
+      </li>
+    </ol>
+    <div class="hy-board__out">
+      <span>Every push returns one of</span>
+      <b class="hy-board__legal">Valid</b><span>·</span><b>Invalid</b><span>·</span><b>NoFromState</b>
+      <span>— illegal moves rejected by construction.</span>
+    </div>
+  </figure>
+</section>
+
+<section class="hy-band hy-why">
+  <header class="hy-band__head">
+    <p class="hy-section-marker">// why a state machine</p>
+    <h2 class="hy-band__title">Stations, turnstiles, one ride at a time.</h2>
+    <p class="hy-band__sub">
+      Stations are <strong>states</strong>; the turnstiles between them are <strong>events</strong> — you
+      can't teleport between any two stations, only take the connections the map allows. Modelling a
+      workflow this way, instead of a tangle of <code>if</code>/<code>else</code> and callbacks, buys three
+      things that matter at scale.
+    </p>
+  </header>
+  <ol class="hy-payoffs">
+    <li class="hy-payoff">
+      <span class="hy-payoff__idx">01</span>
+      <h3 class="hy-payoff__title">Legal moves are explicit</h3>
+      <p class="hy-payoff__body">Illegal transitions are rejected <em>by construction</em>, not discovered at runtime. The map is the contract.</p>
+    </li>
+    <li class="hy-payoff">
+      <span class="hy-payoff__idx">02</span>
+      <h3 class="hy-payoff__title">Failures are types</h3>
+      <p class="hy-payoff__body">Every push returns a sealed <a href="transition-outcomes.html"><code>Transition</code></a> — <code>Valid</code>, <code>Invalid</code>, or <code>NoFromState</code>. The caller is forced to handle "this can't happen".</p>
+    </li>
+    <li class="hy-payoff">
+      <span class="hy-payoff__idx">03</span>
+      <h3 class="hy-payoff__title">Durable resume</h3>
+      <p class="hy-payoff__body">Because the position is an explicit value, a run that dies mid-flight knows exactly which step it was at — and resumes from there.</p>
+    </li>
+  </ol>
+</section>
+
+<section class="hy-band hy-map">
+  <header class="hy-band__head">
+    <p class="hy-section-marker">// the order machine, as a line map</p>
+    <h2 class="hy-band__title">Read the whole machine at a glance.</h2>
+    <p class="hy-band__sub">
+      Each track is one transition. Its colour is the station it leads to; the label reads
+      <strong>Event</strong> (the input you push in) over <span style="font-family:var(--hy-font-mono)">Action</span>
+      (the command emitted out). A <em>dashed</em> track emits no action.
+    </p>
+  </header>
+  <figure class="hy-mapfig">
+    <!-- Inlined (not <img>) so it inherits the page theme — its element classes
+         bind to the same --hy-* tokens as the rest of the page, tracking the
+         light/dark toggle. Redraws docs/images/order-machine.svg as a metro map:
+         track colour = destination station colour. -->
+    <svg viewBox="0 0 1040 500" role="img" aria-label="The Order machine drawn as a metro map. START leads to Cart. Cart to Placed via Checkout emitting ChargeCard. Placed to Shipped via PaymentSucceeded emitting ShipParcel. Placed to Cancelled via PaymentFailed with no action. Shipped to Cancelled via Cancel emitting RefundCard. Cancelled leads to END.">
+      <defs>
+        <marker id="hy-arrow" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0 0 L10 5 L0 10 z" fill="context-stroke"/>
+        </marker>
+      </defs>
+
+      <!-- ===== tracks (drawn first, behind stations) ===== -->
+      <!-- START -> Cart (red, arrives Cart) -->
+      <line class="line line--cart" x1="170" y1="94" x2="170" y2="120" stroke-width="6" fill="none" marker-end="url(#hy-arrow)"/>
+      <!-- Cart -> Placed : Checkout / ChargeCard (teal, arrives Placed) -->
+      <line class="line line--placed" x1="210" y1="160" x2="440" y2="160" stroke-width="7" stroke-linecap="round" fill="none" marker-end="url(#hy-arrow)"/>
+      <!-- Placed -> Shipped : PaymentSucceeded / ShipParcel (amber, arrives Shipped) -->
+      <line class="line line--shipped" x1="520" y1="160" x2="800" y2="160" stroke-width="7" stroke-linecap="round" fill="none" marker-end="url(#hy-arrow)"/>
+      <!-- Placed -> Cancelled : PaymentFailed (violet dashed = no action) -->
+      <line class="line line--cancelled" x1="480" y1="199" x2="480" y2="316" stroke-width="7" stroke-linecap="round" stroke-dasharray="3 13" fill="none" marker-end="url(#hy-arrow)"/>
+      <!-- Shipped -> Cancelled : Cancel / RefundCard (violet, arrives Cancelled) -->
+      <path class="line line--cancelled" d="M840 199 L840 355 L520 355" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" fill="none" marker-end="url(#hy-arrow)"/>
+      <!-- Cancelled -> END (faint terminal connector) -->
+      <line class="line line--start" x1="480" y1="393" x2="480" y2="430" stroke-width="6" fill="none" marker-end="url(#hy-arrow)"/>
+
+      <!-- ===== edge labels ===== -->
+      <text class="edge-event" x="325" y="146" text-anchor="middle" font-size="16">Checkout</text>
+      <text class="edge-action" x="325" y="180" text-anchor="middle" font-size="14">ChargeCard</text>
+      <text class="edge-event" x="660" y="146" text-anchor="middle" font-size="16">PaymentSucceeded</text>
+      <text class="edge-action" x="660" y="180" text-anchor="middle" font-size="14">ShipParcel</text>
+      <text class="edge-event" x="498" y="252" text-anchor="start" font-size="16">PaymentFailed</text>
+      <text class="edge-noaction" x="498" y="272" text-anchor="start" font-size="13">emits nothing</text>
+      <text class="edge-event" x="678" y="341" text-anchor="middle" font-size="16">Cancel</text>
+      <text class="edge-action" x="678" y="376" text-anchor="middle" font-size="14">RefundCard</text>
+
+      <!-- ===== terminals ===== -->
+      <rect class="terminal" x="110" y="47" width="120" height="46" rx="23"/>
+      <text class="terminal-label" x="170" y="76" text-anchor="middle" font-size="15" letter-spacing="0.12em">START</text>
+      <rect class="terminal" x="420" y="431" width="120" height="46" rx="23"/>
+      <text class="terminal-label" x="480" y="460" text-anchor="middle" font-size="15" letter-spacing="0.12em">END</text>
+
+      <!-- ===== stations (white roundels, ringed in their line colour) ===== -->
+      <circle class="station station--cart" cx="170" cy="160" r="38"/>
+      <text class="station-label" x="170" y="225" text-anchor="middle" font-size="20">Cart</text>
+      <circle class="station station--placed" cx="480" cy="160" r="38"/>
+      <text class="station-label" x="480" y="113" text-anchor="middle" font-size="20">Placed</text>
+      <circle class="station station--shipped" cx="840" cy="160" r="38"/>
+      <text class="station-label" x="840" y="225" text-anchor="middle" font-size="20">Shipped</text>
+      <circle class="station station--cancelled" cx="480" cy="355" r="38"/>
+      <text class="station-label" x="432" y="361" text-anchor="end" font-size="20">Cancelled</text>
+
+      <!-- ===== legend ===== -->
+      <rect class="legend-box" x="40" y="362" width="338" height="126" rx="10" stroke-width="1.5"/>
+      <text class="legend-label" x="58" y="388" font-size="12" letter-spacing="0.1em">LEGEND</text>
+      <text x="58" y="412" font-size="13"><tspan class="legend-label">Ring</tspan><tspan class="legend-text"> = State — where the order is</tspan></text>
+      <text x="58" y="434" font-size="13"><tspan class="legend-label">Bold</tspan><tspan class="legend-text"> = Event — the input you push in</tspan></text>
+      <text x="58" y="456" font-size="13"><tspan class="legend-label">Mono</tspan><tspan class="legend-text"> = Action — the command emitted out</tspan></text>
+      <text x="58" y="478" font-size="13"><tspan class="legend-label">Dashed</tspan><tspan class="legend-text"> = a transition that emits no action</tspan></text>
+    </svg>
+    <span class="hy-mapfig__cap">Hydra.create( … ) — the Order machine wired up in OrderDomain.java &amp; HydraTest.java</span>
+  </figure>
+
+  <div class="hy-vocab">
+    <div class="hy-vcard hy-vcard--state">
+      <span class="hy-vcard__dir">— · the position</span>
+      <h3 class="hy-vcard__name">State</h3>
+      <p class="hy-vcard__body"><strong>Where</strong> the machine is — a discrete station, held one at a time. May carry context: <code>Placed(amount, address)</code>.</p>
+    </div>
+    <div class="hy-vcard hy-vcard--event">
+      <span class="hy-vcard__dir">input ↓ · the cause</span>
+      <h3 class="hy-vcard__name">Event</h3>
+      <p class="hy-vcard__body">Something that happened <em>to</em> the machine. You <strong>push</strong> it in — often a bare signal: <code>PaymentSucceeded</code>.</p>
+    </div>
+    <div class="hy-vcard hy-vcard--action">
+      <span class="hy-vcard__dir">output ↑ · the effect</span>
+      <h3 class="hy-vcard__name">Action</h3>
+      <p class="hy-vcard__body">A command the machine <strong>emits</strong> on a transition. You <em>receive</em> it and do the work: <code>ShipParcel(address)</code>.</p>
+    </div>
+  </div>
+</section>
+
+<section class="hy-band hy-drive">
+  <header class="hy-band__head">
+    <p class="hy-section-marker">// two ways to drive the line</p>
+    <h2 class="hy-band__title">In-memory, or as a pure routing function.</h2>
+    <p class="hy-band__sub">
+      A plain <code>transition(event)</code> is perfect for a synchronous, single-process machine. But Hydra
+      was built for the harder case — where the durable truth lives <em>outside</em> the JVM.
+    </p>
+  </header>
+  <div class="hy-modes">
+    <a class="hy-modecard" href="driving-a-machine.html">
+      <span class="hy-modecard__tag">synchronous · in-memory</span>
+      <h3 class="hy-modecard__title">transition(event)</h3>
+      <p class="hy-modecard__body">Match-and-move. Mutates the current state (thread-safe via a single <code>AtomicReference</code>), fires listeners, and hands you the <code>Transition</code>.</p>
+      <span class="hy-modecard__go">How to drive it →</span>
+    </a>
+    <a class="hy-modecard" href="async-orchestration.html">
+      <span class="hy-modecard__tag">asynchronous · durable</span>
+      <h3 class="hy-modecard__title">readTransitionAndNotifyListeners(…)</h3>
+      <p class="hy-modecard__body">Answers "given I finished step X with exit event E, what runs next?" and fires listeners — <strong>without</strong> mutating in-memory state. Your store holds the real position.</p>
+      <span class="hy-modecard__go">Drive an orchestrator →</span>
+    </a>
+  </div>
+</section>
+
+<section class="hy-cta">
+  <h2 class="hy-cta__title">One ride at a time. Only the legal ones.</h2>
+  <p class="hy-cta__sub">Declare your states and events; let the compiler keep them straight.</p>
+  <code class="hy-cta__install"><span class="hy-i-fn">Hydra.create</span>(mb -&gt; <span class="hy-i-str">…</span>)</code>
+  <div class="hy-hero__cta">
+    <a class="hy-btn hy-btn--primary" href="getting-started.html">Get started <span aria-hidden="true">→</span></a>
+    <a class="hy-btn hy-btn--ghost" href="why-state-machine.html">Why a state machine?</a>
+  </div>
+</section>
+++++

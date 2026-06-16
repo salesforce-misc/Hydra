@@ -1,0 +1,27 @@
+= Why a State Machine?
+:description: Why model a workflow as a finite state machine — the subway-map intuition, and the three things it buys you at scale.
+
+Think of a state machine as a *subway map*:
+
+* *Stations* are _states_ — the discrete places the system can be (`Cart`, `Placed`, `Shipped`).
+* *Turnstiles between stations* are _events_ — you cannot teleport from any station to any other; you may only take the connections the map allows.
+* A *transition* is one ride through one turnstile: it either _works_ (you arrive at the next station), or it is _not allowed_ (you pushed a turnstile that does not exist here), or there is _no such station_ on this map at all.
+
+Modelling a workflow this way — instead of a tangle of `if`/`else` and callbacks — buys you three things that matter at scale.
+
+== 1. The legal moves are explicit
+
+Illegal transitions are rejected by construction, not discovered at runtime. The map _is_ the contract: if an edge isn't drawn, the move can't happen.
+
+== 2. Failures are types, not nulls or booleans
+
+Every push returns a sealed xref:transition-outcomes.adoc[`Transition`] — `Valid`, `Invalid`, or `NoFromState` — so the caller is _forced_ to handle "this can't happen" rather than silently ignoring it.
+
+== 3. Durable resume
+
+Because the position is an explicit value, a run that dies mid-flight knows exactly which step it was at and can resume from there. This is the property that makes Hydra a good fit for xref:async-orchestration.adoc[long-running asynchronous orchestrators].
+
+[TIP]
+====
+Hydra is a https://en.wikipedia.org/wiki/Mealy_machine[*Mealy machine*]: the output (the *action*) emitted on a transition depends on _both_ the current state and the event. That's what lets a bare event like `PaymentSucceeded` produce a data-carrying action like `ShipParcel(address)` — the address comes from the *state*, not the event. See xref:core-concepts.adoc[State, Event & Action].
+====

@@ -1,0 +1,26 @@
+= Why Are Event and Action Different Types?
+:description: Conflating Event and Action is the most common source of confusion. They are opposite ends of one edge — and keeping them as separate type parameters buys real things.
+
+It is tempting to think an Event and an Action are the same kind of thing — both are "stuff that happens around a transition." They are not, and conflating them is the most common source of confusion. They are opposite ends of one edge:
+
+[cols="1,1",options="header"]
+|===
+| Event | Action
+| *Input* — arrives from the outside world. | *Output* — emitted by the machine.
+| You _push_ it: `machine.transition(event)`. | You _receive_ it: `transition.getAction()`.
+| The *cause* ("payment succeeded"). | The *effect* ("charge the card", "ship the parcel").
+| Often a bare signal with no data. | Usually carries data the downstream doer needs.
+| Past tense — it already happened. | Imperative — go do this.
+|===
+
+A quick test when you are unsure which one you are holding: *ask who produced it.* If the _outside world_ produced it (a callback fired, a timer elapsed, a user clicked), it's an Event. If the _machine_ produced it as a consequence of moving, it's an Action.
+
+== What the separation buys you
+
+Keeping them as separate type parameters buys real things:
+
+. *Compile-time direction safety.* `transition(EventT)` cannot accept an `Action`, so you can never accidentally feed an output back in as an input.
+. *Different shapes.* An event like `PaymentSucceeded` is a bare signal; the action it triggers, `ShipParcel(address)`, needs a payload — and that payload often comes from the *State*, not the event (the ★ edge in xref:getting-started.adoc[the example]). Forcing both into one type would lose that.
+. *Decoupling decision from doing.* The machine _decides_ and _emits a command_ — it never runs the command itself. Some other code (the call site, a listener, or a worker on another host) interprets the action and _performs_ it (see xref:handling-actions.adoc[Handling Actions]). That separation keeps the machine pure and is what makes the xref:async-orchestration.adoc[async pattern] possible — the machine never blocks on the side effect.
+
+NOTE: The Action payload is *optional*. A transition that emits nothing — `sb.transitionTo(nextState)` — is perfectly valid (the `PaymentFailed → Cancelled` edge). If your machine never emits actions, give `ActionT` a wildcard: `Hydra<MyState, MyEvent, ?>`.

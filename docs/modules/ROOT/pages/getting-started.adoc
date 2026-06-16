@@ -1,0 +1,146 @@
+= Getting Started
+:description: Install Hydra from Maven Central, then model and drive an Order machine end to end.
+
+Hydra is a tiny, thread-safe, type-safe library that exposes a fluent DSL for building *finite state machines* on the JVM — usable from both Java and Kotlin. You declare the states your system can be in, the events that move it between them, and Hydra gives you a machine that makes only the *legal* moves, models every outcome as a type, and notifies listeners as it goes.
+
+It is small enough to read in one sitting, yet built for the demanding case: *driving long-running, asynchronous orchestrators* where steps complete on different threads or hosts minutes apart, and the durable truth lives outside the JVM. That second use case is why Hydra exists — see xref:async-orchestration.adoc[Driving asynchronous orchestrators].
+
+== Features
+
+* *Type-safe generics* — `Hydra<StateT, EventT, ActionT>`. States, events, and the optional action payload are all your own types; the compiler keeps them straight.
+* *Thread-safe by design* — the current state lives in a single `AtomicReference`, and each `transition` does a `synchronized` match-and-move. Safe to drive from many concurrent worker threads; the state never tears.
+* *Sealed `Transition` outcomes* — `Valid` / `Invalid` / `NoFromState`. Three honest results, exhaustively handled. See xref:transition-outcomes.adoc[Transition Outcomes].
+* *Lifecycle listeners* — register `onEnter`, `onExit`, and `onTransition` hooks to fire side effects (logging, metrics, persistence) as the machine moves.
+* *Read-only transitions* — compute _what the next move would be_ and fire listeners *without* mutating in-memory state. The key enabler for xref:async-orchestration.adoc[async orchestration].
+* *Flexible matching* — match an event/state by value (`eq`), by type (`any(Class)`), or by an arbitrary predicate (`where { … }`).
+* *Immutable rebuilds* — `cloneWith { … }` derives a new machine from an existing one (e.g. with a different initial state) without mutating the original.
+* *Java- and Kotlin-friendly* — every builder hook has both a Java `Consumer`/`BiConsumer` overload and a Kotlin lambda-with-receiver overload.
+
+== Install
+
+Hydra is published to Maven Central as `com.salesforce.hydra:hydra`.
+
+[source,kotlin,subs="attributes"]
+.build.gradle.kts
+----
+dependencies {
+    implementation("com.salesforce.hydra:hydra:{hydra-version}")
+}
+----
+
+[source,groovy,subs="attributes"]
+.build.gradle
+----
+dependencies {
+    implementation 'com.salesforce.hydra:hydra:{hydra-version}'
+}
+----
+
+[source,xml,subs="attributes"]
+.pom.xml
+----
+<dependency>
+  <groupId>com.salesforce.hydra</groupId>
+  <artifactId>hydra</artifactId>
+  <version>{hydra-version}</version>
+</dependency>
+----
+
+NOTE: Requires *JDK 21+*.
+
+== Quick start: an Order machine
+
+Model the lifecycle of an order. Each edge reads *`Event / Action`* — the event that drives the move, then the action emitted on it (a _dashed_ edge emits no action):
+
+image::order-machine.svg[Order machine — a Mealy machine,align=center]
+
+Three distinct type families — `State`, `Event`, `Action` — modelled as sealed interfaces of records (JDK 21):
+
+[source,java,indent=0,options="nowrap"]
+----
+sealed interface OrderState {}
+record Cart()                                   implements OrderState {}
+record Placed(long amountCents, String address) implements OrderState {}
+record Shipped(long amountCents, String address) implements OrderState {}
+record Cancelled()                              implements OrderState {}
+
+sealed interface OrderEvent {}                                 // INPUTS — what happened to us
+record Checkout(long amountCents, String address) implements OrderEvent {}
+record PaymentSucceeded()           implements OrderEvent {}   // a bare signal — no data
+record PaymentFailed(String reason) implements OrderEvent {}
+record Cancel()                     implements OrderEvent {}
+
+sealed interface OrderAction {}                                // OUTPUTS — commands we emit
+record ChargeCard(long amountCents) implements OrderAction {}
+record ShipParcel(String address)   implements OrderAction {}
+record RefundCard(long amountCents) implements OrderAction {}
+----
+
+Weave them into a machine. Each `sb.on(Event.class, …)` declares an edge; `sb.transitionTo(nextState, action)` says where to go and what to emit:
+
+[source,java,indent=0,options="nowrap"]
+----
+Hydra<OrderState, OrderEvent, OrderAction> orderMachine = Hydra.create(mb -> {
+  mb.initialState(new Cart());
+
+  mb.state(Cart.class, sb ->
+      sb.on(Checkout.class, (cart, checkout) ->
+          sb.transitionTo(
+              new Placed(checkout.amountCents(), checkout.address()),  // next STATE
+              new ChargeCard(checkout.amountCents()))));               // ACTION emitted
+
+  mb.state(Placed.class, sb -> {
+    sb.onExit(onPlacedExit);                                           // listener: leaving Placed
+    // ★ The Mealy point: a BARE event in, a data-carrying action out.
+    //   PaymentSucceeded has no payload; ShipParcel's address comes from the STATE.
+    sb.on(PaymentSucceeded.class, (placed, event) ->
+        sb.transitionTo(
+            new Shipped(placed.amountCents(), placed.address()),
+            new ShipParcel(placed.address())));
+    // A transition may emit NO action — the payload is optional.
+    sb.on(PaymentFailed.class, (placed, event) -> sb.transitionTo(new Cancelled()));
+  });
+
+  mb.state(Shipped.class, sb -> {
+    sb.onEnter(onShippedEnter);                                        // listener: arriving at Shipped
+    sb.on(Cancel.class, (shipped, event) ->
+        sb.transitionTo(new Cancelled(), new RefundCard(shipped.amountCents())));
+  });
+
+  mb.state(Cancelled.class, sb -> {});                                 // terminal — no outgoing edges
+});
+----
+
+Drive it by pushing *events*. Each valid push moves the state _and_ hands you an *action* — which you then carry out by calling your own code (here, a payment gateway and a warehouse):
+
+[source,java,indent=0,options="nowrap"]
+----
+// 1. Push an event. The machine moves AND tells you what to do next.
+var checkout = orderMachine.transition(new Checkout(4999, "1 Market St"));
+orderMachine.getState();                              // Placed[amountCents=4999, address=1 Market St]
+
+// 2. Do something with the emitted action — call your own code.
+var action = ((Transition.Valid<OrderState, OrderEvent, OrderAction>) checkout).getAction();
+switch (action) {
+  case ChargeCard c -> paymentGateway.charge(c.amountCents());   // ← ChargeCard[4999] → real charge
+  case ShipParcel s -> warehouse.dispatch(s.address());
+  case RefundCard r -> paymentGateway.refund(r.amountCents());
+}
+
+// Next event: a bare PaymentSucceeded comes back in, ShipParcel goes out → warehouse.dispatch(...)
+var paid = orderMachine.transition(new PaymentSucceeded());
+
+// An illegal push is rejected; the state is left untouched and there is no action to run.
+var bad = orderMachine.transition(new Cancel());      // from Cart, Cancel isn't a legal move
+bad.isValid();                                        // false — Transition.Invalid
+----
+
+The `switch` is how you _consume_ an action — covered in xref:handling-actions.adoc[Handling Actions].
+
+The runnable version, with listener and payload assertions, lives in the tests:
+
+* link:{gh-blob}/{testdir}/com/salesforce/hydra/OrderDomain.java[`OrderDomain.java`] — the `State` / `Event` / `Action` type families above.
+* link:{gh-blob}/{testdir}/com/salesforce/hydra/HydraTest.java[`HydraTest.java`] — the machine wired up, asserting the emitted actions (incl. the bare-event → data-action edge), the optional no-action transition, listeners, and invalid-transition rejection.
+
+[.text-center]
+xref:core-concepts.adoc[Next: State, Event & Action →]

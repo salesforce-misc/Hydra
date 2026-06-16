@@ -1,0 +1,41 @@
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="{{or site.url (or siteRootPath '/')}}">{{site.title}}</a>
+      {{#if env.SITE_SEARCH_PROVIDER}}
+      <div class="navbar-item search hide-for-print">
+        <input id="search-input" type="text" placeholder="Search" autocomplete="off">
+      </div>
+      {{/if}}
+      <button class="navbar-burger" aria-controls="topbar-nav" aria-expanded="false" aria-label="Toggle main menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <div class="navbar-item">
+          <span class="control">
+            <a class="button" href="https://github.com/salesforce-misc/Hydra">GitHub</a>
+          </span>
+        </div>
+        <div class="navbar-item">
+          {{!-- Light/dark toggle. Both icons are inlined; CSS shows the one for
+                the *other* theme (moon in light mode, sun in dark mode). The
+                click handler is wired by the theme-init script in head-meta. --}}
+          <button id="hy-theme-toggle" class="hy-theme-toggle" type="button"
+                  aria-label="Toggle light and dark theme" title="Toggle light/dark theme">
+            <svg class="hy-icon-moon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+            <svg class="hy-icon-sun" viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="12" cy="12" r="4"/>
+              <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>

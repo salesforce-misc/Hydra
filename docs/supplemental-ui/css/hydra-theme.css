@@ -1,0 +1,1494 @@
+/* =============================================================================
+   Hydra theme — a modular, additive skin over the stock Antora default UI.
+
+   DESIGN — TRANSIT / WAYFINDING SIGNAGE
+     Hydra's own README frames a state machine as a SUBWAY MAP: "stations are
+     states, turnstiles between stations are events, a transition is one ride
+     through one turnstile." So the whole identity is built from that world —
+     wayfinding signage, a transit line palette, and a departure board as the
+     hero. Not editorial, not a terminal: a transit network you can read at a
+     glance. One accent — the primary line, a deep signal teal — does the work;
+     the four state-line colors (red/teal/amber/violet) are the route legend,
+     used only where a route is being drawn.
+
+   HOW IT LOADS
+     partials/head-meta.hbs injects this file AFTER the bundle's site.css, so
+     every rule here overrides the stock UI without forking the bundle. Upgrading
+     the UI bundle keeps working; this layer just re-applies on top.
+
+   HOW TO TOGGLE / SWAP
+     • Disable the theme  → empty partials/head-meta.hbs.
+     • Re-skin the theme  → edit only the :root tokens below; rules consume
+                            tokens, not raw values.
+     • Replace the theme  → drop in a different css file and point head-meta at it.
+   ========================================================================== */
+
+/* ----------------------------------------------------------------------------
+   1. Fonts
+   ------------------------------------------------------------------------- */
+:root {
+  --hy-font-sans: "Hanken Grotesk", -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Roboto, sans-serif;
+  --hy-font-mono: "Space Mono", ui-monospace, SFMono-Regular, "SF Mono",
+    Menlo, monospace;
+  /* Display face — Bricolage Grotesque has the slightly-irregular, signpainted
+     spine of cut-vinyl transit signage; it reads as "wayfinding," not
+     "magazine." Headings (display role); body stays Hanken Grotesk (a humanist
+     grotesque in the Frutiger/Transport lineage of signage type); board chrome,
+     station codes and code stay Space Mono. Three roles, each earned. */
+  --hy-font-display: "Bricolage Grotesque", "Hanken Grotesk", -apple-system,
+    BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+/* ----------------------------------------------------------------------------
+   2. Design tokens — light theme (the single place to re-skin)
+   ------------------------------------------------------------------------- */
+:root {
+  /* Accent — the PRIMARY LINE: a deep signal teal. Deepened to #0a655e so it
+     clears WCAG AA (~4.9:1) as link/CTA text on white; the brighter #16b3a6
+     shows through in soft tints and the dark theme, where it reads as itself. */
+  --hy-accent: #0a655e;
+  --hy-accent-hover: #074b46;
+  --hy-accent-soft: rgba(22, 179, 166, 0.12);
+
+  /* Surfaces — cool signage paper, faintly blue-grey (not warm, not pure cold) */
+  --hy-bg: #ffffff;
+  --hy-bg-subtle: #f3f6f6;
+  --hy-bg-code: #f5f8f8;
+  --hy-nav-bg: #f6f9f9;
+  --hy-border: #e3e9e9;
+  --hy-border-strong: #d0d9d9;
+
+  /* Text — cool near-black ink */
+  --hy-text: #10191b;
+  --hy-text-muted: #495658;
+  --hy-text-faint: #78878a;
+  --hy-heading: #070d0e;
+
+  /* Top bar — solid midnight, the departure-board blue-black */
+  --hy-navbar-bg: #0b1020;
+  --hy-navbar-text: #eef2f6;
+
+  /* The route legend — the four state-line colors. Used ONLY where a route is
+     drawn (the map, the board's station chips), never as page chrome. */
+  --hy-line-cart: #e0544b;       /* red line    — Cart      */
+  --hy-line-placed: #0d9488;     /* teal line   — Placed     */
+  --hy-line-shipped: #e0a200;    /* amber line  — Shipped    */
+  --hy-line-cancelled: #7c5cd6;  /* violet line — Cancelled  */
+
+  /* Admonition tints — semantic, restrained (standard in great docs) */
+  --hy-note: #2563eb;
+  --hy-tip: #15803d;
+  --hy-important: #be123c;
+  --hy-warning: #b45309;
+  --hy-caution: #c2410c;
+
+  /* Shape & motion — hairline borders, barely-there lift */
+  --hy-radius: 0.5rem;
+  --hy-radius-sm: 0.375rem;
+  --hy-shadow: 0 1px 2px rgba(11, 16, 32, 0.05),
+    0 2px 8px rgba(11, 16, 32, 0.06);
+  --hy-shadow-sm: 0 1px 2px rgba(11, 16, 32, 0.06);
+}
+
+/* ----------------------------------------------------------------------------
+   3. Design tokens — dark theme = "night service" (same names, remapped values)
+
+   Applied when <html data-theme="dark">. The theme-init script in
+   partials/head-meta.hbs resolves the active theme before first paint:
+   it reads the saved choice from localStorage, and when none is saved it
+   falls back to the OS `prefers-color-scheme`. So the OS preference is still
+   the default — the manual toggle just overrides it. Driving the switch off a
+   single attribute (not a media query) lets one CSS block serve both the
+   auto and the explicitly-chosen dark states.
+   ------------------------------------------------------------------------- */
+:root[data-theme="dark"] {
+  /* Signal teal lifted for the midnight surfaces — reads true and clears
+     body-text legibility (~7:1) without tipping into neon. */
+  --hy-accent: #3ed0c2;
+  --hy-accent-hover: #62ddd0;
+  --hy-accent-soft: rgba(62, 208, 194, 0.16);
+
+  --hy-bg: #0a0f1a;
+  --hy-bg-subtle: #111726;
+  --hy-bg-code: #0d1322;
+  --hy-nav-bg: #0c111d;
+  --hy-border: #1d2638;
+  --hy-border-strong: #2c374e;
+
+  --hy-text: #e3e9f1;
+  --hy-text-muted: #9aa6ba;
+  --hy-text-faint: #6b7689;
+  --hy-heading: #f4f7fc;
+
+  --hy-navbar-bg: #070b14;
+  --hy-navbar-text: #eef2f6;
+
+  /* Route legend lifted for night service */
+  --hy-line-cart: #f47068;
+  --hy-line-placed: #2dd4bf;
+  --hy-line-shipped: #f5c145;
+  --hy-line-cancelled: #a78bfa;
+
+  --hy-note: #60a5fa;
+  --hy-tip: #4ade80;
+  --hy-important: #fb7185;
+  --hy-warning: #fbbf24;
+  --hy-caution: #fb923c;
+
+  --hy-shadow: 0 1px 2px rgba(0, 0, 0, 0.5), 0 4px 18px rgba(0, 0, 0, 0.5);
+  --hy-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* ----------------------------------------------------------------------------
+   4. Base typography
+   ------------------------------------------------------------------------- */
+body {
+  font-family: var(--hy-font-sans);
+  background: var(--hy-bg);
+  color: var(--hy-text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.55;
+}
+
+.doc p,
+.doc li,
+.doc dd,
+.doc td.content {
+  line-height: 1.65;
+}
+
+/* Prose ink. The stock bundle hardcodes `.doc { color: #333 }` (plus #5d5d5d on
+   list items, block titles, etc.), which out-specifies the `body` color above —
+   so without these overrides every paragraph stays near-black and vanishes on
+   the dark background. Bind the whole `.doc` text family to tokens so both
+   themes track the palette. */
+.doc {
+  color: var(--hy-text);
+}
+
+.doc p,
+.doc li,
+.doc dd,
+.doc td.content,
+.doc th.tableblock,
+.doc p.tableblock,
+.doc .colist > table td,
+.doc dl,
+.doc dt {
+  color: var(--hy-text);
+}
+
+.doc strong,
+.doc b {
+  color: var(--hy-heading);
+}
+
+/* Block titles (figure/table/listing captions, etc.) */
+.doc .admonitionblock .title,
+.doc .exampleblock .title,
+.doc .imageblock .title,
+.doc .listingblock .title,
+.doc .literalblock .title,
+.doc .openblock .title,
+.doc .videoblock .title,
+.doc .dlist .title,
+.doc table.tableblock caption,
+.doc .ulist .title,
+.doc .olist .title {
+  color: var(--hy-text-faint);
+}
+
+/* Blockquotes / verse */
+.doc .quoteblock,
+.doc .verseblock {
+  color: var(--hy-text-muted);
+  background: var(--hy-bg-subtle);
+  border-left-color: var(--hy-border-strong);
+}
+
+.doc .quoteblock .attribution {
+  color: var(--hy-text-faint);
+}
+
+/* Headings — Bricolage Grotesque display face, solid ink, tight. */
+.doc h1,
+.doc h2,
+.doc h3,
+.doc h4,
+.doc h5,
+.doc h6 {
+  font-family: var(--hy-font-display);
+  color: var(--hy-heading);
+  font-weight: 600;
+  letter-spacing: -0.018em;
+  line-height: 1.2;
+}
+
+.doc h1.page {
+  font-size: 2.5rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  margin-top: 1.5rem;
+}
+
+.doc h2 {
+  border-bottom: 1px solid var(--hy-border);
+  padding-bottom: 0.35rem;
+  margin-top: 2.4rem;
+}
+
+.doc h1.sect0 {
+  background: var(--hy-bg-subtle);
+  border-radius: var(--hy-radius-sm);
+}
+
+/* ----------------------------------------------------------------------------
+   5. Links
+   ------------------------------------------------------------------------- */
+.doc a,
+.doc a code {
+  color: var(--hy-accent);
+  text-decoration: none;
+  transition: color 0.12s ease, border-color 0.12s ease;
+}
+
+.doc a:hover {
+  color: var(--hy-accent-hover);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-decoration-thickness: 1px;
+}
+
+.doc a.xref:hover {
+  text-decoration-color: var(--hy-accent);
+}
+
+/* ----------------------------------------------------------------------------
+   6. Top navbar — solid midnight (departure board)
+   ------------------------------------------------------------------------- */
+.navbar {
+  background: var(--hy-navbar-bg);
+  color: var(--hy-navbar-text);
+  box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.navbar-item,
+.navbar-item:first-child a {
+  color: var(--hy-navbar-text);
+}
+
+.navbar-item:first-child {
+  font-family: var(--hy-font-display);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+/* Burger dropdown panel (shown <1024px) — treat as an extension of the ink bar:
+   same dark surface, both themes (the stock bundle drops a white sheet here). */
+.navbar-menu {
+  background: var(--hy-navbar-bg);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+}
+
+.navbar-menu .navbar-item,
+.navbar-menu a.navbar-item {
+  color: var(--hy-navbar-text);
+}
+
+.navbar-menu .navbar-link:hover,
+.navbar-menu a.navbar-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--hy-navbar-text);
+}
+
+/* Brand roundel before the title — the favicon, framed like a station marker */
+.navbar-brand .navbar-item:first-child::before {
+  content: "";
+  display: inline-block;
+  width: 1.55rem;
+  height: 1.55rem;
+  margin-right: 0.55rem;
+  vertical-align: -0.35rem;
+  background: url(../img/favicon.svg) center / cover no-repeat;
+  border-radius: 0.4rem;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.18);
+}
+
+/* GitHub button — quiet outline on the ink bar */
+.navbar .button {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: var(--hy-navbar-text);
+  border-radius: 0.45rem;
+  font-weight: 600;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.navbar .button:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.38);
+}
+
+/* Search input on the ink bar */
+.navbar .search #search-input {
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 0.45rem;
+  color: var(--hy-navbar-text);
+  padding: 0.25rem 0.6rem;
+  outline: none;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.navbar .search #search-input::placeholder {
+  color: rgba(238, 242, 246, 0.5);
+}
+
+.navbar .search #search-input:focus {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+/* ----------------------------------------------------------------------------
+   7. Side nav
+   ------------------------------------------------------------------------- */
+.nav {
+  background: var(--hy-nav-bg);
+  border-right: 1px solid var(--hy-border);
+  box-shadow: none;
+}
+
+.nav-panel-menu .nav-list .nav-list {
+  border-left: 1px solid var(--hy-border);
+}
+
+.nav-menu h3.title {
+  color: var(--hy-text-faint);
+  font-family: var(--hy-font-mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.nav-menu a.nav-link {
+  color: var(--hy-text-muted);
+  border-radius: var(--hy-radius-sm);
+  /* Left padding clears the active accent bar so text never hugs it; applied to
+     every link so the active state doesn't shift text horizontally. */
+  padding: 0.12rem 0.4rem 0.12rem 0.6rem;
+  margin-left: -0.4rem;
+  transition: color 0.12s ease, background 0.12s ease;
+}
+
+.nav-menu a.nav-link:hover {
+  color: var(--hy-text);
+  background: var(--hy-bg-subtle);
+}
+
+/* Active page — straight accent bar + faint tint, like the highlighted stop on
+   a route. Left corners squared so the inset bar stays a straight line. */
+.nav-menu .is-current-page > .nav-link,
+.nav-menu .is-active > .nav-link {
+  color: var(--hy-accent);
+  font-weight: 700;
+  background: var(--hy-accent-soft);
+  border-radius: 0 var(--hy-radius-sm) var(--hy-radius-sm) 0;
+  box-shadow: inset 2px 0 0 var(--hy-accent);
+}
+
+/* ----------------------------------------------------------------------------
+   8. Toolbar / breadcrumbs
+   ------------------------------------------------------------------------- */
+.toolbar {
+  background: var(--hy-bg);
+  color: var(--hy-text-muted);
+  box-shadow: 0 1px 0 var(--hy-border);
+}
+
+.toolbar a {
+  color: var(--hy-text-muted);
+}
+
+.toolbar a:hover {
+  color: var(--hy-accent);
+}
+
+.edit-this-page a {
+  color: var(--hy-text-faint);
+}
+
+/* Toolbar glyphs — the sidebar-toggle hamburger and breadcrumb home icon are
+   background-image SVGs with #222 baked in by the bundle. On the dark toolbar
+   they vanish — and `color` can't touch a background-image. Invert the glyph in
+   dark mode so it reads near-white; light mode leaves the SVG untouched. */
+:root[data-theme="dark"] .nav-toggle,
+:root[data-theme="dark"] .toolbar .home-link {
+  filter: invert(0.9) hue-rotate(180deg);
+}
+
+/* ----------------------------------------------------------------------------
+   9. Code — inline + blocks
+   ------------------------------------------------------------------------- */
+code,
+pre {
+  font-family: var(--hy-font-mono);
+}
+
+/* Inline code — neutral chip, not accent-tinted (keeps prose calm) */
+.doc p code,
+.doc li code,
+.doc td.content code,
+.doc dd code {
+  background: var(--hy-bg-subtle);
+  color: var(--hy-text);
+  border: 1px solid var(--hy-border);
+  border-radius: var(--hy-radius-sm);
+  font-size: 0.82em;
+  padding: 0.1em 0.36em;
+}
+
+/* Code blocks — rounded, hairline border, faint lift */
+.doc pre.highlight code,
+.doc .listingblock pre {
+  background: var(--hy-bg-code);
+  border: 1px solid var(--hy-border);
+  border-radius: var(--hy-radius);
+  box-shadow: var(--hy-shadow-sm);
+  padding: 1.1em 1.2em;
+  font-size: 0.82rem;
+  line-height: 1.62;
+}
+
+/* Base code text. The bundle leaves non-highlighted code tokens at the inherited
+   .doc #333, which disappears on the dark code surface — pin the default token
+   color so un-tokenised code (and the .hljs base) stays legible in both. */
+.doc pre code,
+.doc pre code .hljs,
+.doc .listingblock pre code {
+  color: var(--hy-text);
+}
+
+/* Image/example titles → small-caps label */
+.doc .imageblock .title,
+.doc .exampleblock .title {
+  color: var(--hy-text-faint);
+  font-family: var(--hy-font-mono);
+  font-size: 0.76rem;
+  font-weight: 700;
+  font-style: normal;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+/* Listing-block titles → source-file caption (carries a link to the source) */
+.doc .listingblock > .title {
+  color: var(--hy-text-faint);
+  font-size: 0.8rem;
+  font-weight: 500;
+  font-style: normal;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.doc .listingblock > .title a {
+  font-family: var(--hy-font-mono);
+  font-size: 0.95em;
+  color: var(--hy-accent);
+}
+
+.doc .listingblock > .title a:hover {
+  color: var(--hy-accent-hover);
+}
+
+/* Callout numbers (the ①②③ markers) — white number on a filled accent circle. */
+.doc .conum[data-value] {
+  background: var(--hy-accent);
+  border-color: var(--hy-accent);
+  color: #fff;
+  font-weight: 700;
+}
+
+.doc .conum[data-value]::after {
+  color: #fff;
+}
+
+/* ----------------------------------------------------------------------------
+   10. Admonitions — soft tinted cards (drop the boxed table look)
+   ------------------------------------------------------------------------- */
+.doc .admonitionblock > table td.content {
+  background: var(--hy-bg-subtle);
+  border: 1px solid var(--hy-border);
+  border-left-width: 3px;
+  border-radius: var(--hy-radius-sm);
+  padding: 1rem 1.1rem 0.85rem;
+}
+
+.doc .admonitionblock.note > table td.content {
+  border-left-color: var(--hy-note);
+}
+.doc .admonitionblock.tip > table td.content {
+  border-left-color: var(--hy-tip);
+}
+.doc .admonitionblock.important > table td.content {
+  border-left-color: var(--hy-important);
+}
+.doc .admonitionblock.warning > table td.content {
+  border-left-color: var(--hy-warning);
+}
+.doc .admonitionblock.caution > table td.content {
+  border-left-color: var(--hy-caution);
+}
+
+/* Keep the stock pill icons, align colors with the card accent */
+.admonitionblock td.icon i.icon-note {
+  background-color: var(--hy-note);
+}
+.admonitionblock td.icon i.icon-tip {
+  background-color: var(--hy-tip);
+}
+.admonitionblock td.icon i.icon-important {
+  background-color: var(--hy-important);
+}
+.admonitionblock td.icon i.icon-warning {
+  background-color: var(--hy-warning);
+}
+.admonitionblock td.icon i.icon-caution {
+  background-color: var(--hy-caution);
+}
+
+/* ----------------------------------------------------------------------------
+   11. Tables, TOC, images
+   ------------------------------------------------------------------------- */
+.doc table.tableblock {
+  border-radius: var(--hy-radius-sm);
+  overflow: hidden;
+}
+
+.doc table.tableblock thead th {
+  background: var(--hy-bg-subtle);
+  color: var(--hy-heading);
+  font-family: var(--hy-font-mono);
+  font-size: 0.82rem;
+  letter-spacing: 0.02em;
+  border-bottom: 2px solid var(--hy-border-strong);
+}
+
+/* Right-hand "Contents" TOC */
+.toc .toc-menu h3 {
+  color: var(--hy-text-faint);
+  font-family: var(--hy-font-mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.toc .toc-menu a {
+  color: var(--hy-text-muted);
+  border-left: 2px solid var(--hy-border);
+  transition: color 0.12s ease, border-color 0.12s ease;
+}
+
+.toc .toc-menu a:hover,
+.toc .toc-menu a.is-active {
+  color: var(--hy-accent);
+  border-left-color: var(--hy-accent);
+}
+
+/* Images — gentle rounding + lift so figures feel intentional */
+.doc .imageblock img,
+.doc .image img {
+  border-radius: var(--hy-radius-sm);
+}
+
+.doc .imageblock:not(.text-center) img {
+  box-shadow: var(--hy-shadow);
+}
+
+/* ----------------------------------------------------------------------------
+   12. Footer + misc
+   ------------------------------------------------------------------------- */
+.footer {
+  color: var(--hy-text-faint);
+  border-top: 1px solid var(--hy-border);
+  background: var(--hy-nav-bg);
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.hy-footer__line {
+  color: var(--hy-text-muted);
+  margin: 0;
+}
+
+.hy-footer__brand {
+  font-family: var(--hy-font-display);
+  font-weight: 700;
+  color: var(--hy-heading);
+}
+
+.hy-footer__meta {
+  font-family: var(--hy-font-mono);
+  font-size: 0.82rem;
+  color: var(--hy-text-faint);
+  margin: 0.5rem 0 0;
+}
+
+.hy-footer__meta a {
+  color: var(--hy-text-muted);
+  text-decoration: none;
+}
+
+.hy-footer__meta a:hover {
+  color: var(--hy-accent);
+}
+
+::selection {
+  background: var(--hy-accent-soft);
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible {
+  outline: 2px solid var(--hy-accent);
+  outline-offset: 2px;
+}
+
+/* ----------------------------------------------------------------------------
+   13. Theme toggle — sun/moon button (markup in header-content.hbs)
+   ------------------------------------------------------------------------- */
+.hy-theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.1rem;
+  height: 2.1rem;
+  padding: 0;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 0.45rem;
+  color: var(--hy-navbar-text);
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.hy-theme-toggle:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.38);
+  color: var(--hy-navbar-text);
+}
+
+.hy-theme-toggle svg {
+  width: 1.05rem;
+  height: 1.05rem;
+  display: block;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Show one icon per theme. Default (light) shows the moon (→ go dark);
+   dark shows the sun (→ go light). */
+.hy-theme-toggle .hy-icon-sun {
+  display: none;
+}
+.hy-theme-toggle .hy-icon-moon {
+  display: block;
+}
+:root[data-theme="dark"] .hy-theme-toggle .hy-icon-sun {
+  display: block;
+}
+:root[data-theme="dark"] .hy-theme-toggle .hy-icon-moon {
+  display: none;
+}
+
+/* ----------------------------------------------------------------------------
+   14. Syntax highlighting — dark palette
+
+   The stock UI bundles a GitHub-*light* highlight.js theme — all dark hues that
+   are unreadable on the dark code surface. Light mode keeps that original
+   palette; this block remaps each token to a cool, accessible dark palette ONLY
+   under [data-theme="dark"]. Selectors mirror the bundle's grouping so
+   specificity matches and the override lands. Tuned to sit beside the teal.
+   ------------------------------------------------------------------------- */
+:root[data-theme="dark"] .doc .hljs-comment,
+:root[data-theme="dark"] .doc .hljs-quote {
+  color: #6b7689;
+}
+:root[data-theme="dark"] .doc .hljs-keyword,
+:root[data-theme="dark"] .doc .hljs-selector-tag,
+:root[data-theme="dark"] .doc .hljs-subst {
+  color: #f5c145;
+}
+:root[data-theme="dark"] .doc .hljs-literal,
+:root[data-theme="dark"] .doc .hljs-number,
+:root[data-theme="dark"] .doc .hljs-tag .hljs-attr,
+:root[data-theme="dark"] .doc .hljs-template-variable,
+:root[data-theme="dark"] .doc .hljs-variable,
+:root[data-theme="dark"] .doc .hljs-attr,
+:root[data-theme="dark"] .doc .hljs-attribute {
+  color: #2dd4bf;
+}
+:root[data-theme="dark"] .doc .hljs-doctag,
+:root[data-theme="dark"] .doc .hljs-string {
+  color: #7dd3fc;
+}
+:root[data-theme="dark"] .doc .hljs-section,
+:root[data-theme="dark"] .doc .hljs-selector-id,
+:root[data-theme="dark"] .doc .hljs-title {
+  color: #f5c145;
+}
+:root[data-theme="dark"] .doc .hljs-class .hljs-title,
+:root[data-theme="dark"] .doc .hljs-type {
+  color: #67b8f0;
+}
+:root[data-theme="dark"] .doc .hljs-name,
+:root[data-theme="dark"] .doc .hljs-tag {
+  color: #67b8f0;
+}
+:root[data-theme="dark"] .doc .hljs-built_in,
+:root[data-theme="dark"] .doc .hljs-builtin-name {
+  color: #5fd3c4;
+}
+:root[data-theme="dark"] .doc .hljs-link,
+:root[data-theme="dark"] .doc .hljs-regexp {
+  color: #4ade80;
+}
+:root[data-theme="dark"] .doc .hljs-bullet,
+:root[data-theme="dark"] .doc .hljs-symbol {
+  color: #c4a7f5;
+}
+:root[data-theme="dark"] .doc .hljs-meta {
+  color: #9aa6ba;
+}
+
+/* =============================================================================
+   15. LANDING PAGE  (.hy-home)
+
+   Scoped entirely under `.hy-home` (the <main> in layouts/home.hbs) so none of
+   this leaks into the docs pages. The landing's job: in ~10s, READ the network —
+   a state machine drawn as a transit system. SIGNATURE = the hero "departure
+   board": the Order machine's transition table rendered as a live line-status
+   board (NEXT / STATION / VIA EVENT / EMITS ACTION), each service revealing on
+   load. Boldness spent there; every other band stays quiet. Reuses the §2/§3
+   palette so light/dark Just Work.
+   ========================================================================== */
+
+.hy-home {
+  --hy-board: #0b1020;            /* midnight departure-board (both themes)   */
+  --hy-board-line: #232c44;
+  --hy-board-text: #eef2f6;
+  --hy-board-faint: #7d8aa6;
+  --hy-board-amber: #f5c145;      /* the classic split-flap amber            */
+  --hy-maxw: 1140px;
+
+  display: block;
+  padding-top: 3.5rem;            /* clear the fixed navbar (bundle: 3.5rem)  */
+  background: var(--hy-bg);
+  color: var(--hy-text);
+  font-family: var(--hy-font-sans);
+  overflow-x: hidden;
+}
+
+/* ---- shared landing primitives ------------------------------------------- */
+.hy-eyebrow,
+.hy-section-marker {
+  font-family: var(--hy-font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--hy-text-faint);
+  margin: 0;
+}
+
+.hy-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--hy-accent);
+}
+
+.hy-eyebrow__dot {
+  width: 0.42rem;
+  height: 0.42rem;
+  border-radius: 50%;
+  background: var(--hy-accent);
+  box-shadow: 0 0 0 3px var(--hy-accent-soft);
+}
+
+.hy-section-marker {
+  color: var(--hy-accent);
+}
+
+.hy-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: var(--hy-font-sans);
+  font-size: 0.95rem;
+  font-weight: 700;
+  line-height: 1;
+  padding: 0.72rem 1.2rem;
+  border-radius: var(--hy-radius-sm);
+  text-decoration: none;
+  border: 1px solid transparent;
+  transition: transform 0.12s ease, background 0.15s ease,
+    border-color 0.15s ease, color 0.15s ease;
+}
+
+.hy-btn--primary {
+  background: var(--hy-accent);
+  color: #fff;
+}
+:root[data-theme="dark"] .hy-btn--primary {
+  color: #05201d;
+}
+.hy-btn--primary:hover {
+  background: var(--hy-accent-hover);
+  transform: translateY(-1px);
+}
+:root[data-theme="dark"] .hy-btn--primary:hover {
+  color: #05201d;
+}
+
+.hy-btn--ghost {
+  background: transparent;
+  color: var(--hy-text);
+  border-color: var(--hy-border-strong);
+}
+.hy-btn--ghost:hover {
+  border-color: var(--hy-accent);
+  color: var(--hy-accent);
+}
+
+.hy-tag {
+  display: inline-block;
+  font-family: var(--hy-font-mono);
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: var(--hy-accent);
+  background: var(--hy-accent-soft);
+  border: 1px solid var(--hy-accent-soft);
+  border-radius: 0.3rem;
+  padding: 0.1rem 0.42rem;
+}
+
+.hy-dot-sep {
+  color: var(--hy-border-strong);
+  margin: 0 0.1rem;
+}
+
+/* ---- HERO ----------------------------------------------------------------- */
+.hy-hero {
+  max-width: var(--hy-maxw);
+  margin: 0 auto;
+  padding: clamp(2.5rem, 6vw, 5rem) 1.5rem clamp(2.5rem, 5vw, 4rem);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.02fr);
+  gap: clamp(2rem, 5vw, 3.5rem);
+  align-items: center;
+}
+
+.hy-hero__copy {
+  min-width: 0;
+}
+
+.hy-hero__title {
+  font-family: var(--hy-font-display);
+  font-weight: 800;
+  font-size: clamp(2.3rem, 5.2vw, 3.6rem);
+  line-height: 1.02;
+  letter-spacing: -0.035em;
+  color: var(--hy-heading);
+  margin: 1rem 0 0;
+}
+
+.hy-hero__title-accent {
+  color: var(--hy-accent);
+}
+
+.hy-hero__lede {
+  font-size: clamp(1rem, 1.4vw, 1.12rem);
+  line-height: 1.62;
+  color: var(--hy-text-muted);
+  margin: 1.25rem 0 0;
+  max-width: 34rem;
+}
+.hy-hero__lede strong {
+  color: var(--hy-heading);
+  font-weight: 700;
+}
+.hy-hero__lede a {
+  color: var(--hy-accent);
+  text-decoration: none;
+  border-bottom: 1px solid var(--hy-accent-soft);
+}
+.hy-hero__lede a:hover {
+  border-bottom-color: var(--hy-accent);
+}
+
+.hy-hero__cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.75rem;
+}
+
+.hy-hero__meta {
+  font-family: var(--hy-font-mono);
+  font-size: 0.78rem;
+  color: var(--hy-text-faint);
+  margin-top: 1.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+/* ---- SIGNATURE: the departure board -------------------------------------- */
+.hy-board {
+  margin: 0;
+  background: var(--hy-board);
+  border: 1px solid var(--hy-board-line);
+  border-radius: var(--hy-radius);
+  box-shadow: 0 24px 60px -20px rgba(0, 0, 0, 0.55),
+    0 1px 0 rgba(255, 255, 255, 0.04) inset;
+  overflow: hidden;
+  font-family: var(--hy-font-mono);
+  color: var(--hy-board-text);
+}
+
+.hy-board__bar {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.7rem 1rem;
+  background: rgba(255, 255, 255, 0.025);
+  border-bottom: 1px solid var(--hy-board-line);
+  font-size: 0.74rem;
+}
+
+.hy-board__roundel {
+  width: 1.1rem;
+  height: 1.1rem;
+  border-radius: 50%;
+  border: 0.22rem solid var(--hy-line-placed);
+  flex: none;
+}
+
+.hy-board__name {
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--hy-board-text);
+}
+
+.hy-board__live {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--hy-board-faint);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.64rem;
+}
+.hy-board__live-dot {
+  width: 0.42rem;
+  height: 0.42rem;
+  border-radius: 50%;
+  background: #4ade80;
+  box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.18);
+  animation: hy-pulse 1.6s ease-in-out infinite;
+}
+
+/* Column header row. The grid is shared with the rows below; the event column
+   (1.35fr) is widened so the longest event — PaymentSucceeded — never clips. */
+.hy-board__head {
+  display: grid;
+  grid-template-columns: 2.2rem minmax(0, 1fr) minmax(0, 1.35fr) minmax(0, 1.05fr);
+  gap: 0.55rem;
+  padding: 0.55rem 1rem 0.4rem;
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--hy-board-faint);
+  border-bottom: 1px solid var(--hy-board-line);
+}
+
+.hy-board__rows {
+  list-style: none;
+  margin: 0;
+  padding: 0.3rem 0;
+}
+
+.hy-svc {
+  display: grid;
+  grid-template-columns: 2.2rem minmax(0, 1fr) minmax(0, 1.35fr) minmax(0, 1.05fr);
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.78rem;
+  border-left: 2px solid transparent;
+}
+
+/* Page-load reveal — PROGRESSIVE ENHANCEMENT.
+   The board is fully visible by default (no-JS, paused tab, crawler, and the
+   unfocused-webview case all see the finished state). The staggered fade-up
+   only runs once JS adds `.hy-anim` to the board AND motion is allowed — so the
+   animation can never be the reason content is missing. */
+.hy-anim .hy-svc {
+  opacity: 0;
+  transform: translateY(6px);
+  animation: hy-row-in 0.45s ease forwards;
+  animation-delay: calc(0.2s + var(--i) * 0.26s);
+}
+
+.hy-svc__idx {
+  color: var(--hy-board-amber);
+  font-size: 0.74rem;
+  font-weight: 700;
+}
+
+.hy-svc__station {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: var(--hy-board-text);
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.hy-svc__stop {
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: 50%;
+  flex: none;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
+}
+.hy-stop--placed { background: var(--hy-line-placed); }
+.hy-stop--shipped { background: var(--hy-line-shipped); }
+.hy-stop--cancelled { background: var(--hy-line-cancelled); }
+
+.hy-svc__event,
+.hy-svc__action {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.hy-svc__event { color: #7dd3fc; }       /* inputs — cool cyan  */
+.hy-svc__action { color: #5fd3c4; }      /* outputs — teal      */
+.hy-svc__action--none {
+  color: var(--hy-board-faint);
+  font-style: italic;
+}
+
+.hy-board__out {
+  border-top: 1px solid var(--hy-board-line);
+  padding: 0.8rem 1rem 0.95rem;
+  background: rgba(0, 0, 0, 0.22);
+  font-size: 0.72rem;
+  color: var(--hy-board-faint);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.hy-anim .hy-board__out {
+  opacity: 0;
+  animation: hy-row-in 0.5s ease forwards;
+  animation-delay: 1.5s;
+}
+.hy-board__out b {
+  color: var(--hy-board-text);
+  font-weight: 700;
+}
+.hy-board__out .hy-board__legal { color: #4ade80; }
+
+@keyframes hy-row-in {
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes hy-pulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.35; }
+}
+
+/* ---- BANDS (shared) ------------------------------------------------------- */
+.hy-band {
+  max-width: var(--hy-maxw);
+  margin: 0 auto;
+  padding: clamp(3rem, 7vw, 5.5rem) 1.5rem;
+  border-top: 1px solid var(--hy-border);
+}
+
+.hy-band__head {
+  max-width: 46rem;
+}
+.hy-band__title {
+  font-family: var(--hy-font-display);
+  font-weight: 700;
+  font-size: clamp(1.7rem, 3.2vw, 2.3rem);
+  letter-spacing: -0.025em;
+  line-height: 1.1;
+  color: var(--hy-heading);
+  margin: 0.7rem 0 0;
+}
+.hy-band__sub {
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--hy-text-muted);
+  margin: 1rem 0 0;
+}
+.hy-band__sub a {
+  color: var(--hy-accent);
+  text-decoration: none;
+  border-bottom: 1px solid var(--hy-accent-soft);
+}
+.hy-band__sub a:hover { border-bottom-color: var(--hy-accent); }
+.hy-band__sub code {
+  font-family: var(--hy-font-mono);
+  font-size: 0.86em;
+  background: var(--hy-bg-code);
+  border: 1px solid var(--hy-border);
+  border-radius: 0.3rem;
+  padding: 0.05em 0.32em;
+}
+
+/* ---- WHY: three payoffs --------------------------------------------------- */
+.hy-payoffs {
+  list-style: none;
+  margin: 2.5rem 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+.hy-payoff {
+  position: relative;
+  padding: 1.5rem 1.4rem;
+  background: var(--hy-bg-subtle);
+  border: 1px solid var(--hy-border);
+  border-radius: var(--hy-radius);
+}
+/* A station-marker tab on the top-left edge of each payoff card */
+.hy-payoff::before {
+  content: "";
+  position: absolute;
+  top: 1.55rem;
+  left: -1px;
+  width: 3px;
+  height: 1.3rem;
+  border-radius: 0 2px 2px 0;
+  background: var(--hy-accent);
+}
+.hy-payoff__idx {
+  font-family: var(--hy-font-mono);
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--hy-accent);
+  background: var(--hy-accent-soft);
+  border-radius: 0.3rem;
+  padding: 0.12rem 0.45rem;
+}
+.hy-payoff__title {
+  font-family: var(--hy-font-display);
+  font-size: 1.12rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--hy-heading);
+  margin: 0.85rem 0 0;
+}
+.hy-payoff__body {
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: var(--hy-text-muted);
+  margin: 0.5rem 0 0;
+}
+.hy-payoff__body code {
+  font-family: var(--hy-font-mono);
+  font-size: 0.86em;
+  background: var(--hy-bg-code);
+  border: 1px solid var(--hy-border);
+  border-radius: 0.3rem;
+  padding: 0.05em 0.32em;
+}
+
+/* ---- the METRO MAP figure ------------------------------------------------- */
+.hy-mapfig {
+  margin: 2.5rem 0 0;
+  padding: clamp(1rem, 2.5vw, 1.75rem);
+  background: var(--hy-bg-subtle);
+  border: 1px solid var(--hy-border);
+  border-radius: var(--hy-radius);
+}
+.hy-mapfig svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 1040px;
+  margin: 0 auto;
+}
+/* The map is inlined (not an <img>) so it lives in the document and inherits the
+   active theme. Its element classes bind to the same --hy-* tokens as the page,
+   so the light/dark TOGGLE drives it — an external <img> could only ever see the
+   OS prefers-color-scheme, flashing the wrong card when toggle and OS disagree. */
+.hy-mapfig svg .map-bg { fill: none; }
+.hy-mapfig svg .station {
+  fill: var(--hy-bg);
+  stroke-width: 5;
+}
+.hy-mapfig svg .station--cart { stroke: var(--hy-line-cart); }
+.hy-mapfig svg .station--placed { stroke: var(--hy-line-placed); }
+.hy-mapfig svg .station--shipped { stroke: var(--hy-line-shipped); }
+.hy-mapfig svg .station--cancelled { stroke: var(--hy-line-cancelled); }
+.hy-mapfig svg .station-label {
+  fill: var(--hy-heading);
+  font-family: var(--hy-font-display);
+  font-weight: 700;
+}
+.hy-mapfig svg .terminal {
+  fill: var(--hy-navbar-bg);
+}
+.hy-mapfig svg .terminal-label {
+  fill: #eef2f6;
+  font-family: var(--hy-font-mono);
+  font-weight: 700;
+}
+.hy-mapfig svg .line--cart { stroke: var(--hy-line-cart); }
+.hy-mapfig svg .line--placed { stroke: var(--hy-line-placed); }
+.hy-mapfig svg .line--shipped { stroke: var(--hy-line-shipped); }
+.hy-mapfig svg .line--cancelled { stroke: var(--hy-line-cancelled); }
+.hy-mapfig svg .line--start { stroke: var(--hy-text-faint); }
+.hy-mapfig svg .edge-event {
+  fill: var(--hy-heading);
+  font-family: var(--hy-font-sans);
+  font-weight: 700;
+}
+.hy-mapfig svg .edge-action {
+  fill: var(--hy-text-muted);
+  font-family: var(--hy-font-mono);
+}
+.hy-mapfig svg .edge-noaction {
+  fill: var(--hy-text-faint);
+  font-family: var(--hy-font-mono);
+  font-style: italic;
+}
+.hy-mapfig svg .legend-box {
+  fill: var(--hy-bg);
+  stroke: var(--hy-border-strong);
+}
+.hy-mapfig svg .legend-label {
+  fill: var(--hy-text-faint);
+  font-family: var(--hy-font-mono);
+  font-weight: 700;
+}
+.hy-mapfig svg .legend-text {
+  fill: var(--hy-text-muted);
+  font-family: var(--hy-font-sans);
+}
+
+.hy-mapfig__cap {
+  display: block;
+  margin: 1rem 0 0;
+  font-family: var(--hy-font-mono);
+  font-size: 0.74rem;
+  letter-spacing: 0.02em;
+  color: var(--hy-text-faint);
+  text-align: center;
+}
+
+/* ---- the three VOCABULARIES (State / Event / Action) --------------------- */
+.hy-vocab {
+  margin: 2.5rem 0 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+}
+.hy-vcard {
+  padding: 1.5rem 1.4rem;
+  background: var(--hy-bg);
+  border: 1px solid var(--hy-border);
+  border-radius: var(--hy-radius);
+  border-top: 3px solid var(--hy-border-strong);
+}
+.hy-vcard--state { border-top-color: var(--hy-line-placed); }
+.hy-vcard--event { border-top-color: #38bdf8; }
+.hy-vcard--action { border-top-color: var(--hy-accent); }
+.hy-vcard__dir {
+  font-family: var(--hy-font-mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--hy-text-faint);
+}
+.hy-vcard__name {
+  font-family: var(--hy-font-display);
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  color: var(--hy-heading);
+  margin: 0.5rem 0 0;
+}
+.hy-vcard__body {
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: var(--hy-text-muted);
+  margin: 0.55rem 0 0;
+}
+.hy-vcard__body code {
+  font-family: var(--hy-font-mono);
+  font-size: 0.86em;
+  background: var(--hy-bg-code);
+  border: 1px solid var(--hy-border);
+  border-radius: 0.3rem;
+  padding: 0.04em 0.3em;
+}
+
+/* ---- MODES grid (sync / async) -------------------------------------------- */
+.hy-modes {
+  margin: 2.5rem 0 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.25rem;
+}
+.hy-modecard {
+  display: flex;
+  flex-direction: column;
+  padding: 1.6rem 1.5rem;
+  background: var(--hy-bg);
+  border: 1px solid var(--hy-border);
+  border-radius: var(--hy-radius);
+  text-decoration: none;
+  transition: border-color 0.15s ease, transform 0.12s ease,
+    box-shadow 0.15s ease;
+}
+.hy-modecard:hover {
+  border-color: var(--hy-accent);
+  transform: translateY(-2px);
+  box-shadow: var(--hy-shadow);
+}
+.hy-modecard__tag {
+  font-family: var(--hy-font-mono);
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--hy-text-faint);
+}
+.hy-modecard__title {
+  font-family: var(--hy-font-display);
+  font-size: 1.22rem;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  color: var(--hy-heading);
+  margin: 0.55rem 0 0;
+}
+.hy-modecard__body {
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: var(--hy-text-muted);
+  margin: 0.55rem 0 0;
+  flex: 1;
+}
+.hy-modecard__body code {
+  font-family: var(--hy-font-mono);
+  font-size: 0.86em;
+  background: var(--hy-bg-code);
+  border: 1px solid var(--hy-border);
+  border-radius: 0.3rem;
+  padding: 0.04em 0.3em;
+}
+.hy-modecard__go {
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: var(--hy-accent);
+  margin-top: 1rem;
+}
+
+/* ---- final CTA ------------------------------------------------------------ */
+.hy-cta {
+  max-width: var(--hy-maxw);
+  margin: 0 auto;
+  padding: clamp(3.5rem, 8vw, 6rem) 1.5rem;
+  border-top: 1px solid var(--hy-border);
+  text-align: center;
+}
+.hy-cta__title {
+  font-family: var(--hy-font-display);
+  font-weight: 800;
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  letter-spacing: -0.03em;
+  color: var(--hy-heading);
+  margin: 0;
+}
+.hy-cta__sub {
+  font-size: 1.05rem;
+  color: var(--hy-text-muted);
+  margin: 1rem 0 0;
+}
+.hy-cta__install {
+  display: inline-block;
+  margin: 1.75rem auto 0;
+  font-family: var(--hy-font-mono);
+  font-size: 0.9rem;
+  color: var(--hy-board-text);
+  background: var(--hy-board);
+  border: 1px solid var(--hy-board-line);
+  border-radius: var(--hy-radius-sm);
+  padding: 0.85rem 1.2rem;
+}
+.hy-cta__install .hy-i-fn { color: #5fd3c4; }
+.hy-cta__install .hy-i-str { color: var(--hy-board-amber); }
+.hy-cta .hy-hero__cta {
+  justify-content: center;
+  margin-top: 1.75rem;
+}
+
+/* ---- responsive ----------------------------------------------------------- */
+@media (max-width: 900px) {
+  .hy-hero {
+    grid-template-columns: 1fr;
+  }
+  .hy-board { order: 2; }
+  .hy-payoffs,
+  .hy-vocab,
+  .hy-modes {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 540px) {
+  .hy-board__head,
+  .hy-svc {
+    grid-template-columns: 2rem 1fr 1fr;
+  }
+  /* Drop the EMITS ACTION column on the narrowest screens — the station + event
+     still tell the story; the action lives in the docs. */
+  .hy-board__head span:last-child,
+  .hy-svc__action {
+    display: none;
+  }
+}
+
+/* ---- reduced motion: render the final state instantly --------------------
+   Belt-and-braces: the JS gate (head-meta) already withholds `.hy-anim` when the
+   user prefers reduced motion, but if `.hy-anim` ever lands anyway, force every
+   animated element to its resting (visible) state. */
+@media (prefers-reduced-motion: reduce) {
+  .hy-anim .hy-svc,
+  .hy-anim .hy-board__out {
+    opacity: 1;
+    transform: none;
+    animation: none;
+  }
+  .hy-board__live-dot {
+    animation: none;
+  }
+}

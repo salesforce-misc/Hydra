@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Hydra Order machine, drawn as a METRO MAP to match the docs' transit-signage
+  theme. Self-contained: embedded <style> with a prefers-color-scheme media query
+  so this <img> adapts to the reader's OS light/dark setting. Each track's colour
+  is the STATION IT LEADS TO; the label reads Event (bold) over Action (mono).
+  A dashed track emits no action.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" width="1040" height="500" viewBox="0 0 1040 500"
+     font-family="'Hanken Grotesk','Segoe UI',Helvetica,Arial,sans-serif" role="img"
+     aria-label="The Order machine drawn as a metro map. START leads to Cart. Cart to Placed via Checkout emitting ChargeCard. Placed to Shipped via PaymentSucceeded emitting ShipParcel. Placed to Cancelled via PaymentFailed with no action. Shipped to Cancelled via Cancel emitting RefundCard. Cancelled leads to END.">
+  <style>
+    :root {
+      --paper: #ffffff; --ink: #070d0e; --muted: #495658; --faint: #78878a;
+      --strong: #d0d9d9; --terminal: #0b1020; --terminalText: #eef2f6;
+      --cart: #e0544b; --placed: #0d9488; --shipped: #e0a200; --cancelled: #7c5cd6;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --paper: #0a0f1a; --ink: #f4f7fc; --muted: #9aa6ba; --faint: #6b7689;
+        --strong: #2c374e; --terminal: #070b14; --terminalText: #eef2f6;
+        --cart: #f47068; --placed: #2dd4bf; --shipped: #f5c145; --cancelled: #a78bfa;
+      }
+    }
+    .bg { fill: var(--paper); }
+    .title { fill: var(--ink); font-family: 'Bricolage Grotesque','Hanken Grotesk',sans-serif; font-weight: 800; }
+    .subtitle { fill: var(--muted); }
+    .station { fill: var(--paper); stroke-width: 5; }
+    .s-cart { stroke: var(--cart); } .s-placed { stroke: var(--placed); }
+    .s-shipped { stroke: var(--shipped); } .s-cancelled { stroke: var(--cancelled); }
+    .station-label { fill: var(--ink); font-family: 'Bricolage Grotesque','Hanken Grotesk',sans-serif; font-weight: 700; }
+    .l-cart { stroke: var(--cart); } .l-placed { stroke: var(--placed); }
+    .l-shipped { stroke: var(--shipped); } .l-cancelled { stroke: var(--cancelled); }
+    .l-start { stroke: var(--faint); }
+    .event { fill: var(--ink); font-weight: 700; }
+    .action { fill: var(--muted); font-family: 'Space Mono',ui-monospace,monospace; }
+    .noaction { fill: var(--faint); font-family: 'Space Mono',ui-monospace,monospace; font-style: italic; }
+    .terminal { fill: var(--terminal); }
+    .terminal-label { fill: var(--terminalText); font-family: 'Space Mono',ui-monospace,monospace; font-weight: 700; }
+    .legend-box { fill: var(--paper); stroke: var(--strong); }
+    .legend-label { fill: var(--faint); font-family: 'Space Mono',ui-monospace,monospace; font-weight: 700; }
+    .legend-text { fill: var(--muted); }
+  </style>
+  <defs>
+    <marker id="om-arrow" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="context-stroke"/>
+    </marker>
+  </defs>
+
+  <rect class="bg" width="1040" height="500"/>
+
+  <!-- title -->
+  <text class="title" x="40" y="36" font-size="22">Order Machine</text>
+  <text class="subtitle" x="178" y="36" font-size="14">— a Mealy machine. Track colour = destination. Label: Event / Action.</text>
+
+  <!-- ===== tracks (behind stations) ===== -->
+  <line class="l-start" x1="170" y1="94" x2="170" y2="120" stroke-width="6" fill="none" marker-end="url(#om-arrow)"/>
+  <line class="l-placed" x1="210" y1="160" x2="440" y2="160" stroke-width="7" stroke-linecap="round" fill="none" marker-end="url(#om-arrow)"/>
+  <line class="l-shipped" x1="520" y1="160" x2="800" y2="160" stroke-width="7" stroke-linecap="round" fill="none" marker-end="url(#om-arrow)"/>
+  <line class="l-cancelled" x1="480" y1="199" x2="480" y2="316" stroke-width="7" stroke-linecap="round" stroke-dasharray="3 13" fill="none" marker-end="url(#om-arrow)"/>
+  <path class="l-cancelled" d="M840 199 L840 355 L520 355" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" fill="none" marker-end="url(#om-arrow)"/>
+  <line class="l-start" x1="480" y1="393" x2="480" y2="430" stroke-width="6" fill="none" marker-end="url(#om-arrow)"/>
+
+  <!-- ===== edge labels ===== -->
+  <text class="event" x="325" y="146" text-anchor="middle" font-size="16">Checkout</text>
+  <text class="action" x="325" y="180" text-anchor="middle" font-size="14">ChargeCard</text>
+  <text class="event" x="660" y="146" text-anchor="middle" font-size="16">PaymentSucceeded</text>
+  <text class="action" x="660" y="180" text-anchor="middle" font-size="14">ShipParcel</text>
+  <text class="event" x="498" y="252" text-anchor="start" font-size="16">PaymentFailed</text>
+  <text class="noaction" x="498" y="272" text-anchor="start" font-size="13">emits nothing</text>
+  <text class="event" x="678" y="341" text-anchor="middle" font-size="16">Cancel</text>
+  <text class="action" x="678" y="376" text-anchor="middle" font-size="14">RefundCard</text>
+
+  <!-- ===== terminals ===== -->
+  <rect class="terminal" x="110" y="47" width="120" height="46" rx="23"/>
+  <text class="terminal-label" x="170" y="76" text-anchor="middle" font-size="15" letter-spacing="0.12em">START</text>
+  <rect class="terminal" x="420" y="431" width="120" height="46" rx="23"/>
+  <text class="terminal-label" x="480" y="460" text-anchor="middle" font-size="15" letter-spacing="0.12em">END</text>
+
+  <!-- ===== stations ===== -->
+  <circle class="station s-cart" cx="170" cy="160" r="38"/>
+  <text class="station-label" x="170" y="225" text-anchor="middle" font-size="20">Cart</text>
+  <circle class="station s-placed" cx="480" cy="160" r="38"/>
+  <text class="station-label" x="480" y="113" text-anchor="middle" font-size="20">Placed</text>
+  <circle class="station s-shipped" cx="840" cy="160" r="38"/>
+  <text class="station-label" x="840" y="225" text-anchor="middle" font-size="20">Shipped</text>
+  <circle class="station s-cancelled" cx="480" cy="355" r="38"/>
+  <text class="station-label" x="432" y="361" text-anchor="end" font-size="20">Cancelled</text>
+
+  <!-- ===== legend ===== -->
+  <rect class="legend-box" x="662" y="392" width="338" height="92" rx="10" stroke-width="1.5"/>
+  <text class="legend-label" x="680" y="416" font-size="12" letter-spacing="0.1em">LEGEND</text>
+  <text x="680" y="438" font-size="13"><tspan class="legend-label">Ring</tspan><tspan class="legend-text"> = State · </tspan><tspan class="legend-label">Bold</tspan><tspan class="legend-text"> = Event (push in)</tspan></text>
+  <text x="680" y="460" font-size="13"><tspan class="legend-label">Mono</tspan><tspan class="legend-text"> = Action (emitted out)</tspan></text>
+  <text x="680" y="478" font-size="13"><tspan class="legend-label">Dashed</tspan><tspan class="legend-text"> = transition that emits no action</tspan></text>
+</svg>

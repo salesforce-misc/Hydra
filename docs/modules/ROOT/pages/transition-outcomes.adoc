@@ -1,0 +1,52 @@
+= Transition Outcomes
+:description: Every push returns one of exactly three sealed Transition cases — Valid, Invalid, NoFromState. Failure modes are types, so your orchestration logic becomes a total switch.
+
+Every push returns one of exactly three sealed cases. Because the failure modes are _types_, your orchestration logic becomes a total `switch`/`when` over the three cases — and the compiler reminds you to handle each.
+
+[source,kotlin,indent=0,options="nowrap"]
+----
+sealed class Transition<StateT, EventT, ActionT> {
+  data class Valid(fromState, event, toState, action)  // the turnstile opened
+  data class Invalid(fromState, event)                 // not a legal move from here
+  data class NoFromState(event)                        // no definition for this state
+  val isValid get() = this is Valid
+}
+----
+
+[cols="1,1,3",options="header"]
+|===
+| Case | Means | When you get it
+| `Valid` | The turnstile opened. | The event was a legal move from the current state. Carries `fromState`, `event`, `toState`, and the (optional) `action`.
+| `Invalid` | Not a legal move from here. | The current state has a definition, but no edge for this event. The state is left *untouched*.
+| `NoFromState` | No definition for this state at all. | The machine has no `state(…)` block matching the current state.
+|===
+
+== Consuming the outcome
+
+In Java, pattern-match the sealed type — an exhaustive `switch` needs no `default`:
+
+[source,java,indent=0,options="nowrap"]
+----
+var transition = orderMachine.transition(new Checkout(4999, "1 Market St"));
+
+switch (transition) {
+  case Transition.Valid<OrderState, OrderEvent, OrderAction> v -> {
+    var nextState = v.getToState();
+    perform(v.getAction());           // do the real-world work (see Handling Actions)
+  }
+  case Transition.Invalid<OrderState, OrderEvent> i ->
+    log.warn("Illegal move: {} from {}", i.getEvent(), i.getFromState());
+  case Transition.NoFromState<OrderEvent> n ->
+    log.error("No state definition for the current position");
+}
+----
+
+A quick `isValid()` check is enough when you only care whether the move happened:
+
+[source,java,indent=0,options="nowrap"]
+----
+var bad = orderMachine.transition(new Cancel());   // from Cart, Cancel isn't a legal move
+bad.isValid();                                     // false — Transition.Invalid
+----
+
+TIP: Add a new state or action variant later, and the compiler flags every `switch` that forgot it. That is the whole point of modelling failure as a *type* rather than a `null` or a `boolean`.
