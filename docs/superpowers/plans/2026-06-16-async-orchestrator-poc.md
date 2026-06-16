@@ -503,6 +503,8 @@ class CursorStore(dataSource: DataSource) {
 ```
 
 > NOTE: Exposed 1.0.0-beta uses the `org.jetbrains.exposed.v1.*` package layout (core vs jdbc split). `and` is `org.jetbrains.exposed.v1.core.and` — add the import if the compiler asks: `import org.jetbrains.exposed.v1.core.and`.
+>
+> **UPDATED (directive 4/5): the catalog now pins Exposed `1.3.0` (latest STABLE, off beta), not `1.0.0-beta-4`.** The `org.jetbrains.exposed.v1.*` layout is retained in 1.x stable, so the imports should hold — but BEFORE writing this file, verify the 1.3.0 API surface (the `v1.core` / `v1.jdbc` package split, `Table.text/varchar/long`, `SchemaUtils.create`, `insert`/`selectAll().where {}`/`update {}`, `transaction(db)`) against **context7** (`resolve-library-id` "Exposed" → `query-docs`), since 1.3.0 is newer than this snippet assumed. Keep the intent; adapt any moved symbol and note it.
 
 - [ ] **Step 2: Compile**
 
