@@ -123,6 +123,20 @@ class HydraTest {
   }
 
   @Test
+  @DisplayName("2-arg read-only transition derives the class from the instance")
+  void testReadTransitionTwoArgOverload() {
+    final var machine = orderMachineStartingAt(new Placed(AMOUNT, ADDRESS));
+
+    final var transition =
+        machine.readTransitionAndNotifyListeners(
+            new Placed(AMOUNT, ADDRESS), new PaymentSucceeded());
+
+    assertThat(transition.isValid()).isTrue();
+    assertThat(actionOf(transition)).isEqualTo(new ShipParcel(ADDRESS));
+    assertThat(machine.getState()).isEqualTo(new Placed(AMOUNT, ADDRESS));
+  }
+
+  @Test
   @DisplayName("onExit / onEnter listeners fire on a valid transition")
   void testEnterAndExitListenersFire() {
     final var machine = orderMachineStartingAt(new Placed(AMOUNT, ADDRESS));

@@ -1,38 +1,51 @@
 [versions]
 jdk = "21"
-kotlin = "2.3.20-RC"
-moshix = "0.35.0-alpha01"
-http4k = "6.30.0.0"
-immutables = "2.12.1"
-arrow = "2.2.1.1"
-graal = "25.0.2"
-java-vavr = "1.0.0"
+kotlin = "2.4.0"
+moshix = "0.36.0"
+http4k = "6.53.0.0"
+immutables = "2.12.2"
+arrow = "2.2.3"
+graal = "25.0.3"
+java-vavr = "1.0.1"
 kotlin-vavr = "0.10.2"
 jetbrains-annotations = "26.1.0"
-okio = "3.16.4"
-kotest = "6.1.3"
+okio = "3.17.0"
+kotest = "6.1.11"
 testLogger = "4.0.0"
 truth = "1.4.5"
-assertj-vavr = "0.4.3"
-kotlin-logging = "8.0.01"
+assertj-vavr = "0.5.1"
+kotlin-logging = "8.0.4"
 pprint = "3.0.0"
-underscore = "1.119"
-kotlin-faker = "2.0.0-rc.11"
-spring = "7.0.5"
+underscore = "1.122"
+kotlin-faker = "2.0.0-rc.13"
+spring = "7.0.8"
 json-assert = "2.0-rc1"
 nexus-publish = "2.0.0"
-kotlinx-datetime = "0.7.1-0.6.x-compat"
+kotlinx-datetime = "0.8.0-0.6.x-compat"
 node-gradle = "7.1.0"
-mockito = "5.22.0"
-gradle-taskinfo = "3.0.1"
+mockito = "5.23.0"
+gradle-taskinfo = "3.0.2"
 
 # Common dependencies
 
 junit = "5.11.4"
-kover = "0.9.7"
+kover = "0.9.8"
 detekt = "1.23.8"
-spotless = "8.2.1"
+spotless = "8.6.0"
 apache-log4j = "3.0.0-beta2"
+
+# Async-orchestrator PoC (integrationTest only)
+# NOTE: testcontainers held at 1.21.x — the 2.0.x BOM is a major rewrite that no
+# longer publishes the junit-jupiter/postgresql/rabbitmq modules under these coords
+# (their own latest is 1.21.4), so 1.21.4 is the coherent latest.
+
+exposed = "1.3.0"
+jooq = "3.21.6"
+amqp-client = "5.31.0"
+postgres-jdbc = "42.7.11"
+testcontainers = "1.21.4"
+kotlinx-serialization = "1.11.0"
+jackson = "2.22.0"
 
 [libraries]
 java-vavr = { module = "io.vavr:vavr", version.ref = "java-vavr" }
@@ -68,6 +81,19 @@ spring-beans = { module = "org.springframework:spring-beans", version.ref = "spr
 json-assert = { module = "org.skyscreamer:jsonassert", version.ref = "json-assert" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime-jvm", version.ref = "kotlinx-datetime" }
 
+# Async-orchestrator PoC (integrationTest only)
+exposed-core = { module = "org.jetbrains.exposed:exposed-core", version.ref = "exposed" }
+exposed-jdbc = { module = "org.jetbrains.exposed:exposed-jdbc", version.ref = "exposed" }
+jooq = { module = "org.jooq:jooq", version.ref = "jooq" }
+amqp-client = { module = "com.rabbitmq:amqp-client", version.ref = "amqp-client" }
+postgres-jdbc = { module = "org.postgresql:postgresql", version.ref = "postgres-jdbc" }
+testcontainers-bom = { module = "org.testcontainers:testcontainers-bom", version.ref = "testcontainers" }
+testcontainers-junit = { module = "org.testcontainers:junit-jupiter" }
+testcontainers-postgres = { module = "org.testcontainers:postgresql" }
+testcontainers-rabbitmq = { module = "org.testcontainers:rabbitmq" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
+jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind", version.ref = "jackson" }
+
 # Gradle plugins
 kotlin-gradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 detekt-gradle = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detekt" }
@@ -82,10 +108,12 @@ kotest = [
 ]
 http4k = ["http4k-core", "http4k-client-apache", "http4k-format-moshi"]
 kotlin-logging = ["kotlin-logging-jvm", "log4j-api", "log4j-core", "log4j-slf4j2-impl"]
+testcontainers = ["testcontainers-junit", "testcontainers-postgres", "testcontainers-rabbitmq"]
 
 [plugins]
 kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
 testLogger = { id = "com.adarshr.test-logger", version.ref = "testLogger" }

@@ -12,6 +12,7 @@ plugins {
   alias(libs.plugins.moshix)
   alias(libs.plugins.kover)
   alias(libs.plugins.nexus.publish)
+  alias(libs.plugins.kotlin.serialization)
 }
 
 val mockitoAgent = configurations.create("mockitoAgent")
@@ -53,6 +54,18 @@ testing {
         implementation(libs.spring.beans)
         implementation(libs.json.assert)
         implementation(libs.assertj.vavr)
+        implementation(platform(libs.testcontainers.bom))
+        implementation(libs.testcontainers.junit)
+        implementation(libs.testcontainers.postgres)
+        implementation(libs.testcontainers.rabbitmq)
+        implementation(libs.exposed.core)
+        implementation(libs.exposed.jdbc)
+        implementation(libs.jooq)
+        implementation(libs.amqp.client)
+        implementation(libs.postgres.jdbc)
+        implementation(libs.kotlinx.serialization.json)
+        implementation(libs.jackson.databind)
+        implementation(libs.kotlin.logging.jvm)
       }
     }
   }

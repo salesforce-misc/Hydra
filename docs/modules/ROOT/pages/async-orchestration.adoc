@@ -8,8 +8,7 @@ In that world the JVM's in-memory state is not the source of truth — a databas
 [source,java,indent=0,options="nowrap"]
 ----
 // A worker finishes a step on some host and calls back:
-var transition = hydra.readTransitionAndNotifyListeners(
-    finishedStep.getClass(), finishedStep, exitEvent);
+var transition = hydra.readTransitionAndNotifyListeners(finishedStep, exitEvent);
 
 if (transition.isValid()) {
   var nextStep = ((Transition.Valid<Step, Event, ?>) transition).getToState();
@@ -31,6 +30,146 @@ That store — not the JVM — is the source of truth.
 . *Dispatch the next step.* Enqueue it to a worker — possibly on another host, possibly minutes later. When _that_ finishes, the loop repeats.
 
 Because the position is an explicit, persisted value, a run that dies mid-flight resumes from exactly where it stopped.
+
+== A worked example: an order-fulfillment pipeline
+
+The pattern above is proven end-to-end by a runnable PoC in this repo's
+`integrationTest` source set — the *same* DAG driven by two idiomatic
+orchestrators (Kotlin + kotlin-exposed, Java + jOOQ) over a real RabbitMQ
+broker and a real Postgres cursor, both spun up with Testcontainers.
+
+=== The DAG
+
+[source]
+----
+Validating ── Validated ───────────▶ Reserving   (action: ReserveInventory)
+Reserving  ── Reserved ─────────────▶ Charging    (action: ChargePayment)
+Reserving  ── OutOfStock ───────────▶ Cancelled   (action: NotifyCustomer)
+Charging   ── Charged ──────────────▶ Shipping    (action: ShipParcel)
+Charging   ── PaymentDeclined ──────▶ Cancelled   (action: ReleaseInventory)
+Shipping   ── Shipped ──────────────▶ Notifying   (action: SendShipNotice)
+Notifying  ── Notified ─────────────▶ Completed   (terminal)
+----
+
+=== The durable cursor
+
+The position lives in one Postgres row, guarded by a `version` for optimistic
+concurrency:
+
+[source,sql]
+----
+CREATE TABLE order_run (
+  run_id        VARCHAR PRIMARY KEY,
+  current_state TEXT    NOT NULL,   -- the serialized OrderState
+  status        VARCHAR NOT NULL,   -- RUNNING | COMPLETED | CANCELLED | FAILED
+  version       BIGINT  NOT NULL
+);
+----
+
+Advancing is a compare-and-set: `UPDATE ... SET version = version + 1 WHERE
+run_id = ? AND version = ?`. A zero-row result means another worker already
+moved this run — the signal a crashed step left behind.
+
+=== The dispatch loop
+
+Each message carries only `{runId, event, expectedVersion}` — *not* the state.
+The worker reads the state from the cursor, so the DB stays the single source
+of truth:
+
+[source,kotlin,indent=0]
+----
+val cursor = store.load(message.runId) ?: return true
+if (cursor.version > message.expectedVersion) {     // a prior worker already advanced…
+  enqueueNext(message.runId, cursor)                // …resume from the persisted state
+  return true
+}
+val transition = hydra.readTransitionAndNotifyListeners(cursor.state, message.event)
+val advanced = store.advance(message.runId, cursor.version, transition.toState, statusFor(...))
+  ?: return resumeFromTruth(message.runId)          // lost the CAS race — resume, don't redo
+transition.action?.let { effects.perform(message.runId, it) }
+enqueueNext(message.runId, advanced)
+----
+
+=== Persist and resurrect: how a *different* process rehydrates the state
+
+The enqueuing process and the dequeue handler share *nothing* in memory — they
+may be different JVMs on different hosts, separated by minutes. The only thing
+that crosses between them is bytes: the message on the queue, and the row in the
+database. So the run's position has to round-trip through serialization.
+
+*On the way down (persist).* The typed `OrderState` is serialized to text and
+written into the `current_state` column. Because `OrderState` is a *sealed*
+hierarchy, the serializer tags each row with its concrete variant — Kotlin uses
+kotlinx-serialization's sealed-class polymorphism, Java uses Jackson's
+`@JsonTypeInfo`/`@JsonSubTypes`:
+
+[source,kotlin,indent=0]
+----
+// CursorStore.advance(...) — write the new position as TEXT
+val encoded = orderJson.encodeToString(OrderState.serializer(), newState)
+//  Charging(4999, "1 Market St", "SKU-1", 1)
+//    → {"type":"Charging","amountCents":4999,"address":"1 Market St","sku":"SKU-1","qty":1}
+----
+
+*On the way up (resurrect).* A dequeue handler in a brand-new process pulls a
+`{runId, event, expectedVersion}` message, then *rehydrates* the run purely from
+the database — it constructs a fresh `Hydra` (zero in-memory position) and reads
+the typed state back out of the row:
+
+[source,kotlin,indent=0]
+----
+// A fresh process: new Hydra, no shared state with whoever ran the previous step
+private val hydra = orderMachine()
+
+fun onDequeue(message: StepMessage) {
+  val cursor = store.load(message.runId) ?: return        // SELECT … WHERE run_id = ?
+  // load() turns the stored TEXT back into a typed OrderState:
+  //   {"type":"Charging",…} → Charging(4999, "1 Market St", "SKU-1", 1)
+  val transition = hydra.readTransitionAndNotifyListeners(cursor.state, message.event)
+  // … CAS-advance, perform the action, enqueue the next step …
+}
+----
+
+[source,kotlin,indent=0]
+----
+// CursorStore.load(...) — the resurrection step
+val state = orderJson.decodeFromString(OrderState.serializer(), row[currentState])
+Cursor(runId = row[runId], state = state, status = …, version = row[version])
+----
+
+The handler never trusts its own memory or the message for the position — it
+re-derives everything from the row. That is what lets *any* worker, in *any*
+process, pick up *any* run: the state is data in the database, not an object on
+some heap. Reconstructing the typed `OrderState` is the literal "resurrection,"
+and feeding it to a freshly-built `Hydra` is what makes the engine stateless and
+horizontally scalable — add more dequeue handlers and they all read the same
+source of truth.
+
+=== Crash mid-flight, resume from the cursor
+
+image::async-resume.svg[Crash and resume sequence,align=center]
+
+A worker can die after it CAS-advances the cursor but before it enqueues the
+next step. RabbitMQ redelivers the un-acked message; a *fresh* worker — a brand
+new `Hydra` with zero in-memory position — reads the already-advanced cursor,
+sees `version > expectedVersion`, and resumes by enqueuing the next step
+*without* re-performing the side effect. The result: the run reaches
+`Completed`, and every side effect fired *exactly once*. This is the literal
+proof of the line above — _a run that dies mid-flight resumes from exactly
+where it stopped_.
+
+=== Run the proof
+
+[source,bash]
+----
+./gradlew integrationTest --tests "*OrderOrchestrator*"
+----
+
+Requires Docker (the tests skip gracefully when it is absent). The crash/resume
+scenario (`scenario2_crashMidFlightResumesFromCursor`) is the headline test;
+`scenario1` proves the happy path across workers, and `scenario3` proves a
+failure edge routes to `Cancelled` with no charge. Both the Kotlin and the Java
+orchestrator pass the identical three scenarios.
 
 == In production
 

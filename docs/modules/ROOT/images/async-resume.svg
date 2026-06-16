@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Crash-and-resume sequence for the async orchestrator, themed to match
+  order-machine.svg (transit-signage palette + a prefers-color-scheme media
+  query so this <img> adapts to the reader's OS light/dark setting). Four
+  lifelines: Worker A, the durable Cursor (Postgres), the Queue (RabbitMQ),
+  and a fresh Worker B. Worker A wins the CAS-advance then dies before the
+  effect/enqueue; the un-acked message is redelivered; Worker B reads the
+  already-advanced cursor and resumes WITHOUT re-performing the side effect.
+  Solid arrow = call; dashed arrow = return.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" width="1180" height="690" viewBox="0 0 1180 690"
+     font-family="'Hanken Grotesk','Segoe UI',Helvetica,Arial,sans-serif" role="img"
+     aria-label="Sequence diagram of crash and resume. Worker A loads the cursor (Charging, version 2), Hydra routes Charged to Shipping, Worker A CAS-advances the cursor to Shipping version 3, then crashes before performing the effect or enqueuing the next step. The un-acked message is redelivered by the queue. A fresh Worker B receives it, loads the cursor (Shipping, version 3), sees version 3 is greater than the message's expected version 2, and resumes by enqueuing the next step without re-performing the side effect. The pipeline continues to Completed and every side effect fires exactly once.">
+  <style>
+    :root {
+      --paper: #ffffff; --ink: #070d0e; --muted: #495658; --faint: #78878a;
+      --strong: #d0d9d9; --note: #f4f7f6; --noteEdge: #cfdad8;
+      --a: #e0544b; --cursor: #0d9488; --queue: #e0a200; --b: #7c5cd6;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --paper: #0a0f1a; --ink: #f4f7fc; --muted: #9aa6ba; --faint: #6b7689;
+        --strong: #2c374e; --note: #121a2b; --noteEdge: #2c374e;
+        --a: #f47068; --cursor: #2dd4bf; --queue: #f5c145; --b: #a78bfa;
+      }
+    }
+    .bg { fill: var(--paper); }
+    .title { fill: var(--ink); font-family: 'Bricolage Grotesque','Hanken Grotesk',sans-serif; font-weight: 800; }
+    .subtitle { fill: var(--muted); }
+    .lifeline { stroke: var(--strong); stroke-width: 2; stroke-dasharray: 2 7; }
+    .head-a { fill: var(--a); } .head-cursor { fill: var(--cursor); }
+    .head-queue { fill: var(--queue); } .head-b { fill: var(--b); }
+    .head-label { fill: var(--paper); font-family: 'Bricolage Grotesque','Hanken Grotesk',sans-serif; font-weight: 700; }
+    .head-sub { fill: var(--paper); font-family: 'Space Mono',ui-monospace,monospace; opacity: 0.85; }
+    .call-a { stroke: var(--a); } .call-cursor { stroke: var(--cursor); }
+    .call-queue { stroke: var(--queue); } .call-b { stroke: var(--b); }
+    .msg { fill: var(--ink); font-weight: 700; }
+    .msg-data { fill: var(--muted); font-family: 'Space Mono',ui-monospace,monospace; }
+    .ret { stroke-dasharray: 6 5; }
+    .note-box { fill: var(--note); stroke: var(--noteEdge); stroke-width: 1.5; }
+    .note-text { fill: var(--ink); font-weight: 700; }
+    .note-sub { fill: var(--muted); font-family: 'Space Mono',ui-monospace,monospace; }
+    .crash { stroke: var(--a); stroke-width: 4; stroke-linecap: round; }
+    .crash-label { fill: var(--a); font-weight: 800; }
+    .resume-label { fill: var(--b); font-weight: 800; }
+    .legend-box { fill: var(--paper); stroke: var(--strong); }
+    .legend-label { fill: var(--faint); font-family: 'Space Mono',ui-monospace,monospace; font-weight: 700; }
+    .legend-text { fill: var(--muted); }
+  </style>
+  <defs>
+    <marker id="ar-call" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="context-stroke"/>
+    </marker>
+    <marker id="ar-ret" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+      <path d="M0 2 L9 5 L0 8" fill="none" stroke="context-stroke" stroke-width="1.6"/>
+    </marker>
+  </defs>
+
+  <rect class="bg" width="1180" height="690"/>
+
+  <!-- title -->
+  <text class="title" x="40" y="40" font-size="22">Crash mid-flight, resume from the cursor</text>
+  <text class="subtitle" x="40" y="62" font-size="14">The DB cursor is the only source of truth. A fresh worker resumes from it — every side effect fires exactly once.</text>
+
+  <!-- ===== lifelines (behind everything) ===== -->
+  <line class="lifeline" x1="170" y1="128" x2="170" y2="360"/>
+  <line class="lifeline" x1="470" y1="128" x2="470" y2="648"/>
+  <line class="lifeline" x1="760" y1="128" x2="760" y2="648"/>
+  <line class="lifeline" x1="1040" y1="128" x2="1040" y2="648"/>
+
+  <!-- ===== lifeline heads ===== -->
+  <rect class="head-a" x="95" y="80" width="150" height="48" rx="10"/>
+  <text class="head-label" x="170" y="103" text-anchor="middle" font-size="16">Worker A</text>
+  <text class="head-sub" x="170" y="120" text-anchor="middle" font-size="11">Hydra · crashes</text>
+
+  <rect class="head-cursor" x="395" y="80" width="150" height="48" rx="10"/>
+  <text class="head-label" x="470" y="103" text-anchor="middle" font-size="16">Cursor</text>
+  <text class="head-sub" x="470" y="120" text-anchor="middle" font-size="11">Postgres · truth</text>
+
+  <rect class="head-queue" x="685" y="80" width="150" height="48" rx="10"/>
+  <text class="head-label" x="760" y="103" text-anchor="middle" font-size="16">Queue</text>
+  <text class="head-sub" x="760" y="120" text-anchor="middle" font-size="11">RabbitMQ</text>
+
+  <rect class="head-b" x="950" y="80" width="180" height="48" rx="10"/>
+  <text class="head-label" x="1040" y="103" text-anchor="middle" font-size="16">Worker B</text>
+  <text class="head-sub" x="1040" y="120" text-anchor="middle" font-size="11">fresh Hydra · resumes</text>
+
+  <!-- ===== 1) A loads the cursor ===== -->
+  <line class="call-a" x1="170" y1="165" x2="470" y2="165" stroke-width="2.5" marker-end="url(#ar-call)"/>
+  <text class="msg" x="320" y="158" text-anchor="middle" font-size="14">load(runId)</text>
+
+  <!-- ===== 2) cursor returns Charging v2 ===== -->
+  <line class="call-cursor ret" x1="470" y1="198" x2="170" y2="198" stroke-width="2.5" marker-end="url(#ar-ret)"/>
+  <text class="msg-data" x="320" y="192" text-anchor="middle" font-size="13">Charging · version 2</text>
+
+  <!-- ===== note: Hydra routes ===== -->
+  <rect class="note-box" x="60" y="216" width="300" height="30" rx="7"/>
+  <text class="note-text" x="74" y="236" font-size="13">Hydra routes <tspan class="note-sub" font-size="12">Charged → Shipping</tspan></text>
+
+  <!-- ===== 3) A CAS-advances ===== -->
+  <line class="call-a" x1="170" y1="278" x2="470" y2="278" stroke-width="3" marker-end="url(#ar-call)"/>
+  <text class="msg" x="320" y="271" text-anchor="middle" font-size="14">CAS advance(expected = 2)</text>
+  <text class="msg-data" x="320" y="296" text-anchor="middle" font-size="13">Shipping · version 2 → 3</text>
+
+  <!-- ===== 4) cursor confirms v3 ===== -->
+  <line class="call-cursor ret" x1="470" y1="322" x2="170" y2="322" stroke-width="2.5" marker-end="url(#ar-ret)"/>
+  <text class="msg-data" x="320" y="316" text-anchor="middle" font-size="13">committed · now version 3</text>
+
+  <!-- ===== crash on A ===== -->
+  <line class="crash" x1="156" y1="346" x2="184" y2="374"/>
+  <line class="crash" x1="184" y1="346" x2="156" y2="374"/>
+  <text class="crash-label" x="100" y="398" text-anchor="middle" font-size="13">✗ crashes</text>
+  <text class="msg-data" x="100" y="416" text-anchor="middle" font-size="11">before effect + enqueue</text>
+
+  <!-- ===== redelivery: the un-acked message goes back on the queue ===== -->
+  <rect class="note-box" x="560" y="372" width="400" height="46" rx="7"/>
+  <text class="note-text" x="580" y="392" font-size="13">message was never ack'd —</text>
+  <text class="msg-data" x="580" y="409" font-size="12">{ event: Charged, expectedVersion: 2 }  redelivered</text>
+
+  <!-- ===== 5) queue delivers to B ===== -->
+  <line class="call-queue" x1="760" y1="450" x2="1040" y2="450" stroke-width="2.5" marker-end="url(#ar-call)"/>
+  <text class="msg" x="900" y="443" text-anchor="middle" font-size="14">deliver</text>
+  <text class="msg-data" x="900" y="468" text-anchor="middle" font-size="12">{ Charged, expected 2 }</text>
+
+  <!-- ===== 6) B loads the cursor ===== -->
+  <line class="call-b" x1="1040" y1="498" x2="470" y2="498" stroke-width="2.5" marker-end="url(#ar-call)"/>
+  <text class="msg" x="755" y="491" text-anchor="middle" font-size="14">load(runId)</text>
+
+  <!-- ===== 7) cursor returns Shipping v3 (already advanced!) ===== -->
+  <line class="call-cursor ret" x1="470" y1="531" x2="1040" y2="531" stroke-width="2.5" marker-end="url(#ar-ret)"/>
+  <text class="msg-data" x="755" y="525" text-anchor="middle" font-size="13">Shipping · version 3</text>
+
+  <!-- ===== resume note on B ===== -->
+  <rect class="note-box" x="800" y="549" width="360" height="46" rx="7"/>
+  <text class="resume-label" x="820" y="569" font-size="13">version 3 &gt; expected 2  ⇒  RESUME</text>
+  <text class="msg-data" x="820" y="586" font-size="12">re-enqueue next step · do NOT re-run the effect</text>
+
+  <!-- ===== 8) B enqueues the next step ===== -->
+  <line class="call-b" x1="1040" y1="626" x2="760" y2="626" stroke-width="2.5" marker-end="url(#ar-call)"/>
+  <text class="msg" x="900" y="619" text-anchor="middle" font-size="14">enqueue { Shipped, v3 }</text>
+
+  <!-- ===== bottom strip: outcome ===== -->
+  <text class="msg-data" x="470" y="672" text-anchor="start" font-size="12">… pipeline continues → Notifying → Completed.  ShipParcel &amp; ChargePayment each fired exactly once.</text>
+
+  <!-- ===== legend ===== -->
+  <rect class="legend-box" x="40" y="442" width="360" height="92" rx="10" stroke-width="1.5"/>
+  <text class="legend-label" x="58" y="466" font-size="12" letter-spacing="0.1em">LEGEND</text>
+  <text x="58" y="488" font-size="13"><tspan class="legend-label">Solid</tspan><tspan class="legend-text"> = call  ·  </tspan><tspan class="legend-label">Dashed</tspan><tspan class="legend-text"> = return</tspan></text>
+  <text x="58" y="510" font-size="13"><tspan class="legend-label">Bold</tspan><tspan class="legend-text"> = message  ·  </tspan><tspan class="legend-label">Mono</tspan><tspan class="legend-text"> = state / payload</tspan></text>
+  <text x="58" y="528" font-size="13"><tspan class="crash-label">✗</tspan><tspan class="legend-text"> = crash  ·  the cursor row is the single source of truth</tspan></text>
+</svg>
