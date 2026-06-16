@@ -32,6 +32,91 @@ That store — not the JVM — is the source of truth.
 
 Because the position is an explicit, persisted value, a run that dies mid-flight resumes from exactly where it stopped.
 
+== A worked example: an order-fulfillment pipeline
+
+The pattern above is proven end-to-end by a runnable PoC in this repo's
+`integrationTest` source set — the *same* DAG driven by two idiomatic
+orchestrators (Kotlin + kotlin-exposed, Java + jOOQ) over a real RabbitMQ
+broker and a real Postgres cursor, both spun up with Testcontainers.
+
+=== The DAG
+
+[source]
+----
+Validating ── Validated ───────────▶ Reserving   (action: ReserveInventory)
+Reserving  ── Reserved ─────────────▶ Charging    (action: ChargePayment)
+Reserving  ── OutOfStock ───────────▶ Cancelled   (action: NotifyCustomer)
+Charging   ── Charged ──────────────▶ Shipping    (action: ShipParcel)
+Charging   ── PaymentDeclined ──────▶ Cancelled   (action: ReleaseInventory)
+Shipping   ── Shipped ──────────────▶ Notifying   (action: SendShipNotice)
+Notifying  ── Notified ─────────────▶ Completed   (terminal)
+----
+
+=== The durable cursor
+
+The position lives in one Postgres row, guarded by a `version` for optimistic
+concurrency:
+
+[source,sql]
+----
+CREATE TABLE order_run (
+  run_id        VARCHAR PRIMARY KEY,
+  current_state TEXT    NOT NULL,   -- the serialized OrderState
+  status        VARCHAR NOT NULL,   -- RUNNING | COMPLETED | CANCELLED | FAILED
+  version       BIGINT  NOT NULL
+);
+----
+
+Advancing is a compare-and-set: `UPDATE ... SET version = version + 1 WHERE
+run_id = ? AND version = ?`. A zero-row result means another worker already
+moved this run — the signal a crashed step left behind.
+
+=== The dispatch loop
+
+Each message carries only `{runId, event, expectedVersion}` — *not* the state.
+The worker reads the state from the cursor, so the DB stays the single source
+of truth:
+
+[source,kotlin,indent=0]
+----
+val cursor = store.load(message.runId) ?: return true
+if (cursor.version > message.expectedVersion) {     // a prior worker already advanced…
+  enqueueNext(message.runId, cursor)                // …resume from the persisted state
+  return true
+}
+val transition = hydra.readTransitionAndNotifyListeners(cursor.state, message.event)
+val advanced = store.advance(message.runId, cursor.version, transition.toState, statusFor(...))
+  ?: return resumeFromTruth(message.runId)          // lost the CAS race — resume, don't redo
+transition.action?.let { effects.perform(message.runId, it) }
+enqueueNext(message.runId, advanced)
+----
+
+=== Crash mid-flight, resume from the cursor
+
+image::async-resume.svg[Crash and resume sequence,align=center]
+
+A worker can die after it CAS-advances the cursor but before it enqueues the
+next step. RabbitMQ redelivers the un-acked message; a *fresh* worker — a brand
+new `Hydra` with zero in-memory position — reads the already-advanced cursor,
+sees `version > expectedVersion`, and resumes by enqueuing the next step
+*without* re-performing the side effect. The result: the run reaches
+`Completed`, and every side effect fired *exactly once*. This is the literal
+proof of the line above — _a run that dies mid-flight resumes from exactly
+where it stopped_.
+
+=== Run the proof
+
+[source,bash]
+----
+./gradlew integrationTest --tests "*OrderOrchestrator*"
+----
+
+Requires Docker (the tests skip gracefully when it is absent). The crash/resume
+scenario (`scenario2_crashMidFlightResumesFromCursor`) is the headline test;
+`scenario1` proves the happy path across workers, and `scenario3` proves a
+failure edge routes to `Cancelled` with no charge. Both the Kotlin and the Java
+orchestrator pass the identical three scenarios.
+
 == In production
 
 This is exactly how Hydra is used in production at Salesforce to sequence multi-step business pipelines in the *Revenue Cloud / Revenue Lifecycle Management* domain (the `OrderMachine` and `PlaceQuoteMachine` examples nod to that lineage). Hydra stays a small, dependency-light engine; the orchestration, transport, and persistence layers live in the consuming application.
