@@ -52,12 +52,6 @@ private constructor(private val machine: Machine<StateT, EventT, ActionT>) {
       }
     }
 
-  fun StateT.readTransitionAndNotifyListeners(event: EventT): Transition<StateT, EventT, ActionT> {
-    val transition = this.getMatchingTransition(event)
-    notifyTransition(transition, event)
-    return transition
-  }
-
   private fun StateT.getMatchingTransition(event: EventT): Transition<StateT, EventT, ActionT> =
     getState()?.getTransitionForEvent(this, event) ?: Transition.NoFromState(event)
 
@@ -70,6 +64,12 @@ private constructor(private val machine: Machine<StateT, EventT, ActionT>) {
     notifyTransition(transition, event)
     return transition
   }
+
+  fun readTransitionAndNotifyListeners(
+    fromState: StateT,
+    event: EventT,
+  ): Transition<StateT, EventT, ActionT> =
+    readTransitionAndNotifyListeners(fromState.javaClass, fromState, event)
 
   private fun getMatchingTransition(
     fromStateClass: Class<out StateT>,
