@@ -117,7 +117,7 @@ New source dirs:
 - `src/integrationTest/kotlin/com/salesforce/hydra/integration/order/...`
 - `src/integrationTest/java/com/salesforce/hydra/integration/order/...`
 
-The `integrationTest` suite must compile both Kotlin and Java; confirm the suite's source set picks up `kotlin` (it currently only lists `java` implicitly). Tests guard on Docker with `org.junit.jupiter.api.Assumptions.assumeTrue(DockerClientFactory.instance().isDockerAvailable())` so the build degrades gracefully without Docker.
+The `integrationTest` suite compiles both Kotlin and Java with **no extra wiring**: `hydra.kt-conventions` applies `kotlin("jvm")`, and the Kotlin plugin auto-attaches a `kotlin` source dir to every source set (including the `JvmTestSuite`-created `integrationTest`). The sibling `revoman-root` repo proves this exact setup — same convention plugins, a dual-language `src/integrationTest/{java,kotlin}`, and **no** explicit source-dir config in its `build.gradle.kts`. Tests guard on Docker with `org.junit.jupiter.api.Assumptions.assumeTrue(DockerClientFactory.instance().isDockerAvailable())` so the build degrades gracefully without Docker.
 
 Run: `./gradlew integrationTest` (or `--tests "...OrderOrchestrator*Test"`).
 
@@ -134,5 +134,5 @@ Expand the existing page in place (keep current concept intro + "The pattern" li
 
 - **jOOQ no-codegen** keeps the build simple but means hand-written `field("...")` refs; acceptable for a PoC and closest in spirit to Exposed.
 - **Testcontainers + Docker** required for the tests to actually run; CI without Docker will skip (not fail).
-- **integrationTest source set** may need explicit Kotlin source-dir wiring; verify during implementation.
+- **integrationTest dual-language wiring** — confirmed zero-config (Kotlin plugin auto-attaches the `kotlin` source dir; `revoman-root` is the proof). No risk.
 - Keep Hydra itself untouched — the PoC lives entirely in the `integrationTest` source set + docs. No changes to `src/main`.
