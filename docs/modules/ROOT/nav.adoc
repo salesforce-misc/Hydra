@@ -13,6 +13,7 @@
 
 .Deep Dives
 * xref:event-vs-action.adoc[Event vs Action]
+* xref:cycles-and-loops.adoc[Does Hydra Detect Cycles?]
 
 .Help
 * xref:building-from-source.adoc[Building from Source]

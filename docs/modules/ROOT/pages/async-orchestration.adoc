@@ -23,7 +23,7 @@ if (transition.isValid()) {
 [.lead]
 Draw the DAG with Hydra, drive it step-by-step with a read-only transition, and keep durable state in your own store.
 
-. *Draw the DAG once.* Each step of the pipeline is a state; each step's exit signal is an event; the next step (and any side effect) is the action. The whole pipeline is one Hydra machine — the map of legal moves.
+. *Draw the DAG once.* Each step of the pipeline is a state; each step's exit signal is an event; the next step (and any side effect) is the action. The whole pipeline is one Hydra machine — the map of legal moves. (This pipeline happens to be acyclic; a *DAG* is this machine's shape, not a constraint Hydra enforces — cyclic machines are equally legal. See xref:cycles-and-loops.adoc[Does Hydra Detect Cycles?].)
 . *Persist the real position.* When a step finishes, your orchestrator writes the new position to its durable store (a DB row, a workflow record).
 That store — not the JVM — is the source of truth.
 . *Consult Hydra as a router.* Call `readTransitionAndNotifyListeners(...)` to compute the next step from the just-finished one, firing listeners along the way, without touching in-memory state.

@@ -1,0 +1,44 @@
+= Does Hydra Detect Cycles?
+:description: No — and by design. A Hydra machine is a state machine, not a DAG. Cycles are legal, the transition graph is not statically knowable, and the engine cannot spin on its own.
+
+Short answer: *no, Hydra does not detect or prevent cycles, and it should not.* A Hydra machine is a https://en.wikipedia.org/wiki/Mealy_machine[Mealy machine] — a *state machine*, not a https://en.wikipedia.org/wiki/Directed_acyclic_graph[DAG]. Cycles are a normal, correct part of the modelling vocabulary.
+
+== Cycles are legal — and useful
+
+Every one of these is a legitimate machine Hydra models *today*:
+
+[cols="1,3",options="header"]
+|===
+| Shape | Example
+| *Self-loop* | `sb.dontTransition(action)` — stay put and re-emit a command (a poll, a heartbeat). See xref:driving-a-machine.adoc[Building & Driving].
+| *Retry back-edge* | `Charging ── PaymentDeclined ──▶ Charging` — try the same step again with a fresh attempt.
+| *Resubmit after reject* | `Approving ── Rejected ──▶ Drafting` — send the work back for another round.
+|===
+
+A cycle-detecting engine would *reject these valid machines*. Rejecting correct models is a worse failure than the problem it purports to solve.
+
+== Why the engine leaves cycles alone
+
+. *Cycles are correct modelling.* Retries, polls, and rework loops are the whole point of a state machine. Forbidding them narrows Hydra to a strictly-linear pipeline — a much smaller tool.
+. *The transition graph is not statically knowable.* A transition's target is computed by a *data-dependent lambda* — `S?.(E) -> TransitionTo` — not a static edge. The next state can depend on the current state's data, so there is no fixed edge set to run a cycle check against. The DAG diagrams in these docs are *hand-drawn* documentation of one machine's intended shape, not a graph the engine derives or enforces.
+. *The engine cannot spin.* Hydra is a pure, reactive router. `transition(event)` and `readTransitionAndNotifyListeners(...)` each fire *once per external event* and return — there is no internal loop that could run away. A machine "loops forever" only if *something outside Hydra* keeps feeding it events. That makes a runaway an orchestration concern, not an engine one.
+
+== Guarding a runaway workflow
+
+If a workflow *could* legitimately cycle and you want a backstop against an unbounded run, put it in the *dispatch loop*, not the engine. The xref:async-orchestration.adoc[async orchestrator] already persists a durable cursor per run — add a step counter to it and abort past a threshold:
+
+[source,kotlin,indent=0]
+----
+val cursor = store.load(message.runId) ?: return true
+if (cursor.steps >= MAX_STEPS) {                     // budget exhausted — stop the run
+  store.markFailed(message.runId, "step budget exceeded")
+  return true
+}
+val transition = hydra.readTransitionAndNotifyListeners(cursor.state, message.event)
+val advanced = store.advance(message.runId, cursor.version, transition.toState, statusFor(...))
+// advance(...) also bumps steps = steps + 1 alongside the version
+----
+
+The guard lives where the loop lives — in your store and your worker — so the engine stays a small, dependency-light pure function.
+
+NOTE: The word *DAG* in xref:async-orchestration.adoc[Async Orchestrators] describes the shape of *that specific* order-fulfillment pipeline, which happens to be acyclic. It is not a constraint Hydra imposes — a cyclic machine drives through the exact same API.
