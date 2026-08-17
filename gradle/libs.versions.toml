@@ -45,7 +45,7 @@ amqp-client = "5.31.0"
 postgres-jdbc = "42.7.11"
 testcontainers = "1.21.4"
 kotlinx-serialization = "1.11.0"
-jackson = "2.22.0"
+jackson = "2.22.2"
 
 [libraries]
 java-vavr = { module = "io.vavr:vavr", version.ref = "java-vavr" }
